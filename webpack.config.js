@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 
 module.exports = {
     entry: './src/index.js',
@@ -9,7 +8,29 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
+                options: {
+                    "plugins": [
+                        "babel-plugin-transform-es2015-template-literals",
+                        "@babel/plugin-proposal-class-properties",
+                        "@babel/plugin-transform-runtime",
+                        "@babel/plugin-syntax-dynamic-import"
+                    ],
+                    "presets": [
+                        [
+                            "@babel/preset-env",
+                            {
+                                "debug": false,
+                                "modules": false,
+                                "targets": {
+                                    "browsers": ["> 1%", "last 2 versions", "ie >= 10"]
+                                },
+                                "useBuiltIns": "usage",
+                                "corejs": 3
+                            }
+                        ]
+                    ]
+                }
             },
             {
                 test: /\.s?css$/,
@@ -22,5 +43,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '/dist/',
         filename: 'index.js',
+        library: "mavickersFactor",
+        libraryTarget: "umd"
     }
 }
