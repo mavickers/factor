@@ -1,6 +1,6 @@
 {
     "name": "@mavickers/factor",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Scaffolding for client-side web applications.",
     "main": "src/index.js",
     "author": {
