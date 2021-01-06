@@ -1,5 +1,5 @@
 import Utilities from "./Utilities";
-import MapperOptionsFlag from "../classes/MapperOptionsFlag";
+import { MapperOptionsFlag } from "../index";
 
 /*
  *  Mapper

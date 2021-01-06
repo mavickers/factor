@@ -8,6 +8,8 @@ import Flags from "./base/interfaces/Flags";
 import Mappable from "./base/interfaces/Mappable";
 import StandardModel from "./base/interfaces/StandardModel";
 
+import MapperOptionsFlag from "./classes/MapperOptionsFlag";
+
 export {
     Classes,
     Mapper,
@@ -17,5 +19,7 @@ export {
     Enum,
     Flags,
     Mappable,
-    StandardModel
+    StandardModel,
+
+    MapperOptionsFlag
 }
