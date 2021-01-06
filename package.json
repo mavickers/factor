@@ -1,8 +1,13 @@
 {
     "name": "@mavickers/factor",
     "version": "0.0.1",
-    "description": "Components and utilities for client-side web applications.",
-    "main": "component.js",
+    "description": "Scaffolding for client-side web applications.",
+    "main": "index.js",
+    "author": {
+        "name": "Michael A. Vickers",
+        "url": "https://lightpathllc.com",
+        "github": "https://github.com/mavickers"
+    },
     "scripts": {
         "build": "npx babel ./ --out-dir ../../dist --ignore node_modules",
         "build-package": "node build-package.js"
@@ -17,7 +22,6 @@
         "utility",
         "utilities"
     ],
-    "author": "Michael A. Vickers",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/mavickers/factor/issues"
