@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import hashFn from "object-hash";
-import Utilities from "@/app/base/Utilities";
+import Utilities from "../Utilities";
 
 class Describing {
     constructor() {

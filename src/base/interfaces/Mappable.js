@@ -1,4 +1,4 @@
-import { Mapper } from "@/app/base";
+import { Mapper } from "../../";
 
 class Mappable {
     constructor(obj) {

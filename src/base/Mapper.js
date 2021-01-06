@@ -1,5 +1,5 @@
-import Utilities from "@/app/base/Utilities";
-import MapperOptionsFlag from "@/app/enums/MapperOptionsFlag";
+import Utilities from "./Utilities";
+import MapperOptionsFlag from "../classes/MapperOptionsFlag";
 
 /*
  *  Mapper

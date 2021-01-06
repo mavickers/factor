@@ -26,7 +26,12 @@
         "url": "https://github.com/mavickers/factor/issues"
     },
     "homepage": "https://github.com/mavickers/factor#readme",
-    "dependencies": {},
+    "dependencies": {
+        "assert": "^2.0.0",
+        "lodash.clonedeep": "^4.5.0",
+        "object-hash": "^2.1.1",
+        "object-scan": "^13.7.1"
+    },
     "devDependencies": {
         "@babel/cli": "^7.12.10",
         "@babel/core": "^7.12.10",

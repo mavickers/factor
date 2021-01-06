@@ -38,7 +38,12 @@ module.exports = {
             }
         ]
     },
-    resolve: { extensions: ["*", ".js", ".jsx"] },
+    resolve: {
+        extensions: ["*", ".js", ".jsx"],
+        fallback: {
+            assert: require.resolve("assert/")
+        }
+    },
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '/dist/',
