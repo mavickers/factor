@@ -41,6 +41,9 @@ module.exports = {
         ]
     },
     resolve: {
+        alias: {
+            "@": path.resolve(__dirname, ".", "src"),
+        },
         extensions: ["*", ".js", ".jsx"],
         fallback: {
             assert: require.resolve("assert/"),
