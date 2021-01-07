@@ -3,6 +3,7 @@ import Configurable from "./Configurable";
 class Enum extends Configurable {
     constructor(...args) {
         super(...args);
+
         const obj = args && args.length > 0 && args[0];
 
         if (!obj) return;
