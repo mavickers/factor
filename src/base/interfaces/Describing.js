@@ -1,10 +1,9 @@
-import cloneDeep from "lodash.clonedeep";
-import hashFn from "object-hash";
 import Utilities from "../Utilities";
+import Configurable from "./Configurable";
 
-class Describing {
+class Describing extends Configurable {
     constructor() {
-
+        super();
     }
 
     differencesFrom(obj) {
@@ -38,11 +37,29 @@ class Describing {
     }
 
     get hash() {
-        return hashFn(this);
+        if (!(Describing.configuration && Describing.configuration.hashFn)) {
+            console.warn("Describing.hash(): hashFn configuration missing");
+            return;
+        }
+        if (!(typeof Describing.configuration.hashFn == "function" || Describing.configuration.hashFn instanceof Function)) {
+            console.warn("Describing.hash(): scanFn configuration invalid");
+            return;
+        }
+
+        return Describing.configuration.hashFn(this);
     }
 
     clone() {
-        return cloneDeep(this);
+        if (!(Describing.configuration && Describing.configuration.cloneFn)) {
+            console.warn("Describing.clone(): cloneFn configuration missing");
+            return;
+        }
+        if (!(typeof Describing.configuration.cloneFn == "function" || Describing.configuration.cloneFn instanceof Function)) {
+            console.warn("Describing.clone(): cloneFn configuration invalid");
+            return;
+        }
+
+        return Describing.configuration.cloneFn(this);
     }
 
     static IsArrayOf = function(obj) { return Utilities.IsArrayOfType(obj, this); }
