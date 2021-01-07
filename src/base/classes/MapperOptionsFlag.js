@@ -1,4 +1,4 @@
-import { Flags } from "@/factor";
+import { Flags } from "../../factor";
 
 class MapperOptionsFlag extends Flags {
     static None;

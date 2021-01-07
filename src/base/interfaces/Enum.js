@@ -1,4 +1,4 @@
-import { Configurable } from "@/factor";
+import { Configurable } from "../../factor";
 
 class Enum extends Configurable {
     constructor(...args) {
