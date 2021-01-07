@@ -1,5 +1,5 @@
-import { Classes } from "../../index";
-import { Describing, Mappable } from "../../index";
+import { Classes } from "@/factor";
+import { Describing, Mappable } from "@/factor";
 
 class StandardModel extends Classes([ Describing, Mappable ]) {
     constructor(obj) {

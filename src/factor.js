@@ -1,15 +1,17 @@
 import Classes from "@/base/Classes";
-import Describing from "./base/interfaces/Describing";
-import Enum from "./base/interfaces/Enum";
+import Configurable from "@/base/interfaces/Configurable";
+import Describing from "@/base/interfaces/Describing";
+import Enum from "@/base/interfaces/Enum";
 import Flags from "@/base/interfaces/Flags";
-import Mappable from "./base/interfaces/Mappable";
-import Mapper from "./base/classes/Mapper";
-import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
-import StandardModel from "./base/interfaces/StandardModel";
-import Utilities from "./base/Utilities";
+import Mappable from "@/base/interfaces/Mappable";
+import Mapper from "@/base/classes/Mapper";
+import MapperOptionsFlag from "@/base/classes/MapperOptionsFlag";
+import StandardModel from "@/base/interfaces/StandardModel";
+import Utilities from "@/base/Utilities";
 
 export {
     Classes,
+    Configurable,
     Describing,
     Enum,
     Flags,
@@ -22,6 +24,7 @@ export {
 
 export default {
     Classes,
+    Configurable,
     Describing: Describing,
     Enum: Enum,
     Flags: Flags,
