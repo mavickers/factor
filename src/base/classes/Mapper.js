@@ -21,15 +21,15 @@ class Mapper {
     #options;
 
     constructor(...args) {
-        let funcs = args.filter(arg => typeof arg === "function" && !Utilities.IsClass(arg));
-        let classes = args.filter(arg => Utilities.IsClass(arg));
+        let funcs = args.filter(arg => typeof arg === "function" && !Utilities.isClass(arg));
+        let classes = args.filter(arg => Utilities.isClass(arg));
         let options = args.filter(arg => Number.isInteger(arg));
 
         this
-            .ToType(classes[0])
-            .FromType(classes[1])
-            .WithSingleMapper(funcs[0])
-            .WithMultipleMapper(funcs[1]);
+            .toType(classes[0])
+            .fromType(classes[1])
+            .withSingleMapper(funcs[0])
+            .withMultipleMapper(funcs[1]);
 
         this.#options = new MapperOptionsFlag().set(options);
     }
@@ -69,64 +69,64 @@ class Mapper {
         return typeMapped;
     }
 
-    FromType(type) {
-        this.#fromType = Utilities.IsClass(type) && type;
+    fromType(type) {
+        this.#fromType = Utilities.isClass(type) && type;
 
         return this;
     }
 
-    ToType(type) {
-        this.#toType = Utilities.IsClass(type) && type;
+    toType(type) {
+        this.#toType = Utilities.isClass(type) && type;
 
         return this;
     }
 
-    WithMultipleMapper(multiple) {
+    withMultipleMapper(multiple) {
         this.#multipleMapper = multiple instanceof Function && multiple;
 
         return this;
     }
 
-    WithOption(opt) {
+    withOption(opt) {
         this.#options.Set(opt);
 
         return this;
     }
 
-    WithSingleMapper(single) {
+    withSingleMapper(single) {
         this.#singleMapper = single instanceof Function && single || this.#singleMapper;
 
         return this;
     }
 
-    static FromType(type) {
+    static fromType(type) {
         const mapper = new Mapper();
 
-        return mapper.FromType(type);
+        return mapper.fromType(type);
     }
 
-    static ToType(type) {
+    static toType(type) {
         const mapper = new Mapper();
 
-        return mapper.ToType(type);
+        return mapper.toType(type);
     }
 
-    static WithMultipleMapper(multiple) {
+    static withMultipleMapper(multiple) {
         const mapper = new Mapper();
 
-        return mapper.WithMultipleMapper(multiple)
+        return mapper.withMultipleMapper(multiple)
     }
 
-    static WithOption(opt) {
+    static withOption(opt) {
         const mapper = new Mapper();
 
-        return mapper.WithOption(opt);
+        return mapper.withOption(opt);
     }
 
-    static WithSingleMapper(single) {
+    static withSingleMapper(single) {
         const mapper = new Mapper();
 
-        return mapper.WithSingleMapper(single);
+        return mapper.withSingleMapper(single);
     }
 }
 

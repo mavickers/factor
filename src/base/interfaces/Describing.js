@@ -62,7 +62,7 @@ class Describing extends Configurable {
         return Describing.configuration.cloneFn(this);
     }
 
-    static IsArrayOf = function(obj) { return Utilities.IsArrayOfType(obj, this); }
+    static isArrayOf = function(obj) { return Utilities.isArrayOfType(obj, this); }
 }
 
 export default Describing;

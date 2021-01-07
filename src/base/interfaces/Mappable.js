@@ -5,7 +5,7 @@ class Mappable {
 
     }
 
-    MapTo(mappingFunction) {
+    mapTo(mappingFunction) {
         return mappingFunction(this);
     }
 
@@ -26,7 +26,7 @@ class Mappable {
      *       "id" keys for instance.
      */
 
-    static MapFrom = function(mapper, obj, ancillaryData = null, withUnlistedPropertyMappings = false, overwrite = false) {
+    static mapFrom = function(mapper, obj, ancillaryData = null, withUnlistedPropertyMappings = false, overwrite = false) {
         if (!(mapper instanceof Mapper || mapper instanceof Mapper)) throw Error("Invalid mapper parameter in Mapper.mapFrom");
         if (!obj) return null;
         if (!(obj instanceof Object || arrayData == null)) return null;

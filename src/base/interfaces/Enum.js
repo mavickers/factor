@@ -25,7 +25,7 @@ class Enum extends Configurable {
      *   to report only a single match of the given value.
      *
      */
-    ContainsValue = function(propertyValue, singleOnly) {
+    containsValue = function(propertyValue, singleOnly) {
         if (propertyValue == null) return;
         if (singleOnly == null || typeof singleOnly !== "boolean") singleOnly = true;
 
@@ -41,7 +41,7 @@ class Enum extends Configurable {
      *  - propertyValue - the value to be searched for.
      *
      */
-    MatchedValues = function(propertyValue) {
+    matchedValues = function(propertyValue) {
         if (propertyValue == null) return;
         if (!(Enum.configuration && Enum.configuration.valueScanFn)) {
             console.warn("Enum.MatchedValues(): valueScanFn configuration missing");
