@@ -23,7 +23,7 @@ module.exports = {
                             "@babel/preset-env",
                             {
                                 "debug": false,
-                                "modules": false,
+                                "modules": "auto",
                                 "targets": {
                                     "browsers": ["> 1%", "last 2 versions", "ie >= 10"]
                                 },
