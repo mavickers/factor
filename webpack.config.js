@@ -1,5 +1,4 @@
 const path = require('path')
-const nodeExternals = require("webpack-node-externals");
 
 module.exports = {
     entry: './src/index.js',
@@ -12,10 +11,12 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     "plugins": [
-                        "babel-plugin-transform-es2015-template-literals",
                         "@babel/plugin-proposal-class-properties",
+                        "@babel/plugin-proposal-private-property-in-object",
+                        "@babel/plugin-syntax-dynamic-import",
+                        "@babel/plugin-transform-classes",
                         "@babel/plugin-transform-runtime",
-                        "@babel/plugin-syntax-dynamic-import"
+                        "@babel/plugin-transform-template-literals"
                     ],
                     "presets": [
                         [
@@ -39,18 +40,11 @@ module.exports = {
             }
         ]
     },
-    resolve: {
-        extensions: ["*", ".js", ".jsx"],
-        fallback: {
-            assert: require.resolve("assert/")
-        }
-    },
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '/dist/',
         filename: 'index.js',
         library: "mavickersFactor",
         libraryTarget: "umd"
-    },
-    externals: [ nodeExternals() ]
+    }
 }

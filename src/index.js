@@ -23,3 +23,17 @@ export {
 
     MapperOptionsFlag
 }
+
+export default {
+    Classes: Classes,
+    Mapper: Mapper,
+    Utilities: Utilities,
+
+    Describing: Describing,
+    Enum: Enum,
+    Flags: Flags,
+    Mappable: Mappable,
+    StandardModel: StandardModel,
+
+    MapperOptionsFlag: MapperOptionsFlag
+}

@@ -27,7 +27,6 @@
     },
     "homepage": "https://github.com/mavickers/factor#readme",
     "dependencies": {
-        "assert": "^2.0.0",
         "lodash.clonedeep": "^4.5.0",
         "object-hash": "^2.1.1",
         "object-scan": "^13.7.1"
@@ -35,12 +34,15 @@
     "devDependencies": {
         "@babel/cli": "^7.12.10",
         "@babel/core": "^7.12.10",
+        "@babel/plugin-proposal-class-properties": "^7.12.1",
+        "@babel/plugin-proposal-private-property-in-object": "^7.12.1",
+        "@babel/plugin-transform-classes": "^7.12.1",
         "@babel/plugin-transform-runtime": "^7.12.10",
+        "@babel/plugin-transform-template-literals": "^7.12.1",
         "@babel/preset-env": "^7.12.11",
         "babel-eslint": "~10.1.0",
         "babel-jest": "~26.3.0",
         "babel-loader": "^8.2.2",
-        "babel-plugin-transform-es2015-template-literals": "^6.22.0",
         "core-js": "^3.6.5",
         "eslint": "~7.8.1",
         "npm": "^6.11.2",
@@ -48,7 +50,6 @@
         "path": "^0.12.7",
         "raw-loader": "^4.0.2",
         "webpack": "^5.11.1",
-        "webpack-cli": "^4.3.1",
-        "webpack-node-externals": "^2.5.2"
+        "webpack-cli": "^4.3.1"
     }
 }
