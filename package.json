@@ -2,7 +2,7 @@
     "name": "@mavickers/factor",
     "version": "0.0.9",
     "description": "Scaffolding for client-side web applications.",
-    "main": "dist/index.js",
+    "main": "src/index.js",
     "author": {
         "name": "Michael A. Vickers",
         "url": "https://lightpathllc.com",
@@ -28,8 +28,7 @@
     "homepage": "https://github.com/mavickers/factor#readme",
     "dependencies": {
         "lodash.clonedeep": "^4.5.0",
-        "object-hash": "^2.1.1",
-        "object-scan": "^13.7.1"
+        "object-hash": "^2.1.1"
     },
     "devDependencies": {
         "@babel/cli": "^7.12.10",
@@ -49,6 +48,7 @@
         "npm": "^6.11.2",
         "npm-run-all": "~4.1.5",
         "path": "^0.12.7",
+        "process": "^0.11.10",
         "raw-loader": "^4.0.2",
         "webpack": "^5.11.1",
         "webpack-cli": "^4.3.1"

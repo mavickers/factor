@@ -1,7 +1,8 @@
-import objectScan from "object-scan";
+import Configurable from "./Configurable";
 
-class Enum {
+class Enum extends Configurable {
     constructor(...args) {
+        super(...args);
         const obj = args && args.length > 0 && args[0];
 
         if (!obj) return;
@@ -41,8 +42,16 @@ class Enum {
      */
     MatchedValues = function(propertyValue) {
         if (propertyValue == null) return;
+        if (!(Enum.configuration && Enum.configuration.valueScanFn)) {
+            console.warn("Enum.MatchedValues(): valueScanFn configuration missing");
+            return;
+        }
+        if (!(typeof Enum.configuration.valueScanFn == "function" || Enum.configuration.valueScanFn instanceof Function)) {
+            console.warn("Enum.MatchedValues(): valueScanFn configuration invalid");
+            return;
+        }
 
-        return objectScan(["**"], { joined: false, filterFn: ({ value }) => value === propertyValue})(this);
+        return Enum.configuration.valueScanFn(this, propertyValue);
     }
 }
 

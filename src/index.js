@@ -1,12 +1,21 @@
+import Enum from "./base/interfaces/Enum";
 import Flags from "./base/interfaces/Flags";
+import Mapper from "./base/classes/Mapper";
 import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
+import Utilities from "./base/Utilities";
 
 export {
+    Enum,
     Flags,
-    MapperOptionsFlag
+    Mapper,
+    MapperOptionsFlag,
+    Utilities
 };
 
 export default {
+    Enum: Enum,
     Flags: Flags,
-    MapperOptionsFlag: MapperOptionsFlag
+    Mapper: Mapper,
+    MapperOptionsFlag: MapperOptionsFlag,
+    Utilities: Utilities
 };

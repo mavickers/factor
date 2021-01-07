@@ -43,7 +43,8 @@ module.exports = {
     resolve: {
         extensions: ["*", ".js", ".jsx"],
         fallback: {
-            assert: require.resolve("assert/")
+            assert: require.resolve("assert/"),
+            process: require.resolve("process/")
         }
     },
     output: {

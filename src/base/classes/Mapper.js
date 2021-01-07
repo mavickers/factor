@@ -1,5 +1,5 @@
-import Utilities from "./Utilities";
-import { MapperOptionsFlag } from "../index";
+import { Utilities } from "../../index";
+import { MapperOptionsFlag } from "../../index";
 
 /*
  *  Mapper
