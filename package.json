@@ -2,7 +2,7 @@
     "name": "@mavickers/factor",
     "version": "0.1.2",
     "description": "Client-side scaffolding for web applications.",
-    "main": "dist/index.js",
+    "main": "src/factor.js",
     "author": {
         "name": "Michael A. Vickers",
         "url": "https://lightpathllc.com",

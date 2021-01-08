@@ -1,13 +1,14 @@
-import AutoModel from "./base/interfaces/AutoModel";
 import Classes from "./base/Classes";
 import Configurable from "./base/interfaces/Configurable";
 import Describing from "./base/interfaces/Describing";
+import Mappable from "./base/interfaces/Mappable";
+import StandardModel from "./base/interfaces/StandardModel";
+
+import AutoModel from "./base/interfaces/AutoModel";
 import Enum from "./base/interfaces/Enum";
 import Flags from "./base/interfaces/Flags";
-import Mappable from "./base/interfaces/Mappable";
 import Mapper from "./base/classes/Mapper";
 import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
-import StandardModel from "./base/interfaces/StandardModel";
 import Utilities from "./base/Utilities";
 
 export {
