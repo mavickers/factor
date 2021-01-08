@@ -27,6 +27,7 @@ class Utilities {
 
         return typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
     }
+    static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function);
 }
 
 export default Utilities;
