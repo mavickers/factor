@@ -1,7 +1,7 @@
-import { Classes } from "../../factor";
+import { Classes, Configurable } from "../../factor";
 import { Describing, Mappable } from "../../factor";
 
-class StandardModel extends Classes([ Describing, Mappable ]) {
+class StandardModel extends Classes([ Configurable, Describing, Mappable ]) {
     constructor(obj) {
         super(obj);
     }

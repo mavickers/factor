@@ -1,6 +1,7 @@
-import { Configurable, StandardModel, Utilities } from "../../factor";
+import { Classes, Configurable, StandardModel, Utilities } from "../../factor";
+import { PipelineArgs } from "../../factor";
 
-const primitiveTypes = [ Boolean, Number, String ];
+const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
 
 const configFn = function(model) {
     console.log("configFn");
@@ -19,7 +20,7 @@ const configFn = function(model) {
         const prop = instance[propName];
 
         if (!(typeof prop == "object" || prop instanceof Object)) return;
-        if (prop.hasOwnProperty("type") && Utilities.isFunction(prop["type"])) propConfig["type"] = prop["type"];
+        if (prop.hasOwnProperty("type") && (fieldTypes.includes(prop["type"]) || fieldTypes.includes(Object.getPrototypeOf(prop["type"])))) propConfig["type"] = prop["type"];
 
         // if the type parameter was not valid there is not point in adding this
         // field to the config - throw a warning but continue, misconfigurations
@@ -51,13 +52,18 @@ const configFn = function(model) {
     return true;
 }
 
-class AutoModel extends Configurable {
+class AutoModel extends StandardModel {
     constructor(obj) {
         super(obj);
+
+        const config = Object.getPrototypeOf(this).constructor._config;
+        console.log("AutoModel constructor");
+        console.log(Object.getPrototypeOf(this).constructor.name);
     }
 
-    static new() {
-        this.configure({ "One": "1" }, configFn);
+    static new(...args) {
+        console.log(this.configure);
+        this.configure(this, configFn);
 
         const model = this;
         const instance = new this(model);
@@ -68,8 +74,9 @@ class AutoModel extends Configurable {
         propNames.forEach(propName =>  {
             delete instance[propName];
             if (!(config.fieldDefs[propName])) return;
-            
+
             let field = this[`#${propName}`];
+            const pipelineArgs = PipelineArgs.new({ input: { field: this[`#${propName}`], config: config, propName: propName }})
 
             if (config.fieldDefs[propName].type === Boolean) {
                 Object.defineProperty(instance, propName, {

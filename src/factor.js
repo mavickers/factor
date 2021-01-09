@@ -11,6 +11,8 @@ import Mapper from "./base/classes/Mapper";
 import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
 import Utilities from "./base/Utilities";
 
+import { Pipeline, PipelineArgs, PipelineFilter } from "./base/components/Pipeline";
+
 export {
     AutoModel,
     Classes,
@@ -21,6 +23,9 @@ export {
     Mappable,
     Mapper,
     MapperOptionsFlag,
+    Pipeline,
+    PipelineArgs,
+    PipelineFilter,
     StandardModel,
     Utilities
 };
@@ -35,6 +40,9 @@ export default {
     Mappable: Mappable,
     Mapper: Mapper,
     MapperOptionsFlag: MapperOptionsFlag,
+    Pipeline,
+    PipelineArgs,
+    PipelineFilter,
     StandardModel: StandardModel,
     Utilities: Utilities
 };
