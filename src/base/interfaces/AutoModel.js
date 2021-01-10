@@ -2,13 +2,11 @@ import { Classes, Configurable, StandardModel, Utilities } from "../../factor";
 //import { AutoModelPipelineArgs } from "../../factor";
 
 const configFn = function(model) {
-    console.log("configFn");
+    console.log(`configFn [${typeof model == "function"}, ${model instanceof Function}, ${model.isConfigured}]`);
 
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
 
-    console.log("CONFIGURING");
-    console.log(model.name);
-    //console.log(Object.getPrototypeOf(this).constructor.name);
+    console.log(`configFn ${model.name}`);
 
     const instance = new model();
     const propNames = Object.getOwnPropertyNames(instance);
@@ -56,17 +54,22 @@ class AutoModel extends StandardModel {
     constructor(obj) {
         super(obj);
 
-        const config = Object.getPrototypeOf(this).constructor._config;
-        console.log("AutoModel constructor");
-        console.log(Object.getPrototypeOf(this).constructor.name);
+        const modelChild = Object.getPrototypeOf(this).constructor;
+        const modelConfig = modelChild._config;
+        const modelName = modelChild.name;
+        console.log(`AutoModel constructor ${modelName}`);
     }
 
     static new(...args) {
+        console.log(`new() ${this.name}`);
+        console.log(this);
         this.configure(this, configFn);
 
+        console.log(`new() ${this.name} back`);
         const model = this;
         const instance = new this(model);
         const propNames = Object.getOwnPropertyNames(instance);
+
         const config = model._config;
 
         //iterate through the fields, replace with getter/setters
@@ -97,7 +100,7 @@ class AutoModel extends StandardModel {
             }
         });
 
-        console.log(Object.getOwnPropertyNames(instance));
+        //console.log(Object.getOwnPropertyNames(instance));
 
         return instance;
     }
