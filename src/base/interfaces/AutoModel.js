@@ -1,5 +1,5 @@
 import { Classes, Configurable, StandardModel, Utilities } from "../../factor";
-import { PipelineArgs } from "../../factor";
+//import { AutoModelPipelineArgs } from "../../factor";
 
 const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
 
@@ -9,6 +9,8 @@ const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
 
     console.log("CONFIGURING");
+    console.log(model.name);
+    //console.log(Object.getPrototypeOf(this).constructor.name);
 
     const instance = new model();
     const propNames = Object.getOwnPropertyNames(instance);
@@ -62,7 +64,6 @@ class AutoModel extends StandardModel {
     }
 
     static new(...args) {
-        console.log(this.configure);
         this.configure(this, configFn);
 
         const model = this;
@@ -76,7 +77,7 @@ class AutoModel extends StandardModel {
             if (!(config.fieldDefs[propName])) return;
 
             let field = this[`#${propName}`];
-            const pipelineArgs = PipelineArgs.new({ input: { field: this[`#${propName}`], config: config, propName: propName }})
+            //const pipelineArgs = PipelineArgs.new({ input: { field: this[`#${propName}`], config: config, propName: propName }})
 
             if (config.fieldDefs[propName].type === Boolean) {
                 Object.defineProperty(instance, propName, {
