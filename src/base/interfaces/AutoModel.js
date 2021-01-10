@@ -1,8 +1,6 @@
 import { Classes, Configurable, StandardModel, Utilities } from "../../factor";
 //import { AutoModelPipelineArgs } from "../../factor";
 
-const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
-
 const configFn = function(model) {
     console.log("configFn");
 
@@ -104,5 +102,8 @@ class AutoModel extends StandardModel {
         return instance;
     }
 }
+
+const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
+
 
 export default AutoModel;

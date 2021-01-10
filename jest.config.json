@@ -1,0 +1,28 @@
+{
+    "collectCoverage": true,
+    "moduleFileExtensions": [
+        "js",
+        "mjs"
+    ],
+    "transform": {
+        "^.+\\.js$": [ "babel-jest", {
+            "presets": [
+                [ "@babel/preset-env", {
+                    "targets": {
+                        "node": 10
+                    }
+                }]
+            ],
+            "plugins": [
+                "@babel/plugin-proposal-class-properties",
+                "@babel/plugin-proposal-private-property-in-object",
+                "@babel/plugin-syntax-dynamic-import",
+                "@babel/plugin-transform-classes",
+                "@babel/plugin-transform-runtime",
+                "@babel/plugin-transform-template-literals"
+            ]
+        }],
+        "^.+\\.mjs$": "babel-jest"
+    },
+    "testRegex": "((\\.|/*.)(spec))\\.js?$"
+}
