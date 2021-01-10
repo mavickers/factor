@@ -10,17 +10,26 @@ export default function (bases) {
         }
     }
 
+    let classNames = [];
+
     bases.forEach(base => {
+        const className = base.prototype.constructor.name;
+
+        classNames.push(className);
+
         // this copies instance properties over
         Object.getOwnPropertyNames(base.prototype)
             .filter(prop => prop != 'constructor')
             .forEach(prop => Object.defineProperty(Bases.prototype, prop, Object.getOwnPropertyDescriptor(base.prototype, prop)));
-
         // this copies static properties over
-        for (let key in base) {
-            Bases[key] = base[key];
-        }
+        Object.getOwnPropertyNames(base)
+            .filter(prop => ![ "length", "name", "prototype" ].includes(prop))
+            .forEach(prop => Object.defineProperty(Bases, prop, Object.getOwnPropertyDescriptor(base, prop)));
     });
+
+    classNames = Array.isArray(Bases._classes) ? [ ...Bases._classes, ...classNames ] : classNames;
+    if (Bases._classes) delete Bases._classes;
+    Object.defineProperty(Bases, "_classes", { get: () => classNames });
 
     return Bases;
 }

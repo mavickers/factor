@@ -14,7 +14,7 @@ class Utilities {
         if (!(func && func instanceof Function)) throw Error("Invalid param 'func' in funcParams()");
 
         return new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)').exec(func.toString().replace(/\n/g, ''))[1].replace(/\/\*.*?\*\//g, '').replace(/ /g, '');
-    }
+    };
 
     static getParentClassName = (obj) => Object.getPrototypeOf(obj.constructor).name;
     static isArrayOfType = (obj, type) => obj && Array.isArray(obj) && obj.reduce((acc, col) => acc && col instanceof type, true) || false;
@@ -26,7 +26,10 @@ class Utilities {
         // - string contains "native code" (native object)
 
         return typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
-    }
+    };
+    static isClassedWith = (obj, className) => {
+        return Array.isArray(obj) && className && typeof className == "string" && obj.includes(className);
+    };
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) || false;
 }
 
