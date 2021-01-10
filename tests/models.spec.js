@@ -1,5 +1,4 @@
 import { AutoModel, Configurable } from "../src/factor";
-import assert from "assert";
 
 describe("AutoModel", () => {
     it("Should not fail on secondary instantiations", () => {
@@ -7,10 +6,10 @@ describe("AutoModel", () => {
             field1 = { type: String };
         }
 
-        assert.doesNotThrow(() => {
+        expect(() => {
             Test.new();
             Test.new();
-        })
+        }).not.toThrow();
     });
 
     it("Should silently fail when assigning the wrong value type", () => {
@@ -23,17 +22,17 @@ describe("AutoModel", () => {
         const test1 = Test.new();
 
         test1.field1 = 1;
-        assert.notEqual(test1.field1, 1);
+        expect(test1.field1).not.toEqual(1);
         test1.field1 = false;
-        assert.notEqual(test1.field1, false);
+        expect(test1.field1).not.toEqual(false);
         test1.field2 = false;
-        assert.notEqual(test1.field2, false);
+        expect(test1.field2).not.toEqual(false);
         test1.field2 = "test";
-        assert.notEqual(test1.field2, "test");
+        expect(test1.field2).not.toEqual("test");
         test1.field3 = "test";
-        assert.notEqual(test1.field3, "test");
+        expect(test1.field3).not.toEqual("test");
         test1.field3 = 1;
-        assert.notEqual(test1.field3, 1);
+        expect(test1.field3).not.toEqual(1);
     });
 });
 
@@ -42,6 +41,6 @@ describe("Configurable", () => {
         class Test extends Configurable { }
 
         Test.configure({});
-        assert.throws(() => Test._config = {});
+        expect(() => Test._config = {}).toThrow();
     })
 });
