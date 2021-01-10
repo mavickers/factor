@@ -87,5 +87,4 @@ class AutoModel extends StandardModel {
 
 const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
 
-
 export default AutoModel;
