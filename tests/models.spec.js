@@ -8,5 +8,5 @@ describe("Configurable", () => {
         assert.throws(() => Test._config = { });
     })
 
-    it
+
 });
