@@ -23,7 +23,6 @@ class Configurable {
 
     static configure = function(config, fn) {
         const configFn = Utilities.isFunction(fn) && fn || standardConfigFn;
-        console.log("configure()");
 
         return configFn(this, config);
     }
