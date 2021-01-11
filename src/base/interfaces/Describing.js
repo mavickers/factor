@@ -1,5 +1,5 @@
-import { Utilities } from "../../factor";
-import { Configurable } from "../../factor";
+import Utilities from "../Utilities";
+import Configurable from "../interfaces/Configurable";
 
 class Describing extends Configurable {
     constructor() {

@@ -1,4 +1,4 @@
-import { Mapper } from "../../factor";
+import Mapper from "../classes/Mapper";
 
 class Mappable {
     constructor(obj) {

@@ -1,4 +1,5 @@
-import { PipelineArgs, Utilities } from "../../../factor";
+import PipelineArgs from "./PipelineArgs";
+import { Utilities } from "../../Utilities";
 
 class PipelineFilter {
     constructor(input, next) {
@@ -10,3 +11,5 @@ class PipelineFilter {
         if (!(input instanceof PipelineArgs)) PipelineArgs.new({ error: Error(invalidInputArgsMsg), meta: { input: input }});
     }
 }
+
+export default PipelineFilter

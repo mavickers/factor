@@ -1,5 +1,4 @@
-import { Classes, Configurable, StandardModel, Utilities } from "../../factor";
-//import { AutoModelPipelineArgs } from "../../factor";
+import StandardModel from "../interfaces/StandardModel";
 
 const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;

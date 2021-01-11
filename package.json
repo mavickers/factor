@@ -10,7 +10,8 @@
     },
     "scripts": {
         "build": "webpack",
-        "test-models": "jest tests/models.spec.js"
+        "test-models": "jest tests/models.spec.js",
+        "test-pipeline": "jest tests/pipelines.spec.js"
     },
     "repository": {
         "type": "git",

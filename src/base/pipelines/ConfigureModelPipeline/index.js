@@ -1,4 +1,4 @@
-import { Configurable, Pipeline, PipelineArgs, PipelineFilter } from "../../../factor";
+import Configurable from "../../interfaces/Configurable";
 
 
 class ConfigureModelPipeline extends Configurable {

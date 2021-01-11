@@ -1,4 +1,4 @@
-import { Utilities } from "../../factor";
+import Utilities from "../Utilities";
 
 const standardConfigFn = function(obj, config) {
     if (obj.hasOwnProperty("_config")) return false;
