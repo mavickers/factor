@@ -7,8 +7,8 @@ describe("AutoModel", () => {
         }
 
         expect(() => {
-            Test.new();
-            Test.new();
+            Test.create();
+            Test.create();
         }).not.toThrow();
     });
 
@@ -19,7 +19,7 @@ describe("AutoModel", () => {
             field3 = {type: Boolean};
         }
 
-        const test1 = Test.new();
+        const test1 = Test.create();
 
         test1.field1 = 1;
         expect(test1.field1).not.toEqual(1);
@@ -43,7 +43,7 @@ describe("AutoModel", () => {
             field1 = {type: String};
         };
 
-        const test1 = Test.new();
+        const test1 = Test.create();
 
         test1.setValue("field1", "test");
         expect(test1.field1).toEqual("test");

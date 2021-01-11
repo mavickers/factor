@@ -52,7 +52,7 @@ class AutoModel extends StandardModel {
         return this;
     }
 
-    static new(...args) {
+    static create(...args) {
         this.configure(this, configFn);
 
         const model = this;

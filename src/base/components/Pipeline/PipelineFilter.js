@@ -8,7 +8,7 @@ class PipelineFilter {
         const invalidInputArgsMsg = `Filter \"${filterName}\" received invalid 'input' argument`;
 
         if (!Utilities.isFunction(next)) throw Error("PipelineFilter(): 'next' parameter invalid");
-        if (!(input instanceof PipelineArgs)) PipelineArgs.new({ error: Error(invalidInputArgsMsg), meta: { input: input }});
+        if (!(input instanceof PipelineArgs)) PipelineArgs.create({ error: Error(invalidInputArgsMsg), meta: { input: input }});
     }
 }
 
