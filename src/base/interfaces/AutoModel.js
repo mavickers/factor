@@ -46,8 +46,8 @@ class AutoModel extends StandardModel {
     }
 
     setValue = function(prop, value) {
-        console.log("setValue " + prop + " " + value);
-        if (Object.hasOwnProperty(prop)) this[prop] = value;
+        if (this.hasOwnProperty(prop)) this[prop] = value;
+        else console.warn(`AutoModel.setValue(): property ${prop} does not exist`);
 
         return this;
     }
@@ -57,11 +57,12 @@ class AutoModel extends StandardModel {
 
         const model = this;
         const instance = new this(model);
+        const methods = model._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);
         const config = model._config;
 
         //iterate through the fields, replace with getter/setters
-        propNames.forEach(propName =>  {
+        propNames.filter(prop => !methods.includes(prop)).forEach(propName =>  {
             delete instance[propName];
             if (!(config.fieldDefs[propName])) return;
 
@@ -83,7 +84,7 @@ class AutoModel extends StandardModel {
             if (config.fieldDefs[propName].type === String) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
-                    set: function(value) { field = (typeof value === "string" || value instanceof String) && value.trim() || null; }
+                    set: function(value) { console.log("set"); field = (typeof value === "string" || value instanceof String) && value.trim() || null; }
                 });
             }
         });

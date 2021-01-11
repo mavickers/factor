@@ -33,6 +33,9 @@ describe("AutoModel", () => {
         expect(test1.field3).not.toEqual("test");
         test1.field3 = 1;
         expect(test1.field3).not.toEqual(1);
+
+        expect(() => test1.field4 = "test").toThrow();
+        expect(test1.field4).toBeUndefined();
     });
 
     it("Should set property values using setValue method", () => {
@@ -42,16 +45,18 @@ describe("AutoModel", () => {
 
         const test1 = Test.new();
 
-        expect(() => test1.setValue("field1", "test")).not.toThrow();
-        expect(() => test1.setValue("field1", 1)).toThrow();
-        expect(() => test1.setValue("field2", "test")).toThrow();
+        test1.setValue("field1", "test");
+        expect(test1.field1).toEqual("test");
+        test1.setValue("field1", 1);
+        expect(test1.field1).toBeNull();
+        expect(() => test1.setValue("field2", "test")).not.toThrow();
+        expect(test1.field2).toBeUndefined();
     });
 });
 
 describe("Configurable", () => {
     it("Should fail when attempting to reassign _config in a configured class.", () => {
-        class Test extends Configurable {
-        }
+        class Test extends Configurable {}
 
         Test.configure({});
         expect(() => Test._config = {}).toThrow();
