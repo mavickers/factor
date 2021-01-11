@@ -5,10 +5,11 @@ const configFn = function(model) {
 
     const instance = new model();
     const propNames = Object.getOwnPropertyNames(instance);
+    const methods = model._inherited.instanceMethods;
     const _config = { fieldDefs: { }, isMisconfigured: false };
 
     // iterate through the fields, parse and build the configs
-    propNames.forEach(propName => {
+    propNames.filter(prop => !methods.includes(prop)).forEach(propName => {
         const propConfig = { type: null, required: false, default: null, value: null };
         const prop = instance[propName];
 
@@ -29,7 +30,7 @@ const configFn = function(model) {
     });
 
     // now store it in the model prototype
-    Object.freeze(_config);
+    Object.seal(_config);
     Object.defineProperty(model, "_config", { get: () => _config });
 
     return true;
@@ -42,6 +43,13 @@ class AutoModel extends StandardModel {
         const modelChild = Object.getPrototypeOf(this).constructor;
         const modelConfig = modelChild._config;
         const modelName = modelChild.name;
+    }
+
+    setValue = function(prop, value) {
+        console.log("setValue " + prop + " " + value);
+        if (Object.hasOwnProperty(prop)) this[prop] = value;
+
+        return this;
     }
 
     static new(...args) {
@@ -80,10 +88,19 @@ class AutoModel extends StandardModel {
             }
         });
 
-        return instance;
+        return Object.seal(instance);
     }
 }
 
 const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
+
+// add AutoModel details to _inheritance
+if (!AutoModel._inherited) AutoModel._inherited = { }
+AutoModel._inherited.classNames = AutoModel._inherited.classNames || [];
+AutoModel._inherited.instanceMethods = AutoModel._inherited.instanceMethods || [];
+AutoModel._inherited.staticMethods = AutoModel._inherited.staticMethods || [];
+AutoModel._inherited.classNames.push("AutoModel");
+AutoModel._inherited.instanceMethods.push("setValue");
+AutoModel._inherited.staticMethods.push("new");
 
 export default AutoModel;

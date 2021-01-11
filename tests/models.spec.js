@@ -3,7 +3,7 @@ import { AutoModel, Configurable } from "../src/factor";
 describe("AutoModel", () => {
     it("Should not fail on secondary instantiations", () => {
         class Test extends AutoModel {
-            field1 = { type: String };
+            field1 = {type: String};
         }
 
         expect(() => {
@@ -14,9 +14,9 @@ describe("AutoModel", () => {
 
     it("Should silently fail when assigning the wrong value type", () => {
         class Test extends AutoModel {
-            field1 = { type: String };
-            field2 = { type: Number };
-            field3 = { type: Boolean };
+            field1 = {type: String};
+            field2 = {type: Number};
+            field3 = {type: Boolean};
         }
 
         const test1 = Test.new();
@@ -34,11 +34,24 @@ describe("AutoModel", () => {
         test1.field3 = 1;
         expect(test1.field3).not.toEqual(1);
     });
+
+    it("Should set property values using setValue method", () => {
+        class Test extends AutoModel {
+            field1 = {type: String};
+        };
+
+        const test1 = Test.new();
+
+        expect(() => test1.setValue("field1", "test")).not.toThrow();
+        expect(() => test1.setValue("field1", 1)).toThrow();
+        expect(() => test1.setValue("field2", "test")).toThrow();
+    });
 });
 
 describe("Configurable", () => {
     it("Should fail when attempting to reassign _config in a configured class.", () => {
-        class Test extends Configurable { }
+        class Test extends Configurable {
+        }
 
         Test.configure({});
         expect(() => Test._config = {}).toThrow();

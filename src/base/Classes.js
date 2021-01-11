@@ -10,26 +10,34 @@ export default function (bases) {
         }
     }
 
-    let classNames = [];
+    const inherited = { classNames: [], instanceMethods: [], staticMethods: [] };
 
     bases.forEach(base => {
         const className = base.prototype.constructor.name;
 
-        classNames.push(className);
+        inherited.classNames.push(className);
 
         // this copies instance properties over
         Object.getOwnPropertyNames(base.prototype)
             .filter(prop => prop != 'constructor')
-            .forEach(prop => Object.defineProperty(Bases.prototype, prop, Object.getOwnPropertyDescriptor(base.prototype, prop)));
+            .forEach(prop => {
+                Object.defineProperty(Bases.prototype, prop, Object.getOwnPropertyDescriptor(base.prototype, prop));
+                inherited.instanceMethods.push(prop);
+            });
         // this copies static properties over
         Object.getOwnPropertyNames(base)
             .filter(prop => ![ "length", "name", "prototype" ].includes(prop))
-            .forEach(prop => Object.defineProperty(Bases, prop, Object.getOwnPropertyDescriptor(base, prop)));
+            .forEach(prop => {
+                Object.defineProperty(Bases, prop, Object.getOwnPropertyDescriptor(base, prop));
+                inherited.staticMethods.push(prop);
+            });
     });
 
-    classNames = Array.isArray(Bases._classes) ? [ ...Bases._classes, ...classNames ] : classNames;
-    if (Bases._classes) delete Bases._classes;
-    Object.defineProperty(Bases, "_classes", { get: () => classNames });
+    inherited.classNames = Bases._inherited && Array.isArray(Bases._inherited.classNames)
+        ? [ ...Bases._inherited, ...inherited.classNames ]
+        : inherited.classNames;
+    if (Bases._inherited) delete Bases._inherited;
+    Object.defineProperty(Bases, "_inherited", { get: () => inherited });
 
     return Bases;
 }
