@@ -84,7 +84,7 @@ class AutoModel extends StandardModel {
             if (config.fieldDefs[propName].type === String) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
-                    set: function(value) { console.log("set"); field = (typeof value === "string" || value instanceof String) && value.trim() || null; }
+                    set: function(value) { field = (typeof value === "string" || value instanceof String) && value.trim() || null; }
                 });
             }
         });
