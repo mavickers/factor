@@ -102,6 +102,6 @@ AutoModel._inherited.instanceMethods = AutoModel._inherited.instanceMethods || [
 AutoModel._inherited.staticMethods = AutoModel._inherited.staticMethods || [];
 AutoModel._inherited.classNames.push("AutoModel");
 AutoModel._inherited.instanceMethods.push("setValue");
-AutoModel._inherited.staticMethods.push("new");
+AutoModel._inherited.staticMethods.push("create");
 
 export default AutoModel;
