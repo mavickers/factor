@@ -1,4 +1,4 @@
-import PipelineFilter from "../components/Pipeline/PipelineFilter";
+import PipelineFilter from "../../components/Pipeline/PipelineFilter";
 
 class SetBooleanField extends PipelineFilter {
     constructor(input, next) {

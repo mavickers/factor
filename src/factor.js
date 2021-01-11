@@ -1,14 +1,14 @@
 import Classes from "./base/Classes";
 import Configurable from "./base/interfaces/Configurable";
-import Describing from "./base/interfaces/Describing";
+import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
-import StandardModel from "./base/interfaces/StandardModel";
+import StandardModel from "./base/classes/StandardModel";
 
 import { Pipeline, PipelineArgs, PipelineFilter } from "./base/components/Pipeline";
 
-import AutoModel from "./base/interfaces/AutoModel";
-import Enum from "./base/interfaces/Enum";
-import Flags from "./base/interfaces/Flags";
+import AutoModel from "./base/classes/AutoModel";
+import Enum from "./base/classes/Enum";
+import Flags from "./base/classes/Flags";
 import Mapper from "./base/classes/Mapper";
 import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
 
@@ -20,7 +20,7 @@ export {
     AutoModel,
     Classes,
     Configurable,
-    Describing,
+    Describable,
     Enum,
     Flags,
     Mappable,
@@ -37,7 +37,7 @@ export default {
     AutoModel,
     Classes,
     Configurable,
-    Describing: Describing,
+    Describing: Describable,
     Enum: Enum,
     Flags: Flags,
     Mappable: Mappable,

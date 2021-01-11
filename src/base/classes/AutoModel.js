@@ -1,4 +1,4 @@
-import StandardModel from "../interfaces/StandardModel";
+import StandardModel from "./StandardModel";
 
 const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;

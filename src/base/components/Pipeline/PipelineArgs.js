@@ -1,4 +1,4 @@
-import AutoModel from "../../interfaces/AutoModel";
+import AutoModel from "../../classes/AutoModel";
 
 class PipelineArgs extends AutoModel {
     input = { type: Object, required: true };
