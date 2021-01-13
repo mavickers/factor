@@ -1,3 +1,9 @@
-export * as Pipeline from "./Pipeline";
-export * as PipelineArgs from "./PipelineArgs";
-export * as PipelineFilter from "./PipelineFilter";
+import Pipeline from "./Pipeline";
+import PipelineArgs from "./PipelineArgs";
+import PipelineFilter from "./PipelineFilter";
+
+export {
+    Pipeline,
+    PipelineArgs,
+    PipelineFilter
+}

@@ -2,6 +2,6 @@ import { Pipeline, PipelineArgs, PipelineFilter } from "../src/base/components/P
 
 describe("Pipelines", () => {
     it("Is testing", () => {
-        const pipelineArgs = new PipelineArgs();
+        const args = new PipelineArgs();
     })
 });
