@@ -5,7 +5,6 @@ import Classes from "../Classes";
 const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
 
-    console.log("new instance");
     const instance = new model();
     const propNames = Object.getOwnPropertyNames(instance);
     const methods = model._inherited.instanceMethods;
@@ -52,17 +51,13 @@ class AutoModel extends StandardModel {
         const modelChild = Utilities.getChildClass(this)
         const modelParent = Utilities.getParentClass(this);
 
-        Classes.addInheritance(modelParent, modelChild);
-
-        // console.log(modelChild);
-        console.log(modelChild._inherited);
+        Classes.addInheritance(modelChild, modelParent);
     }
 
     static create(...args) {
         this.configure(this, configFn);
 
         const model = this;
-        console.log("create");
         const instance = new this(model);
         const methods = model._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);
@@ -101,14 +96,5 @@ class AutoModel extends StandardModel {
 }
 
 const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
-
-// add AutoModel details to _inheritance
-if (!AutoModel._inherited) AutoModel._inherited = { }
-// AutoModel._inherited.classNames = AutoModel._inherited.classNames || [];
-// AutoModel._inherited.instanceMethods = AutoModel._inherited.instanceMethods || [];
-// AutoModel._inherited.staticMethods = AutoModel._inherited.staticMethods || [];
-// AutoModel._inherited.classNames.push("AutoModel");
-// AutoModel._inherited.instanceMethods.push("setValue");
-// AutoModel._inherited.staticMethods.push("create");
 
 export default AutoModel;

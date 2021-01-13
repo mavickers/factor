@@ -37,7 +37,8 @@ Classes.addMethods = function(newBase, oldBase) {
 
 Classes.addInheritance = function(newBase, oldBase, instanceMethods, staticMethods) {
     if (!(typeof newBase == "function" || newBase instanceof Function)) return;
-    if (!(Array.isArray(instanceMethods) && Array.isArray(staticMethods))) return;
+    if (instanceMethods && !Array.isArray(instanceMethods)) return;
+    if (staticMethods && !Array.isArray(staticMethods)) return;
 
     instanceMethods = instanceMethods || Object.getOwnPropertyNames(oldBase.prototype).filter(prop => prop !== "constructor");
     staticMethods = staticMethods || Object.getOwnPropertyNames(oldBase).filter(prop => ![ "length", "name", "prototype" ].includes(prop));
