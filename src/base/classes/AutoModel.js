@@ -1,4 +1,9 @@
 import StandardModel from "./StandardModel";
+import Utilities from "../Utilities";
+import Classes from "../Classes";
+import Configurable from "../interfaces/Configurable";
+import Describable from "../interfaces/Describable";
+import Mappable from "../interfaces/Mappable";
 
 const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
@@ -38,18 +43,21 @@ const configFn = function(model) {
 
 class AutoModel extends StandardModel {
     constructor(obj) {
+        // todo: figure out how to disable the constructor and force
+        //       usage of create()
+
+        // todo: also consider migrating create() to eventual
+        //       repo-enabled class
+
         super(obj);
 
-        const modelChild = Object.getPrototypeOf(this).constructor;
-        const modelConfig = modelChild._config;
-        const modelName = modelChild.name;
-    }
+        const modelChild = Utilities.getChildClass(this)
+        const modelParent = Utilities.getParentClass(this);
 
-    setValue = function(prop, value) {
-        if (this.hasOwnProperty(prop)) this[prop] = value;
-        else console.warn(`AutoModel.setValue(): property ${prop} does not exist`);
+        Classes.addInheritance(modelParent, modelChild);
 
-        return this;
+        // console.log(modelChild);
+        console.log(modelChild._inherited);
     }
 
     static create(...args) {
@@ -97,11 +105,11 @@ const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
 
 // add AutoModel details to _inheritance
 if (!AutoModel._inherited) AutoModel._inherited = { }
-AutoModel._inherited.classNames = AutoModel._inherited.classNames || [];
-AutoModel._inherited.instanceMethods = AutoModel._inherited.instanceMethods || [];
-AutoModel._inherited.staticMethods = AutoModel._inherited.staticMethods || [];
-AutoModel._inherited.classNames.push("AutoModel");
-AutoModel._inherited.instanceMethods.push("setValue");
-AutoModel._inherited.staticMethods.push("create");
+// AutoModel._inherited.classNames = AutoModel._inherited.classNames || [];
+// AutoModel._inherited.instanceMethods = AutoModel._inherited.instanceMethods || [];
+// AutoModel._inherited.staticMethods = AutoModel._inherited.staticMethods || [];
+// AutoModel._inherited.classNames.push("AutoModel");
+// AutoModel._inherited.instanceMethods.push("setValue");
+// AutoModel._inherited.staticMethods.push("create");
 
 export default AutoModel;

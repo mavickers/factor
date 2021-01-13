@@ -16,6 +16,8 @@ class Utilities {
         return new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)').exec(func.toString().replace(/\n/g, ''))[1].replace(/\/\*.*?\*\//g, '').replace(/ /g, '');
     };
 
+    static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
+    static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
     static getParentClassName = (obj) => Object.getPrototypeOf(obj.constructor).name;
     static isArrayOfType = (obj, type) => obj && Array.isArray(obj) && obj.reduce((acc, col) => acc && col instanceof type, true) || false;
     static isClass = (obj) => {

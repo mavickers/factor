@@ -33,25 +33,20 @@ describe("AutoModel", () => {
         expect(test1.field3).not.toEqual("test");
         test1.field3 = 1;
         expect(test1.field3).not.toEqual(1);
-
-        expect(() => test1.field4 = "test").toThrow();
-        expect(test1.field4).toBeUndefined();
     });
 
-    it("Should set property values using setValue method", () => {
+    it("Should not allow assigning values to new fields", () => {
         class Test extends AutoModel {
             field1 = {type: String};
-        };
+            field2 = {type: Number};
+            field3 = {type: Boolean};
+        }
 
         const test1 = Test.create();
 
-        test1.setValue("field1", "test");
-        expect(test1.field1).toEqual("test");
-        test1.setValue("field1", 1);
-        expect(test1.field1).toBeNull();
-        expect(() => test1.setValue("field2", "test")).not.toThrow();
-        expect(test1.field2).toBeUndefined();
-    });
+        expect(() => test1.field4 = "test").toThrow();
+        expect(test1.field4).toBeUndefined();
+    })
 });
 
 describe("Configurable", () => {
