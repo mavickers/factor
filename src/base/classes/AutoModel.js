@@ -1,13 +1,11 @@
 import StandardModel from "./StandardModel";
 import Utilities from "../Utilities";
 import Classes from "../Classes";
-import Configurable from "../interfaces/Configurable";
-import Describable from "../interfaces/Describable";
-import Mappable from "../interfaces/Mappable";
 
 const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
 
+    console.log("new instance");
     const instance = new model();
     const propNames = Object.getOwnPropertyNames(instance);
     const methods = model._inherited.instanceMethods;
@@ -64,6 +62,7 @@ class AutoModel extends StandardModel {
         this.configure(this, configFn);
 
         const model = this;
+        console.log("create");
         const instance = new this(model);
         const methods = model._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);

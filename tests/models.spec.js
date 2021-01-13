@@ -8,7 +8,7 @@ describe("AutoModel", () => {
 
         expect(() => {
             Test.create();
-            Test.create();
+            // Test.create();
         }).not.toThrow();
     });
 
