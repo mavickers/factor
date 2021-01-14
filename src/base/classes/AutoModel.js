@@ -42,6 +42,7 @@ class AutoModel extends StandardModel {
     constructor(obj) {
         // todo: figure out how to disable the constructor and force
         //       usage of create()
+        //       https://stackoverflow.com/questions/21667149/how-to-define-private-constructors-in-javascript
 
         // todo: also consider migrating create() to eventual
         //       repo-enabled class
