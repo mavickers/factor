@@ -1,9 +1,41 @@
+import PipelineFilter from "./PipelineFilter";
+import PipelineArgs from "./PipelineArgs";
+
+const execute = function(filter, input, next, callback) {
+    const isAsync = typeof callback === "function" || callback instanceof Function;
+    const callbackFn = isAsync ? callback : function() { };
+    const nextFn = isAsync
+        ? next || function() { callbackFn(null, input) }
+        : next || function() { };
+    const nextArgs = isAsync ? [ input, callbackFn ] : [ input ];
+
+    if ()
+
+        (function() {
+
+        })()(...nextArgs);
+}
+
+
 class Pipeline {
-    filters = [];
-    current = 0;
+    #arguments;
+    #filters = [];
+    #current = 0;
 
-    constructor() {
+    constructor(...args) {
+        this.withFilters(...args);
 
+        return this;
+    }
+
+    withArgs = function(pipelineArgs) {
+        if (!(pipelineArgs instanceof PipelineArgs)) throw Error("Pipeline.withArgs(): 'pipelineArgs' parameters is invalid");
+        if (!pipelineArgs.data) pipelineArgs.data = { };
+        if (!pipelineArgs.meta) pipelineArgs.meta = { abort: false, filters: [ ] };
+    }
+
+    withFilters = function(...filters) {
+        filters.forEach(filter => filter instanceof PipelineFilter && this.#filters.push(filter));
     }
 
     add(filter) {

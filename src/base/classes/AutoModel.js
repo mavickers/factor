@@ -41,7 +41,8 @@ const configFn = function(model) {
 class AutoModel extends StandardModel {
     constructor(obj) {
         // todo: figure out how to disable the constructor and force
-        //       usage of create()
+        //       usage of create(); the SO article below is a bit convoluted
+        //       but a Proxy or class wrapper may be the answer.
         //       https://stackoverflow.com/questions/21667149/how-to-define-private-constructors-in-javascript
 
         // todo: also consider migrating create() to eventual
@@ -63,6 +64,7 @@ class AutoModel extends StandardModel {
         const methods = model._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);
         const config = model._config;
+        const initialVals = (typeof args === "object" || args instanceof Object) && args || { };
 
         //iterate through the fields, replace with getter/setters
         propNames.filter(prop => !methods.includes(prop)).forEach(propName =>  {
@@ -84,6 +86,12 @@ class AutoModel extends StandardModel {
                     set: function(value) { field = (typeof value === "number" || value instanceof Number) && value || null; }
                 });
             }
+            if (config.fieldDefs[propName].type === Object) {
+                Object.defineProperty(instance, propName, {
+                    get: function() { return field; },
+                    set: function(value) { field = (typeof value === "object" || value instanceof Object) && value || null; }
+                });
+            }
             if (config.fieldDefs[propName].type === String) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
@@ -91,6 +99,9 @@ class AutoModel extends StandardModel {
                 });
             }
         });
+
+        // iterate through the arguments and set the values accordingly
+        initialVals.forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
 
         return Object.seal(instance);
     }
