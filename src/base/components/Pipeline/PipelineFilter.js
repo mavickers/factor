@@ -10,7 +10,7 @@ class PipelineFilter {
 
     constructor(processFn) {
         this.#name = Utilities.getChildClass(this).name;
-        this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
+        this.processor = processFn;
     }
 
     abort() {
@@ -32,6 +32,14 @@ class PipelineFilter {
 
         if (isAsync) next(pipelineArgs, callback);
         else return next(pipelineArgs);
+    }
+
+    get processor() {
+        return this.#processFn();
+    }
+
+    set processor(processFn) {
+        this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
     }
 }
 
