@@ -66,38 +66,42 @@ class AutoModel extends StandardModel {
         const config = model._config;
         const initialVals = (typeof args === "object" || args instanceof Object) && args || { };
 
-        //iterate through the fields, replace with getter/setters
+        //iterate through the fields, replace with getter/setters, set default values
         propNames.filter(prop => !methods.includes(prop)).forEach(propName =>  {
             delete instance[propName];
-            if (!(config.fieldDefs[propName])) return;
 
+            if (!config?.fieldDefs?.[propName] ?? false) return;
+
+            const fieldDef = config?.fieldDefs?.[propName] ?? null;
+            const fieldValDefault = fieldDef.default ?? fieldDef.type == Boolean ? false : null;
             let field = this[`#${propName}`];
-            //const pipelineArgs = PipelineArgs.new({ input: { field: this[`#${propName}`], config: config, propName: propName }})
 
-            if (config.fieldDefs[propName].type === Boolean) {
+            if (fieldDef.type === Boolean) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
-                    set: function(value) { field = typeof value === "boolean" && value; }
+                    set: function(value) { field = (typeof value === "boolean" || value instanceof Boolean) && value; }
                 });
             }
-            if (config.fieldDefs[propName].type === Number) {
+            if (fieldDef.type === Number) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
                     set: function(value) { field = (typeof value === "number" || value instanceof Number) && value || null; }
                 });
             }
-            if (config.fieldDefs[propName].type === Object) {
+            if (fieldDef.type === Object) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
                     set: function(value) { field = (typeof value === "object" || value instanceof Object) && value || null; }
                 });
             }
-            if (config.fieldDefs[propName].type === String) {
+            if (fieldDef.type === String) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
                     set: function(value) { field = (typeof value === "string" || value instanceof String) && value.trim() || null; }
                 });
             }
+
+            instance[propName] = fieldValDefault;
         });
 
         // iterate through the arguments and set the values accordingly

@@ -12,12 +12,6 @@ class PipelineFilter {
     constructor(processFn) {
         this.#name = Utilities.getChildClass(this);
         this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
-        // const filterName = Object.getPrototypeOf(this).constructor.name;
-        // const invalidNextArgsMsg = `Filter \"${filterName}\" received invalid 'next' argument`
-        // const invalidInputArgsMsg = `Filter \"${filterName}\" received invalid 'input' argument`;
-        //
-        // if (!Utilities.isFunction(next)) throw Error("PipelineFilter(): 'next' parameter invalid");
-        // if (!(input instanceof PipelineArgs)) PipelineArgs.create({ error: Error(invalidInputArgsMsg), meta: { input: input }});
     }
 
     abort = function() {

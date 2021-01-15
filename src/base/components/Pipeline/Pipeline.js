@@ -9,11 +9,11 @@ const execute = function(filter, input, next, callback) {
         : next || function() { };
     const nextArgs = isAsync ? [ input, callbackFn ] : [ input ];
 
-    if ()
+//    if ()
 
-        (function() {
+    (function() {
 
-        })()(...nextArgs);
+    })()(...nextArgs);
 }
 
 

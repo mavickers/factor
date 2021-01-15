@@ -2,10 +2,7 @@ import { Pipeline, PipelineArgs, PipelineFilter } from "../src/base/components/P
 
 describe("Pipelines", () => {
     it("Instantiates correctly", () => {
-        expect(() => PipelineArgs.create({
-            input: {},
-
-        }))
+        expect(() => PipelineArgs.create()).not.toThrow();
     });
     // it("Is testing", () => {
     //     class FilterOne extends PipelineFilter {
