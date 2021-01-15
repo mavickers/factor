@@ -10,6 +10,7 @@ class Utilities {
      *  May not work properly with params that have a default value.
      *
      */
+    static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
     static getFuncParams (func) {
         if (!(func && func instanceof Function)) throw Error("Invalid param 'func' in funcParams()");
 
@@ -32,7 +33,9 @@ class Utilities {
     static isClassedWith = (obj, className) => {
         return Array.isArray(obj) && className && typeof className == "string" && obj.includes(className);
     };
-    static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) || false;
+    static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
+    static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
+    static isString = (obj) => obj && (typeof obj === "string" || obj instanceof String) && true || false;
 }
 
 export default Utilities;

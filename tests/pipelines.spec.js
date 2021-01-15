@@ -1,28 +1,20 @@
-import { Pipeline, PipelineArgs, PipelineFilter } from "../src/base/components/Pipeline";
+import PipelineArgs from "../src/base/components/Pipeline/PipelineArgs";
 
 describe("Pipelines", () => {
-    it("Instantiates correctly", () => {
+    beforeEach(() => {
+
+    });
+
+    it("PipelineArgs instantiates correctly", () => {
         let args;
 
         expect(() => args = PipelineArgs.create()).not.toThrow();
+        expect(() => args.meta = { }).toThrow();
+        expect(() => args.meta.test = "test").toThrow();
+        expect(() => args.error = new Error("test")).not.toThrow();
+        expect(args.error).toBeNull();
+        expect(() => args.error = "Test Message").not.toThrow();
 
-        console.log(args);
+        expect(args.error.message).toEqual("Test Message");
     });
-    // it("Is testing", () => {
-    //     class FilterOne extends PipelineFilter {
-    //         constructor(args, ) {
-    //             super();
-    //
-    //         }
-    //     };
-    //
-    //     const pipeline = Pipeline
-    //         .create(FilterOne, FilterTwo, FilterThree)
-    //         .withFilter(FilterFive)
-    //         .withFilters(FilterSix, FilterSeven)
-    //         .withFinish(FilterEight)
-    //         .withArgs(paramArgs)
-    //         .run(paramArgs);
-    //     const args = new PipelineArgs();
-    // })
 });

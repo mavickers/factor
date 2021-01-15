@@ -28,8 +28,7 @@
         "url": "https://github.com/mavickers/factor/issues"
     },
     "homepage": "https://github.com/mavickers/factor#readme",
-    "dependencies": {
-    },
+    "dependencies": {},
     "devDependencies": {
         "@babel/cli": "^7.12.10",
         "@babel/core": "^7.12.10",
@@ -42,6 +41,7 @@
         "@babel/plugin-transform-runtime": "^7.12.10",
         "@babel/plugin-transform-template-literals": "^7.12.1",
         "@babel/preset-env": "^7.12.11",
+        "@babel/preset-typescript": "^7.12.7",
         "assert": "^2.0.0",
         "babel-eslint": "~10.1.0",
         "babel-jest": "~26.3.0",

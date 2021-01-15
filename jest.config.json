@@ -7,11 +7,8 @@
     "transform": {
         "^.+\\.js$": [ "babel-jest", {
             "presets": [
-                [ "@babel/preset-env", {
-                    "targets": {
-                        "node": 10
-                    }
-                }]
+                [ "@babel/preset-env", { "targets": { "node": "current" } }],
+                "@babel/preset-typescript"
             ],
             "plugins": [
                 "@babel/plugin-proposal-class-properties",

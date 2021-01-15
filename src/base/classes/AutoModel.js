@@ -82,10 +82,13 @@ class AutoModel extends StandardModel {
             const fieldDef = config?.fieldDefs?.[propName] ?? null;
             const fieldValDefault = fieldDef.default || (fieldDef.type == Boolean ? false : null);
             const privateFieldName = `#${propName}`;
+            const readOnly = (fieldDef?.readOnly ?? false) || false;
 
             // this may not work, will have to define a private obj on the instance that contains
             // the actual field vals.
             let field = eval("\"" + `this.#${propName}` + "\"");
+
+            const fieldVals = { };
 
             // console.log(propName);
             // console.log(fieldDef);
@@ -95,33 +98,34 @@ class AutoModel extends StandardModel {
             //
             if (fieldDef.type === Boolean) {
                 Object.defineProperty(instance, propName, {
-                    get: function() { return field; },
-                    set: function(value) { field = (typeof value === "boolean" || value instanceof Boolean) && value; }
+                    get: function() { return fieldVals[propName]; },
+                    set: function(value) { fieldVals[propName] = (typeof value === "boolean" || value instanceof Boolean) && value; }
                 });
             }
             if (fieldDef.type === Number) {
                 Object.defineProperty(instance, propName, {
-                    get: function() { return field; },
-                    set: function(value) { field = (typeof value === "number" || value instanceof Number) && value || null; }
+                    get: function() { return fieldVals[propName]; },
+                    set: function(value) { fieldVals[propName] = (typeof value === "number" || value instanceof Number) && value || null; }
                 });
             }
             if (fieldDef.type === Object) {
-                console.log("Object.defineProperty " + propName);
-                console.log(field);
+                // console.log("Object.defineProperty " + propName);
+                // console.log(field);
+
                 Object.defineProperty(instance, propName, {
-                    get: function() { return field; },
-                    set: function(value) { field = (typeof value === "object" || value instanceof Object) && value || null; }
+                    get: function() { return fieldVals[propName]; },
+                    ...(readOnly && { set: function(value) { fieldVals[propName] = Utilities.isObject(value) && value || null; }})
                 });
-                console.log(instance.data);
+                // console.log(instance.data);
             }
             if (fieldDef.type === String) {
                 Object.defineProperty(instance, propName, {
-                    get: function() { return field; },
-                    set: function(value) { field = (typeof value === "string" || value instanceof String) && value.trim() || null; }
+                    get: function() { return fieldVals[propName]; },
+                    ...(readOnly && { set: function(value) { fieldVals[propName] = (typeof value === "string" || value instanceof String) && value.trim() || null; }})
                 });
             }
 
-            console.log(instance);
+            // console.log(instance);
             instance[propName] = fieldValDefault;
         });
 
