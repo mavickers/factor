@@ -39,6 +39,8 @@ const configFn = function(model) {
 }
 
 class AutoModel extends StandardModel {
+    #test;
+
     constructor(obj) {
         // todo: figure out how to disable the constructor and force
         //       usage of create(); the SO article below is a bit convoluted
@@ -49,6 +51,11 @@ class AutoModel extends StandardModel {
         //       repo-enabled class
 
         super(obj);
+
+        // this.#test = "hello";
+        // const test1 = "goodbye";
+        // console.log(eval("\"" + this.#test + "\""));
+        // console.log(this.#test);
 
         const modelChild = Utilities.getChildClass(this)
         const modelParent = Utilities.getParentClass(this);
@@ -73,9 +80,19 @@ class AutoModel extends StandardModel {
             if (!config?.fieldDefs?.[propName] ?? false) return;
 
             const fieldDef = config?.fieldDefs?.[propName] ?? null;
-            const fieldValDefault = fieldDef.default ?? fieldDef.type == Boolean ? false : null;
-            let field = this[`#${propName}`];
+            const fieldValDefault = fieldDef.default || (fieldDef.type == Boolean ? false : null);
+            const privateFieldName = `#${propName}`;
 
+            // this may not work, will have to define a private obj on the instance that contains
+            // the actual field vals.
+            let field = eval("\"" + `this.#${propName}` + "\"");
+
+            // console.log(propName);
+            // console.log(fieldDef);
+            // console.log(fieldDef.default);
+            // console.log(fieldDef.type);
+            // console.log(fieldValDefault);
+            //
             if (fieldDef.type === Boolean) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
@@ -89,10 +106,13 @@ class AutoModel extends StandardModel {
                 });
             }
             if (fieldDef.type === Object) {
+                console.log("Object.defineProperty " + propName);
+                console.log(field);
                 Object.defineProperty(instance, propName, {
                     get: function() { return field; },
                     set: function(value) { field = (typeof value === "object" || value instanceof Object) && value || null; }
                 });
+                console.log(instance.data);
             }
             if (fieldDef.type === String) {
                 Object.defineProperty(instance, propName, {
@@ -101,6 +121,7 @@ class AutoModel extends StandardModel {
                 });
             }
 
+            console.log(instance);
             instance[propName] = fieldValDefault;
         });
 
@@ -111,6 +132,6 @@ class AutoModel extends StandardModel {
     }
 }
 
-const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel ];
+const fieldTypes = [ Boolean, Number, String, AutoModel, StandardModel, Object, Error ];
 
 export default AutoModel;

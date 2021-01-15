@@ -14,6 +14,8 @@ class PipelineFilter {
         this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
     }
 
+    get name() { return this.#name; }
+
     abort = function() {
         if (!this.#pipelineArgs) this.#pipelineArgs = PipelineArgs.create();
         if (!this.#pipelineArgs.meta) this.#pipelineArgs.meta = { abort: true, filters: [ ] };
