@@ -26,12 +26,9 @@ class PipelineFilter {
         this.#next = next;
         this.#callback = callback;
 
-        const isAsync = typeof callback === "function" || callback instanceof Function;
+        const isAsync = Utilities.isFunction(callback);
 
-        if (!pipelineArgs?.isAborted ?? true)
-            this.#pipelineArgs.meta.filters.push({ name: this.#name, result: this.#processFn(pipelineArgs) });
-
-        pipelineArgs.addFilterResult(this.#processFn(pipelineArgs.data));
+        !pipelineArgs.isAborted && pipelineArgs.addFilterResult(this.#name, this.#processFn(pipelineArgs.data));
 
         if (isAsync) next(pipelineArgs, callback);
         else return next(pipelineArgs);
