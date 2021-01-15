@@ -1,5 +1,5 @@
 import PipelineArgs from "./PipelineArgs";
-import { Utilities } from "../../Utilities";
+import Utilities from "../../Utilities";
 
 class PipelineFilter {
     #name;
@@ -10,13 +10,13 @@ class PipelineFilter {
     #processFn = function(input) { };
 
     constructor(processFn) {
-        this.#name = Utilities.getChildClass(this);
+        this.#name = Utilities.getChildClass(this).name;
         this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
     }
 
     get name() { return this.#name; }
 
-    abort = function() {
+    #abort = function() {
         if (!this.#pipelineArgs) this.#pipelineArgs = PipelineArgs.create();
         if (!this.#pipelineArgs.meta) this.#pipelineArgs.meta = { abort: true, filters: [ ] };
 
@@ -24,14 +24,13 @@ class PipelineFilter {
     }
 
     static create = function(processFn) {
-        return new PipelineFilter(processFn);
+        return new this(processFn);
     };
 
     execute = function(pipelineArgs, next, callback) {
         if (!Utilities.isFunction(next)) throw new Error("PipelineFilter.execute(): 'pipelineArgs' parameter is invalid");
 
         this.#pipelineArgs = pipelineArgs;
-        this.#pipelineArgs.meta = this.#pipelineArgs.meta || { abort: false, filters: [ ] };
         this.#next = next;
         this.#callback = callback;
 
