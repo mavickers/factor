@@ -9,7 +9,7 @@ describe("Pipelines", () => {
     it("should instantiate and operate PipelineArgs correctly", () => {
         let args;
 
-        expect(() => args = PipelineArgs.create()).not.toThrow();
+        expect(() => args = new PipelineArgs()).not.toThrow();
         expect(() => args.meta = { }).toThrow();
         expect(() => args.meta.test = "test").toThrow();
 
@@ -17,6 +17,7 @@ describe("Pipelines", () => {
          * tests on args.error
          *
          */
+
         expect(() => args.error = Error("test")).not.toThrow();
         expect(args.error).toBeNull();
         expect(() => args.error = "Test Message").not.toThrow();
@@ -29,10 +30,20 @@ describe("Pipelines", () => {
     });
 
     it("should instantiate and operate PipelineFilters correctly", () => {
-        class TestFilter extends PipelineFilter { };
+        class TestFilterA extends PipelineFilter {
+            constructor() {
+                super((data) => "RETURN");
+            }
+        }
 
-        let args = PipelineArgs.create({ test: "123" });
+        class TestFilterB extends PipelineFilter {
+            constructor() {
+                super((data) => this.abort());
+            }
+        }
+
         let filter;
+        let args;
 
         let nextReturnVal = "321";
         let nextSetVal = "321";
@@ -42,14 +53,23 @@ describe("Pipelines", () => {
             return "END";
         };
 
-        expect(() => filter = TestFilter.create()).not.toThrow();
-        expect(filter.name).toEqual("TestFilter");
+        args = new PipelineArgs({ test: "123" });
+        expect(() => filter = new TestFilterA()).not.toThrow();
+        expect(filter.name).toEqual("TestFilterA");
         expect(() => filter.name = "Test").toThrow();
-        expect(() => filter = TestFilter.create((p,n,c) => true )).not.toThrow();
-        expect(filter.abort).toBeUndefined();
         expect(() => filter.execute(args, null)).toThrow();
         expect(() => nextReturnVal = filter.execute(args, next)).not.toThrow();
         expect(nextSetVal).toEqual("123");
         expect(nextReturnVal).toEqual("END");
+        expect(args.meta.filters).toBeInstanceOf(Array);
+        expect(args.meta.filters).toHaveLength(1);
+        expect(args.meta.filters[0].name).toEqual("TestFilterA");
+        expect(args.meta.filters[0].result).toEqual("RETURN");
+
+        args = new PipelineArgs();
+        expect(() => filter = new TestFilterB()).not.toThrow();
+        expect(() => filter.execute(args, next)).not.toThrow();
+        expect(args.meta.abort).toEqual(true);
+        expect(args.isAborted).toEqual(true);
     });
 });

@@ -1,4 +1,5 @@
 import Utilities from "../../Utilities";
+import PipelineFilter from "./PipelineFilter";
 
 class PipelineArgs {
     data;
@@ -13,12 +14,19 @@ class PipelineArgs {
         this.#meta = { abort: false, filters: [ ] };
     }
 
+    abort() {
+        this.#meta.abort = true;
+    }
+
+    addFilterResult(filterName, value) {
+        this.#meta.filters.push({ name: filterName, result: value });
+    }
+
     get isAborted() {
         return this.#meta?.abort ?? false;
     }
 
     get error() {
-        //return Utilities.copyAndSeal(this.#error);
         return this.#error;
     }
 
@@ -28,10 +36,6 @@ class PipelineArgs {
 
     get meta() {
         return Utilities.copyAndSeal(this.#meta);
-    }
-
-    static create(obj) {
-        return new this(obj);
     }
 }
 

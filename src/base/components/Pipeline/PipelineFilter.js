@@ -1,4 +1,3 @@
-import PipelineArgs from "./PipelineArgs";
 import Utilities from "../../Utilities";
 
 class PipelineFilter {
@@ -7,25 +6,18 @@ class PipelineFilter {
     #next;
     #callback;
 
-    #processFn = function(input) { };
+    #processFn = function(data) { return null };
 
     constructor(processFn) {
         this.#name = Utilities.getChildClass(this).name;
         this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
     }
 
-    get name() { return this.#name; }
-
-    #abort = function() {
-        if (!this.#pipelineArgs) this.#pipelineArgs = PipelineArgs.create();
-        if (!this.#pipelineArgs.meta) this.#pipelineArgs.meta = { abort: true, filters: [ ] };
-
-        this.#pipelineArgs.meta.abort = true;
+    abort() {
+        this.#pipelineArgs.abort();
     }
 
-    static create = function(processFn) {
-        return new this(processFn);
-    };
+    get name() { return this.#name; }
 
     execute = function(pipelineArgs, next, callback) {
         if (!Utilities.isFunction(next)) throw new Error("PipelineFilter.execute(): 'pipelineArgs' parameter is invalid");
@@ -38,6 +30,8 @@ class PipelineFilter {
 
         if (!pipelineArgs?.isAborted ?? true)
             this.#pipelineArgs.meta.filters.push({ name: this.#name, result: this.#processFn(pipelineArgs) });
+
+        pipelineArgs.addFilterResult(this.#processFn(pipelineArgs.data));
 
         if (isAsync) next(pipelineArgs, callback);
         else return next(pipelineArgs);
