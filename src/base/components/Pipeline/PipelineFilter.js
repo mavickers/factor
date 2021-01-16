@@ -34,6 +34,12 @@ class PipelineFilter {
         else return next(pipelineArgs);
     }
 
+    executeNew = function(pipelineArgs) {
+        this.#pipelineArgs = pipelineArgs;
+
+        return !pipelineArgs.isAborted && this.#processFn(pipelineArgs.data) || null;
+    }
+
     get processor() {
         return this.#processFn();
     }
