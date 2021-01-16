@@ -11,13 +11,14 @@ class Utilities {
      *
      */
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
+    // todo: revisit this method - this may confuse when using class vs instance
+    static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
     static getFuncParams (func) {
         if (!(func && func instanceof Function)) throw Error("Invalid param 'func' in funcParams()");
 
         return new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)').exec(func.toString().replace(/\n/g, ''))[1].replace(/\/\*.*?\*\//g, '').replace(/ /g, '');
     };
-
-    static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
+    // todo: revisit the following two methods - these may confuse when using class vs instance
     static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
     static getParentClassName = (obj) => Object.getPrototypeOf(obj.constructor).name;
     static isArrayOfType = (obj, type) => obj && Array.isArray(obj) && obj.reduce((acc, col) => acc && col instanceof type, true) || false;

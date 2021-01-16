@@ -3,9 +3,6 @@ import Utilities from "../../Utilities";
 class PipelineFilter {
     #name;
     #pipelineArgs;
-    #next;
-    #callback;
-
     #processFn = function(data) { return null };
 
     constructor(processFn) {
@@ -19,22 +16,7 @@ class PipelineFilter {
 
     get name() { return this.#name; }
 
-    execute = function(pipelineArgs, next, callback) {
-        if (!Utilities.isFunction(next)) throw new Error("PipelineFilter.execute(): 'pipelineArgs' parameter is invalid");
-
-        this.#pipelineArgs = pipelineArgs;
-        this.#next = next;
-        this.#callback = callback;
-
-        const isAsync = Utilities.isFunction(callback);
-
-        !pipelineArgs.isAborted && pipelineArgs.addFilterResult(this.#name, this.#processFn(pipelineArgs.data));
-
-        if (isAsync) next(pipelineArgs, callback);
-        else return next(pipelineArgs);
-    }
-
-    executeNew = function(pipelineArgs) {
+    execute = function(pipelineArgs) {
         this.#pipelineArgs = pipelineArgs;
 
         return !pipelineArgs.isAborted && this.#processFn(pipelineArgs.data) || null;

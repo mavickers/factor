@@ -37,7 +37,7 @@ describe("PipelineFilter", () => {
         let args = new PipelineArgs({ test1: "123" });
         let returnVal = "321";
 
-        expect(() => returnVal = filter.executeNew(args)).not.toThrow();
+        expect(() => returnVal = filter.execute(args)).not.toThrow();
         expect(args.data.test1).toEqual("456");
         expect(args.data.test2).toEqual("000");
         expect(returnVal).toEqual("END");
@@ -50,14 +50,14 @@ describe("PipelineFilter", () => {
         let returnValue = "testing";
 
         expect(() => filter = new TestFilterC()).not.toThrow();
-        expect(() => filter.executeNew(args)).not.toThrow();
+        expect(() => filter.execute(args)).not.toThrow();
         expect(args.meta.abort).toEqual(true);
         expect(args.isAborted).toEqual(true);
 
         // test slipping in a new processor
         args = new PipelineArgs();
         expect(() => filter.processor = processor).not.toThrow();
-        expect(() => returnValue = filter.executeNew(args)).not.toThrow();
+        expect(() => returnValue = filter.execute(args)).not.toThrow();
         expect(returnValue).toEqual("NEW PROCESSOR");
     });
 });
