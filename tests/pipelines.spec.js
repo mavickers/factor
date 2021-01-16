@@ -40,14 +40,13 @@ describe("Pipelines", () => {
         }
 
         let args, filter;
-
-        let nextReturnVal = "321";
-        let nextSetVal = "321";
         let next = function(args) {
             nextSetVal = args.data.test;
             args.data.test = "456";
             return "END";
         };
+        let nextReturnVal = "321";
+        let nextSetVal = "321";
         let processor = (data) => "NEW PROCESSOR";
 
         // instantiate a filter and execute a processor; validate

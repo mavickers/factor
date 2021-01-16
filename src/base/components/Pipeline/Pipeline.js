@@ -22,8 +22,8 @@ class Pipeline {
     #filters = [];
     #current = 0;
 
-    constructor(...args) {
-        this.withFilters(...args);
+    constructor(...filters) {
+        this.withFilters(...filters);
 
         return this;
     }
@@ -36,11 +36,6 @@ class Pipeline {
 
     withFilters = function(...filters) {
         filters.forEach(filter => filter instanceof PipelineFilter && this.#filters.push(filter));
-    }
-
-    add(filter) {
-        this.filters.push(filter);
-        return this;
     }
 
     count(filter) {
