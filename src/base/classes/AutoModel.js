@@ -52,11 +52,6 @@ class AutoModel extends StandardModel {
 
         super(obj);
 
-        // this.#test = "hello";
-        // const test1 = "goodbye";
-        // console.log(eval("\"" + this.#test + "\""));
-        // console.log(this.#test);
-
         const modelChild = Utilities.getChildClass(this)
         const modelParent = Utilities.getParentClass(this);
 
@@ -90,12 +85,6 @@ class AutoModel extends StandardModel {
 
             const fieldVals = { };
 
-            // console.log(propName);
-            // console.log(fieldDef);
-            // console.log(fieldDef.default);
-            // console.log(fieldDef.type);
-            // console.log(fieldValDefault);
-            //
             if (fieldDef.type === Boolean) {
                 Object.defineProperty(instance, propName, {
                     get: function() { return fieldVals[propName]; },

@@ -1,5 +1,4 @@
 import Utilities from "../../Utilities";
-import PipelineFilter from "./PipelineFilter";
 
 class PipelineArgs {
     data;

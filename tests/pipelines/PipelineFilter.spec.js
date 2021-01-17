@@ -23,6 +23,13 @@ class TestFilterC extends PipelineFilter {
     }
 }
 
+const processorReplacement = (data) => {
+    data.test1 = "abcde";
+    data.test2 = "vwxyz";
+
+    return "NEW PROCESSOR";
+};
+
 describe("PipelineFilter", () => {
     it("instantiates and correctly", () => {
         let filter;
@@ -46,18 +53,26 @@ describe("PipelineFilter", () => {
     it("should abort properly", () => {
         let args = new PipelineArgs();
         let filter = new TestFilterA()
-        let processor = (data) => "NEW PROCESSOR";
         let returnValue = "testing";
 
         expect(() => filter = new TestFilterC()).not.toThrow();
         expect(() => filter.execute(args)).not.toThrow();
         expect(args.meta.abort).toEqual(true);
         expect(args.isAborted).toEqual(true);
+    });
 
-        // test slipping in a new processor
-        args = new PipelineArgs();
-        expect(() => filter.processor = processor).not.toThrow();
-        expect(() => returnValue = filter.execute(args)).not.toThrow();
-        expect(returnValue).toEqual("NEW PROCESSOR");
+    it("should view and swap processor function properly", () => {
+        let filter = new TestFilterB();
+        let args = new PipelineArgs({ test1: "123" });
+        let returnVal = "321";
+
+        expect(() => returnVal = filter.execute(args)).not.toThrow();
+        expect(returnVal).toEqual("END");
+        expect(() => filter.processor = processorReplacement).not.toThrow();
+        expect(filter.processor).toEqual(processorReplacement);
+        expect(() => returnVal = filter.execute(args)).not.toThrow();
+        expect(args.data.test1).toEqual("abcde");
+        expect(args.data.test2).toEqual("vwxyz");
+        expect(returnVal).toEqual("NEW PROCESSOR");
     });
 });

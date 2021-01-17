@@ -7,7 +7,7 @@ class PipelineFilter {
 
     constructor(processFn) {
         this.#name = Utilities.getChildClass(this).name;
-        this.processor = processFn;
+        this.#processFn = processFn;
     }
 
     abort() {
@@ -23,7 +23,7 @@ class PipelineFilter {
     }
 
     get processor() {
-        return this.#processFn();
+        return this.#processFn;
     }
 
     set processor(processFn) {
