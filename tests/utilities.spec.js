@@ -36,30 +36,37 @@ describe("Utilities", () => {
         function fn3(eight, nine, ten, eleven, /* test (hello) */ twelve) { };
         const fn4 = thirteen => null;
         const fn5 = function() { };
+        const fn6 = function(first = "1", second = "2", third, fourth = "4") { };
 
-        let res1, res2, res3, res4, res5;
+        let res1, res2, res3, res4, res5, res6;
 
         expect(() => res1 = Utilities.getFuncParams(fn1)).not.toThrow();
         expect(() => res2 = Utilities.getFuncParams(fn2)).not.toThrow();
         expect(() => res3 = Utilities.getFuncParams(fn3)).not.toThrow();
         expect(() => res4 = Utilities.getFuncParams(fn4)).not.toThrow();
         expect(() => res5 = Utilities.getFuncParams(fn5)).not.toThrow();
+        expect(() => res6 = Utilities.getFuncParams(fn6)).not.toThrow();
 
         expect(res1).toBeInstanceOf(Array);
         expect(res2).toBeInstanceOf(Array);
         expect(res3).toBeInstanceOf(Array);
         expect(res4).toBeInstanceOf(Array);
         expect(res5).toBeInstanceOf(Array);
+        expect(res6).toBeInstanceOf(Array);
 
         expect(res1).toHaveLength(3);
         expect(res2).toHaveLength(4);
         expect(res3).toHaveLength(5);
+        expect(res4).toHaveLength(1);
         expect(res5).toHaveLength(0);
+        expect(res6).toHaveLength(4);
 
         expect(res1).toEqual([ "one", "two", "three" ]);
         expect(res2).toEqual([ "four", "five", "six", "seven" ]);
         expect(res3).toEqual([ "eight", "nine", "ten", "eleven", "twelve" ]);
+        expect(res4).toEqual([ "thirteen" ]);
         expect(res5).toEqual([ ]);
+        expect(res6).toEqual([ "first", "second", "third", "fourth" ]);
     });
 
     it("should identify arrays containing items of the same type", () => {

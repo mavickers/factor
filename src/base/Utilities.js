@@ -1,16 +1,5 @@
 class Utilities {
 
-    /*
-     *  funcParams()
-     *
-     *  Returns the name of the parameters for a given function.
-     *
-     *  Stolen from https://stackoverflow.com/a/39253854/1809473
-     *
-     *  May not work properly with params that have a default value.
-     *
-     */
-
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
     /*
      *  getChildClass(obj)
@@ -30,9 +19,11 @@ class Utilities {
      *
      */
     static getFuncParams (func) {
-        if (func.length === 0) return [];
+        const fnString = func.toString();
 
-        let string = func.toString().replace(/\/\*.*\*\//, '');
+        if (func.length === 0 && !fnString.match(/^function\s*\(([a-zA-z].+)/)) return [];
+
+        let string = fnString.replace(/\/\*.*\*\//, "").replace(/\=.*?\,/g,",").replace(/=.*?\)/g,")");
         let args;
 
         // first match everything inside the function argument parens. like
