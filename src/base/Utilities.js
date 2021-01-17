@@ -10,37 +10,36 @@ class Utilities {
      *  May not work properly with params that have a default value.
      *
      */
+
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
     // todo: revisit this method - this may confuse when using class vs instance
     static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
+
+    /*
+     *  getFuncParams
+     *  lifted from https://stackoverflow.com/a/64505640/1809473
+     *
+     */
     static getFuncParams (func) {
         if (func.length === 0) return [];
 
-        let string = func.toString();
+        let string = func.toString().replace(/\/\*.*\*\//, '');
         let args;
 
         // first match everything inside the function argument parens. like
         // `function (arg1,arg2) {}` or `async function(arg1,arg2) { }
 
-        args = string.match(/(?:async|function)\s*.*?\(([^)]*)\)/)?.[1] ||
+        args =
+            string.match(/(?:async|function)\s*.*?\(([^)]*)\)/)?.[1] ||
             // arrow functions with multiple arguments  like `(arg1,arg2) => {}`
             string.match(/^\s*\(([^)]*)\)\s*=>/)?.[1] ||
             // arrow functions with single argument without parens like `arg => {}`
             string.match(/^\s*([^=]*)=>/)?.[1]
 
-        // split the arguments string into an array comma delimited.
+        // split the arguments string into a comma delimited array.
         // - ensure no inline comments are parsed and trim the whitespace.
         // - ensure no undefined values are added.
-        return args.split(',').map(arg => arg.replace(/\/\*.*\*\//, '').trim()).filter(arg => arg);
-
-        // if (!(func && func instanceof Function)) throw Error("Utilities.getFuncParams(): invalid param 'func'");
-        //
-        // const expr = new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)');
-        // const matches = expr.exec(func.toString().replace(/\n/g, ''));
-        //
-        // console.log(matches);
-        //
-        // return new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)').exec(func.toString().replace(/\n/g, ''))[1].replace(/\/\*.*?\*\//g, '').replace(/ /g, '');
+        return args.split(',').map(arg => arg.trim()).filter(arg => arg);
     };
     // todo: revisit the following two methods - these may confuse when using class vs instance
     static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
