@@ -14,9 +14,33 @@ class Utilities {
     // todo: revisit this method - this may confuse when using class vs instance
     static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
     static getFuncParams (func) {
-        if (!(func && func instanceof Function)) throw Error("Invalid param 'func' in funcParams()");
+        if (func.length === 0) return [];
 
-        return new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)').exec(func.toString().replace(/\n/g, ''))[1].replace(/\/\*.*?\*\//g, '').replace(/ /g, '');
+        let string = func.toString();
+        let args;
+
+        // first match everything inside the function argument parens. like
+        // `function (arg1,arg2) {}` or `async function(arg1,arg2) { }
+
+        args = string.match(/(?:async|function)\s*.*?\(([^)]*)\)/)?.[1] ||
+            // arrow functions with multiple arguments  like `(arg1,arg2) => {}`
+            string.match(/^\s*\(([^)]*)\)\s*=>/)?.[1] ||
+            // arrow functions with single argument without parens like `arg => {}`
+            string.match(/^\s*([^=]*)=>/)?.[1]
+
+        // split the arguments string into an array comma delimited.
+        // - ensure no inline comments are parsed and trim the whitespace.
+        // - ensure no undefined values are added.
+        return args.split(',').map(arg => arg.replace(/\/\*.*\*\//, '').trim()).filter(arg => arg);
+
+        // if (!(func && func instanceof Function)) throw Error("Utilities.getFuncParams(): invalid param 'func'");
+        //
+        // const expr = new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)');
+        // const matches = expr.exec(func.toString().replace(/\n/g, ''));
+        //
+        // console.log(matches);
+        //
+        // return new RegExp('(?:'+func.name+'\\s*|^)\\s*\\((.*?)\\)').exec(func.toString().replace(/\n/g, ''))[1].replace(/\/\*.*?\*\//g, '').replace(/ /g, '');
     };
     // todo: revisit the following two methods - these may confuse when using class vs instance
     static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
