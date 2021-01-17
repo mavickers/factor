@@ -76,7 +76,7 @@ describe("Utilities", () => {
         const arr7 = [ new ClassFour() ];
         const arr8 = [ new ClassFive() ];
         const arr9 = [ new ClassSix() ];
-        const arr10 = [ ClassFour, ClassFive, ClassSix ];
+        const arr10 = [ ClassThree, ClassFour, ClassFive, ClassSix ];
 
         expect(Utilities.isArrayOfType(arr1, "string")).toEqual(true);
         expect(Utilities.isArrayOfType(arr2, "number")).toEqual(true);
@@ -98,4 +98,17 @@ describe("Utilities", () => {
         expect(Utilities.isArrayOfType(arr10, Function)).toEqual(true);
         expect(Utilities.isArrayOfType(arr10, "function")).toEqual(true);
     });
+
+    it("should determine if an object is a class", () => {
+        class ClassOne { }
+        class ClassTwo extends ClassOne { };
+        function ClassThree() { };
+
+        expect(Utilities.isClass(ClassOne)).toEqual(true);
+        expect(Utilities.isClass(ClassTwo)).toEqual(true);
+        expect(Utilities.isClass(ClassThree)).toEqual(false);
+        expect(Utilities.isClass(new ClassOne())).toEqual(false);
+        expect(Utilities.isClass(Object)).toEqual(true);
+        expect(Utilities.isClass(String)).toEqual(true);
+    })
 });
