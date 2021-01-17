@@ -12,8 +12,17 @@ class Utilities {
      */
 
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
-    // todo: revisit this method - this may confuse when using class vs instance
+    /*
+     *  getChildClass(obj)
+     *  - obj: instantiated object
+     *
+     *  Returns the class/function that the instantiated object belongs to; use-
+     *  case is for inside of a parent class where you want to know the extending
+     *  class.
+     *
+     */
     static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
+    static getChildClassName = function(obj) { return this.getChildClass(obj).name; };
 
     /*
      *  getFuncParams
@@ -42,9 +51,21 @@ class Utilities {
         return args.split(',').map(arg => arg.trim()).filter(arg => arg);
     };
     // todo: revisit the following two methods - these may confuse when using class vs instance
+    /*
+     *  getParentClass(obj)
+     *  - obj: instantiated object
+     *
+     *  Returns the class being extended.
+     *
+     */
     static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
-    static getParentClassName = (obj) => Object.getPrototypeOf(obj.constructor).name;
-    static isArrayOfType = (obj, type) => obj && Array.isArray(obj) && obj.reduce((acc, col) => acc && col instanceof type, true) || false;
+    static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
+    static isArrayOfType = function(obj, type) {
+        if (!(obj && Array.isArray(obj) && type && type.toString().trim())) return false;
+        return (typeof type == "string")
+            ? (obj.reduce((acc, col) => acc && typeof col === type, true) || false)
+            : (obj.reduce((acc, col) => acc && col instanceof type, true) || false);
+    }
     static isClass = (obj) => {
         // if the string content of the given object satisfies any of these conditions,
         // consider the object as a class:
