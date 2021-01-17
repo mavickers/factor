@@ -75,12 +75,9 @@ class Utilities {
 
         return typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
     };
-    static isClassedWith = (obj, className) => {
-        return Array.isArray(obj) && className && typeof className == "string" && obj.includes(className);
-    };
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
-    static isString = (obj) => obj && (typeof obj === "string" || obj instanceof String) && true || false;
+    static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
 }
 
 export default Utilities;

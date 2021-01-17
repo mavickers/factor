@@ -35,28 +35,31 @@ describe("Utilities", () => {
         const fn2 = (four, five, six, seven) => null;
         function fn3(eight, nine, ten, eleven, /* test (hello) */ twelve) { };
         const fn4 = thirteen => null;
+        const fn5 = function() { };
 
-        let res1, res2, res3, res4;
+        let res1, res2, res3, res4, res5;
 
         expect(() => res1 = Utilities.getFuncParams(fn1)).not.toThrow();
         expect(() => res2 = Utilities.getFuncParams(fn2)).not.toThrow();
         expect(() => res3 = Utilities.getFuncParams(fn3)).not.toThrow();
         expect(() => res4 = Utilities.getFuncParams(fn4)).not.toThrow();
+        expect(() => res5 = Utilities.getFuncParams(fn5)).not.toThrow();
 
         expect(res1).toBeInstanceOf(Array);
         expect(res2).toBeInstanceOf(Array);
         expect(res3).toBeInstanceOf(Array);
         expect(res4).toBeInstanceOf(Array);
+        expect(res5).toBeInstanceOf(Array);
 
         expect(res1).toHaveLength(3);
         expect(res2).toHaveLength(4);
         expect(res3).toHaveLength(5);
-        expect(res4).toHaveLength(1);
+        expect(res5).toHaveLength(0);
 
         expect(res1).toEqual([ "one", "two", "three" ]);
         expect(res2).toEqual([ "four", "five", "six", "seven" ]);
         expect(res3).toEqual([ "eight", "nine", "ten", "eleven", "twelve" ]);
-        expect(res4).toEqual([ "thirteen" ]);
+        expect(res5).toEqual([ ]);
     });
 
     it("should identify arrays containing items of the same type", () => {
@@ -97,6 +100,10 @@ describe("Utilities", () => {
         expect(Utilities.isArrayOfType(arr9, "function")).toEqual(true);
         expect(Utilities.isArrayOfType(arr10, Function)).toEqual(true);
         expect(Utilities.isArrayOfType(arr10, "function")).toEqual(true);
+        expect(Utilities.isArrayOfType()).toEqual(false);
+        expect(Utilities.isArrayOfType("test", "string")).toEqual(false);
+        expect(Utilities.isArrayOfType(arr1)).toEqual(false);
+        expect(Utilities.isArrayOfType(undefined, "string")).toEqual(false);
     });
 
     it("should determine if an object is a class", () => {
@@ -111,4 +118,43 @@ describe("Utilities", () => {
         expect(Utilities.isClass(Object)).toEqual(true);
         expect(Utilities.isClass(String)).toEqual(true);
     })
+
+    it("should determine if an object is a function", () => {
+        const func1 = function() { };
+        function func2() { };
+        const func3 = () => null;
+        class ClassOne { }
+
+        expect(Utilities.isFunction(new Function())).toEqual(true);
+        expect(Utilities.isFunction(function() { })).toEqual(true);
+        expect(Utilities.isFunction(func1)).toEqual(true);
+        expect(Utilities.isFunction(func2)).toEqual(true);
+        expect(Utilities.isFunction(func3)).toEqual(true);
+        expect(Utilities.isFunction(ClassOne)).toEqual(true);
+        expect(Utilities.isFunction(new ClassOne())).toEqual(false);
+    });
+
+    it("should determine if an object is an object", () => {
+        class ClassOne { };
+
+        expect(Utilities.isObject({})).toEqual(true);
+        expect(Utilities.isObject(new Object())).toEqual(true);
+        expect(Utilities.isObject(Object)).toEqual(true);
+        expect(Utilities.isObject(new String())).toEqual(true);
+        expect(Utilities.isObject("string")).toEqual(false);
+        expect(Utilities.isObject(1)).toEqual(false);
+        expect(Utilities.isObject(true)).toEqual(false);
+        expect(Utilities.isObject(Function)).toEqual(true);
+        expect(Utilities.isObject(new Function())).toEqual(true);
+        expect(Utilities.isObject(ClassOne)).toEqual(true);
+        expect(Utilities.isObject(new ClassOne())).toEqual(true);
+    });
+
+    it("should determine if an object is a string", () => {
+        expect(Utilities.isString("test")).toEqual(true);
+        expect(Utilities.isString(new String())).toEqual(true);
+        expect(Utilities.isString(String)).toEqual(false);
+        expect(Utilities.isString("")).toEqual(true);
+        expect(Utilities.isString()).toEqual(false);
+    });
 });
