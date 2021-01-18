@@ -2,7 +2,7 @@ import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 
 export default class SetBooleanFieldFilter extends PipelineFilter {
     constructor() {
-        super(function(data) {
+        super((data) => {
             if (data.fieldDef.type !== Boolean) return;
 
             Object.defineProperty(data.instance, data.propName, {

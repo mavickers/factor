@@ -2,7 +2,7 @@ import { PipelineFilter } from "../../../components/Pipeline";
 
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
-        super(function(data) {
+        super((data) => {
             delete data.instance[data.propName];
 
             if (!data.config?.fieldDefs?.[data.propName] ?? false) return this.abort();

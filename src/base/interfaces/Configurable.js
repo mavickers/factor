@@ -1,13 +1,5 @@
 import Utilities from "../Utilities";
 
-const standardConfigFn = function(obj, config) {
-    if (obj.hasOwnProperty("_config")) return false;
-
-    Object.defineProperty(obj, "_config", { get: () => config });
-
-    return true;
-}
-
 class Configurable {
     static get isConfigured() {
         return this.hasOwnProperty("_config");
@@ -22,6 +14,14 @@ class Configurable {
 
         return configFn(this);
     }
+}
+
+const standardConfigFn = function(obj, config) {
+    if (obj.hasOwnProperty("_config")) return false;
+
+    Object.defineProperty(obj, "_config", { get: () => config });
+
+    return true;
 }
 
 export default Configurable;

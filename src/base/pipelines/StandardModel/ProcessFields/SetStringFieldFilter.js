@@ -3,7 +3,7 @@ import Utilities from "../../../Utilities";
 
 export default class SetStringFieldFilter extends PipelineFilter {
     constructor() {
-        super(function(data) {
+        super((data) => {
             if (data.fieldDef.type !== String) return;
 
             Object.defineProperty(data.instance, data.propName, {
