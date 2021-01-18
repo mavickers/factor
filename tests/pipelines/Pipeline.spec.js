@@ -38,7 +38,7 @@ describe("Pipeline", () => {
         expect(pipeline.count).toEqual(2);
         expect(() => pipeline = new Pipeline.create(FilterA, FilterB)).not.toThrow();
         expect(pipeline.count).toEqual(0);
-        expect(() => pipeline = new Pipeline.createWith(FilterA, FilterB)).not.toThrow();
+        expect(() => pipeline = new Pipeline.createWithFilters(FilterA, FilterB)).not.toThrow();
         expect(pipeline.count).toEqual(2);
     });
 
@@ -76,12 +76,12 @@ describe("Pipeline", () => {
         const argsA = new PipelineArgs({ test1: 1 });
         const argsB = new PipelineArgs({ test1: 1 });
 
-        expect(() => pipeline = new Pipeline.createWith(FilterA, FilterB).finishWith(FilterC)).not.toThrow();
+        expect(() => pipeline = new Pipeline.createWithFilters(FilterA, FilterB).finishWith(FilterC)).not.toThrow();
         expect(pipeline.count).toEqual(2);
         expect(() => pipeline.execute(argsA)).not.toThrow();
         expect(argsA.data.test1).toEqual(4);
 
-        expect(() => pipeline = new Pipeline.createWith(FilterA, FilterD, FilterB).finishWith(FilterC)).not.toThrow();
+        expect(() => pipeline = new Pipeline.createWithFilters(FilterA, FilterD, FilterB).finishWith(FilterC)).not.toThrow();
         expect(pipeline.count).toEqual(3);
         expect(() => pipeline.execute(argsB)).not.toThrow();
         expect(argsB.data.test1).toEqual(3);
