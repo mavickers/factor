@@ -13,5 +13,3 @@ export default class InitializeFilter extends PipelineFilter {
         });
     }
 }
-
-

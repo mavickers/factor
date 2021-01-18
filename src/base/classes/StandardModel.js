@@ -45,6 +45,8 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         // iterate through the arguments and set the values accordingly
         initialVals.forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
 
+        console.log(instance.className);
+
         return Object.seal(instance);
     }
 }
