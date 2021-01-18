@@ -1,14 +1,14 @@
 import PipelineFilter from "../../../../components/Pipeline/PipelineFilter";
 import Utilities from "../../../../Utilities";
 
-export default class SetNumberFieldFilter extends PipelineFilter {
+export default class SetObjectFieldFilter extends PipelineFilter {
     constructor() {
         super(function(data) {
-            if (data.fieldDef.type !== Number) return;
+            if (data.fieldDef.type !== Object) return;
 
             Object.defineProperty(data.instance, data.propName, {
                 get: function() { return data.fieldVals[data.propName]; },
-                ...(!data.readonly && { set: function(value) { data.fieldVals[data.propName] = Utilities.isNumber(value) && value || null; }})
+                ...(!data.readOnly && { set: function(value) { data.fieldVals[data.propName] = Utilities.isObject(value) && value || null; }})
             });
         });
     }

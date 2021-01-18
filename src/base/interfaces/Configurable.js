@@ -9,10 +9,6 @@ const standardConfigFn = function(obj, config) {
 }
 
 class Configurable {
-    constructor(obj) {
-
-    }
-
     static get isConfigured() {
         return this.hasOwnProperty("_config");
     }

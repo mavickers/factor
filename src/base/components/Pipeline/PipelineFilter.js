@@ -19,7 +19,7 @@ class PipelineFilter {
     execute = function(pipelineArgs) {
         this.#pipelineArgs = pipelineArgs;
 
-        return !pipelineArgs.isAborted && this.#processFn(pipelineArgs.data) || null;
+        return this.#processFn(pipelineArgs.data) || null;
     }
 
     get processor() {

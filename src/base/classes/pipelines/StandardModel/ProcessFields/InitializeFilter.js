@@ -3,15 +3,13 @@ import { PipelineFilter } from "../../../../components/Pipeline";
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super(function(data) {
-            const { instance, config, initialVals, propName } = data;
+            delete data.instance[data.propName];
 
-            delete instance[propName];
+            if (!data.config?.fieldDefs?.[data.propName] ?? false) return this.abort();
 
-            if (!config?.fieldDefs?.[propName] ?? false) return this.abort();
-
-            data.fieldDef = config?.fieldDefs?.[propName] ?? null;
-            data.fieldValDefault = fieldDef.default || (fieldDef.type == Boolean ? false : null);
-            data.readOnly = (fieldDef?.readOnly ?? false) || false;
+            data.fieldDef = data.config?.fieldDefs?.[data.propName] ?? null;
+            data.fieldValDefault = data.fieldDef.default || (data.fieldDef.type === Boolean ? false : null);
+            data.readOnly = (data.fieldDef?.readOnly ?? false) || false;
             data.fieldVals = { };
         });
     }

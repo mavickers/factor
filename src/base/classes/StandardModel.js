@@ -4,7 +4,9 @@ import Configurable from "../interfaces/Configurable";
 import Describable from "../interfaces/Describable";
 import Mappable from "../interfaces/Mappable";
 import { PipelineArgs } from "../components/Pipeline";
-import processFieldsPipeline from "./pipelines";
+import Pipelines from "./pipelines";
+
+const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
 
 const configFn = function(model) {
     if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
@@ -43,7 +45,7 @@ const configFn = function(model) {
 }
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
-    constructor(obj) {
+    constructor() {
         // todo: figure out how to disable the constructor and force
         //       usage of create(); the SO article below is a bit convoluted
         //       but a Proxy or class wrapper may be the answer.
@@ -52,7 +54,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         // todo: also consider migrating create() to eventual
         //       repo-enabled class
 
-        super(obj);
+        super();
 
         const modelChild = Utilities.getChildClass(this)
         const modelParent = Utilities.getParentClass(this);
@@ -63,63 +65,17 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     static create(...args) {
         this.configure(this, configFn);
 
-        const model = this;
-        const instance = new this(model);
-        const methods = model._inherited.instanceMethods;
+        const instance = new this();
+        const methods = this._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);
-        const config = model._config;
-        const initialVals = (typeof args === "object" || args instanceof Object) && args || { };
-
-        const pipelineArgs = new PipelineArgs({
-            instance: new this(model),
-            config: model._config,
-            initialVals: (typeof args === "object" || args instanceof Object) && args || { }
-        });
-        const pipeline = new Pipelin
-
-        propNames.filter(prop => !methods.includes(prop)).forEach(propName => {
-            pipelineArgs.propName = propName;
-            processFieldsPipeline.execute(pipelineArgs);
-        })
+        const config = this._config;
+        const initialVals = Utilities.isObject(args) && args || { };
 
         // iterate through the fields, replace with getter/setters, set default values
-        propNames.filter(prop => !methods.includes(prop)).forEach(propName => {
-            delete instance[propName];
-
-            if (!config?.fieldDefs?.[propName] ?? false) return;
-
-            const fieldDef = config?.fieldDefs?.[propName] ?? null;
-            const fieldValDefault = fieldDef.default || (fieldDef.type == Boolean ? false : null);
-            const readOnly = (fieldDef?.readOnly ?? false) || false;
-            const fieldVals = { };
-
-            if (fieldDef.type === Boolean) {
-                Object.defineProperty(instance, propName, {
-                    get: function() { return fieldVals[propName]; },
-                    set: function(value) { fieldVals[propName] = (typeof value === "boolean" || value instanceof Boolean) && value; }
-                });
-            }
-            if (fieldDef.type === Number) {
-                Object.defineProperty(instance, propName, {
-                    get: function() { return fieldVals[propName]; },
-                    set: function(value) { fieldVals[propName] = (typeof value === "number" || value instanceof Number) && value || null; }
-                });
-            }
-            if (fieldDef.type === Object) {
-                Object.defineProperty(instance, propName, {
-                    get: function() { return fieldVals[propName]; },
-                    ...(!readOnly && { set: function(value) { fieldVals[propName] = Utilities.isObject(value) && value || null; }})
-                });
-            }
-            if (fieldDef.type === String) {
-                Object.defineProperty(instance, propName, {
-                    get: function() { return fieldVals[propName]; },
-                    ...(!readOnly && { set: function(value) { fieldVals[propName] = (typeof value === "string" || value instanceof String) && value.trim() || null; }})
-                });
-            }
-
-            instance[propName] = fieldValDefault;
-        });
+        propNames
+            .filter(propName => !methods.includes(propName))
+            .map(propName => new PipelineArgs({ instance: instance, config: config, initialVals: initialVals, propName: propName }))
+            .forEach(arg => processFieldsPipeline.execute(arg));
 
         // iterate through the arguments and set the values accordingly
         initialVals.forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));

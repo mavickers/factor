@@ -2,10 +2,6 @@ import Utilities from "../Utilities";
 import Configurable from "../interfaces/Configurable";
 
 class Describable extends Configurable {
-    constructor() {
-        super();
-    }
-
     differencesFrom(obj) {
         const diffs = { };
 

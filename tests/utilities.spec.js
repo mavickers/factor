@@ -1,5 +1,4 @@
 import Utilities from "../src/base/Utilities";
-import * as Util from "util";
 
 describe("Utilities", () => {
     it("should copy and seal an object", () => {
@@ -163,5 +162,13 @@ describe("Utilities", () => {
         expect(Utilities.isString(String)).toEqual(false);
         expect(Utilities.isString("")).toEqual(true);
         expect(Utilities.isString()).toEqual(false);
+    });
+
+    it("should determine if an object is a number", () => {
+       expect(Utilities.isNumber(1)).toEqual(true);
+       expect(Utilities.isNumber("1")).toEqual(false);
+       expect(Utilities.isNumber(1.0)).toEqual(true);
+       expect(Utilities.isNumber(NaN)).toEqual(false);
+       expect(Utilities.isNumber(new Number())).toEqual(true);
     });
 });

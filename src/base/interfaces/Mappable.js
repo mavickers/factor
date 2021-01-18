@@ -1,10 +1,6 @@
 import Mapper from "../classes/Mapper";
 
 class Mappable {
-    constructor(obj) {
-
-    }
-
     mapTo(mappingFunction) {
         return mappingFunction(this);
     }

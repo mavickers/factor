@@ -34,6 +34,12 @@ describe("Pipeline", () => {
         expect(pipeline.count).toEqual(1);
         expect(() => pipeline = new Pipeline(FilterA, FilterB)).not.toThrow();
         expect(pipeline.count).toEqual(2);
+        expect(() => pipeline = new Pipeline().filterWith(FilterA, FilterB)).not.toThrow();
+        expect(pipeline.count).toEqual(2);
+        expect(() => pipeline = new Pipeline.create(FilterA, FilterB)).not.toThrow();
+        expect(pipeline.count).toEqual(0);
+        expect(() => pipeline = new Pipeline.createWith(FilterA, FilterB)).not.toThrow();
+        expect(pipeline.count).toEqual(2);
     });
 
     it("should execute basic pipeline and update meta properly", () => {
@@ -65,16 +71,38 @@ describe("Pipeline", () => {
         expect(argsB.meta.filters[2].value).toBeUndefined();
     });
 
-    it("should execute callback properly", () => {
-        let pipeline, argsB;
+    it("should execute final filter properly", () => {
+        let pipeline;
         const argsA = new PipelineArgs({ test1: 1 });
+        const argsB = new PipelineArgs({ test1: 1 });
+
+        expect(() => pipeline = new Pipeline.createWith(FilterA, FilterB).finishWith(FilterC)).not.toThrow();
+        expect(pipeline.count).toEqual(2);
+        expect(() => pipeline.execute(argsA)).not.toThrow();
+        expect(argsA.data.test1).toEqual(4);
+
+        expect(() => pipeline = new Pipeline.createWith(FilterA, FilterD, FilterB).finishWith(FilterC)).not.toThrow();
+        expect(pipeline.count).toEqual(3);
+        expect(() => pipeline.execute(argsB)).not.toThrow();
+        expect(argsB.data.test1).toEqual(3);
+    });
+
+    it("should execute callback properly", () => {
+        let pipeline;
+        const argsA = new PipelineArgs({ test1: 1 });
+        const argsB = new PipelineArgs({ test1: 1 });
 
         const callback = function(args) {
             args.data.callback = "callback";
         }
 
         expect(() => pipeline = new Pipeline(FilterA)).not.toThrow();
-        expect(() => argsB = pipeline.execute(argsA, callback)).not.toThrow();
+        expect(() => pipeline.execute(argsA, callback)).not.toThrow();
+        expect(argsA.data.callback).toEqual("callback");
+
+        expect(() => pipeline = new Pipeline(FilterA, FilterD, FilterB).finishWith(FilterC)).not.toThrow();
+        expect(() => pipeline.execute(argsB, callback)).not.toThrow();
         expect(argsB.data.callback).toEqual("callback");
+        expect(argsB.data.test1).toEqual(3);
     });
 });
