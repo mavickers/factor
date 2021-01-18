@@ -1,4 +1,4 @@
-import Pipeline from "../../../../components/Pipeline/Pipeline";
+import Pipeline from "../../../components/Pipeline/Pipeline";
 
 import Initialize from "./InitializeFilter"
 import SetBooleanField from "./SetBooleanFieldFilter";

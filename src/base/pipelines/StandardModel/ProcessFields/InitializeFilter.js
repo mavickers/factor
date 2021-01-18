@@ -1,4 +1,4 @@
-import { PipelineFilter } from "../../../../components/Pipeline";
+import { PipelineFilter } from "../../../components/Pipeline";
 
 export default class InitializeFilter extends PipelineFilter {
     constructor() {

@@ -1,4 +1,4 @@
-import PipelineFilter from "../../../../components/Pipeline/PipelineFilter";
+import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 
 export default class SetBooleanFieldFilter extends PipelineFilter {
     constructor() {

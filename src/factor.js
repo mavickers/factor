@@ -13,8 +13,6 @@ import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
 
 import Utilities from "./base/Utilities";
 
-import ConfigureModelPipeline from "./base/pipelines/ConfigureModelPipeline";
-
 export {
     Classes,
     Configurable,

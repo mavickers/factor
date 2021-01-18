@@ -1,10 +1,10 @@
-import Utilities from "../Utilities";
 import Classes from "../Classes";
 import Configurable from "../interfaces/Configurable";
 import Describable from "../interfaces/Describable";
 import Mappable from "../interfaces/Mappable";
-import { PipelineArgs } from "../components/Pipeline";
-import Pipelines from "./pipelines";
+import PipelineArgs from "../components/Pipeline/PipelineArgs";
+import Pipelines from "../pipelines";
+import Utilities from "../Utilities";
 
 const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
 

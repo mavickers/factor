@@ -1,5 +1,5 @@
-import PipelineFilter from "../../../../components/Pipeline/PipelineFilter";
-import Utilities from "../../../../Utilities";
+import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
+import Utilities from "../../../Utilities";
 
 export default class SetNumberFieldFilter extends PipelineFilter {
     constructor() {
