@@ -1,8 +1,8 @@
-import { AutoModel, Configurable } from "../src/factor";
+import { StandardModel, Configurable } from "../src/factor";
 
-describe("AutoModel", () => {
+describe("StandardModel", () => {
     it("Should not fail on secondary instantiations", () => {
-        class Test extends AutoModel {
+        class Test extends StandardModel {
             field1 = {type: String};
         }
 
@@ -13,7 +13,7 @@ describe("AutoModel", () => {
     });
 
     it("Should silently fail when assigning the wrong value type", () => {
-        class Test extends AutoModel {
+        class Test extends StandardModel {
             field1 = {type: String};
             field2 = {type: Number};
             field3 = {type: Boolean};
@@ -36,7 +36,7 @@ describe("AutoModel", () => {
     });
 
     it("Should not allow assigning values to new fields", () => {
-        class Test extends AutoModel {
+        class Test extends StandardModel {
             field1 = {type: String};
             field2 = {type: Number};
             field3 = {type: Boolean};

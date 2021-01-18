@@ -6,7 +6,6 @@ import StandardModel from "./base/classes/StandardModel";
 
 import { Pipeline, PipelineArgs, PipelineFilter } from "./base/components/Pipeline";
 
-import AutoModel from "./base/classes/AutoModel";
 import Enum from "./base/classes/Enum";
 import Flags from "./base/classes/Flags";
 import Mapper from "./base/classes/Mapper";
@@ -17,7 +16,6 @@ import Utilities from "./base/Utilities";
 import ConfigureModelPipeline from "./base/pipelines/ConfigureModelPipeline";
 
 export {
-    AutoModel,
     Classes,
     Configurable,
     Describable,
@@ -34,7 +32,7 @@ export {
 };
 
 export default {
-    AutoModel,
+    AutoModel: StandardModel,
     Classes,
     Configurable,
     Describing: Describable,
