@@ -22,7 +22,7 @@ class Pipeline {
         return new Pipeline();
     }
 
-    static createWithFilters(...filters) {
+    static createWith(...filters) {
         return new Pipeline(...filters);
     }
 

@@ -7,4 +7,4 @@ import SetStringField from "./SetStringFieldFilter"
 import SetObjectField from "./SetObjectFieldFilter"
 import Wrapup from "./WrapupFilter";
 
-export default Pipeline.createWithFilters(Initialize, SetBooleanField, SetNumberField, SetStringField, SetObjectField).finishWith(Wrapup);
+export default Pipeline.createWith(Initialize, SetBooleanField, SetNumberField, SetStringField, SetObjectField).finishWith(Wrapup);

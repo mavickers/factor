@@ -10,8 +10,8 @@ class PipelineFilter {
         this.#processFn = processFn;
     }
 
-    abort() {
-        this.#pipelineArgs.abort();
+    abort(obj) {
+        return this.#pipelineArgs.abort(obj);
     }
 
     get name() { return this.#name; }

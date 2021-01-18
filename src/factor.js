@@ -4,7 +4,9 @@ import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
 import StandardModel from "./base/classes/StandardModel";
 
-import { Pipeline, PipelineArgs, PipelineFilter } from "./base/components/Pipeline";
+import Pipeline from "./base/components/Pipeline/Pipeline";
+import PipelineArgs from "./base/components/Pipeline/PipelineArgs";
+import PipelineFilter from "./base/components/Pipeline/PipelineFilter";
 
 import Enum from "./base/classes/Enum";
 import Flags from "./base/classes/Flags";

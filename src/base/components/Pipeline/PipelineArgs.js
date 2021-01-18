@@ -10,11 +10,12 @@ class PipelineArgs {
 
         this.data = Utilities.isObject(data) && data || { };
         this.#error = null;
-        this.#meta = { abort: false, filters: [ ] };
+        this.#meta = { abort: false, abortedWith: null, filters: [ ] };
     }
 
-    abort() {
+    abort(obj) {
         this.#meta.abort = true;
+        this.#meta.abortedWith = obj;
     }
 
     addFilterResult(filterName, value) {

@@ -17,10 +17,10 @@ class Configurable {
         return this._config;
     }
 
-    static configure = function(config, fn) {
+    static configure = function(fn) {
         const configFn = Utilities.isFunction(fn) && fn || standardConfigFn;
 
-        return configFn(this, config);
+        return configFn(this);
     }
 }
 

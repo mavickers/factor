@@ -6,43 +6,8 @@ import PipelineArgs from "../components/Pipeline/PipelineArgs";
 import Pipelines from "../pipelines";
 import Utilities from "../Utilities";
 
+const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
-
-const configFn = function(model) {
-    if (!(typeof model == "function" || model instanceof Function) || model.isConfigured) return false;
-
-    const instance = new model();
-    const propNames = Object.getOwnPropertyNames(instance);
-    const methods = model._inherited.instanceMethods;
-    const _config = { fieldDefs: { }, isMisconfigured: false };
-
-    // iterate through the fields, parse and build the configs
-    propNames.filter(prop => !methods.includes(prop)).forEach(propName => {
-        const propConfig = { type: null, required: false, default: null, value: null };
-        const prop = instance[propName];
-
-        if (!(typeof prop == "object" || prop instanceof Object)) return;
-        if (prop.hasOwnProperty("type") && (fieldTypes.includes(prop["type"]) || fieldTypes.includes(Object.getPrototypeOf(prop["type"])))) propConfig["type"] = prop["type"];
-
-        // if the type parameter was not valid there is not point in adding this
-        // field to the config - throw a warning but continue, misconfigurations
-        // can be handled by the consumer.
-        if (propConfig["type"] == null) {
-            console.warn(`Model configuration: field '${propName}' in model '${model.name}' does not contain valid configuration`);
-            _config.isMisconfigured = true;
-
-            return;
-        }
-
-        _config.fieldDefs[propName] = prop;
-    });
-
-    // now store it in the model prototype
-    Object.seal(_config);
-    Object.defineProperty(model, "_config", { get: () => _config });
-
-    return true;
-}
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {
@@ -63,7 +28,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     }
 
     static create(...args) {
-        this.configure(this, configFn);
+        this.configure((model) => configureModelPipeline.execute(new PipelineArgs({ model: model })));
 
         const instance = new this();
         const methods = this._inherited.instanceMethods;
@@ -75,7 +40,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         propNames
             .filter(propName => !methods.includes(propName))
             .map(propName => new PipelineArgs({ instance: instance, config: config, initialVals: initialVals, propName: propName }))
-            .forEach(arg => processFieldsPipeline.execute(arg));
+            .forEach(args => processFieldsPipeline.execute(args));
 
         // iterate through the arguments and set the values accordingly
         initialVals.forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
@@ -84,6 +49,6 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     }
 }
 
-const fieldTypes = [ Boolean, Number, String, StandardModel, StandardModel, Object, Error ];
+const fieldTypes = [ Boolean, Number, String, StandardModel, Object, Error ];
 
 export default StandardModel;
