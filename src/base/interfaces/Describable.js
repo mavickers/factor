@@ -47,11 +47,11 @@ class Describable extends Configurable {
 
     clone() {
         if (!(Describable.configuration && Describable.configuration.cloneFn)) {
-            console.warn("Describing.clone(): cloneFn configuration missing");
+            console.warn("Describable.clone(): cloneFn configuration missing");
             return;
         }
         if (!(typeof Describable.configuration.cloneFn == "function" || Describable.configuration.cloneFn instanceof Function)) {
-            console.warn("Describing.clone(): cloneFn configuration invalid");
+            console.warn("Describable.clone(): cloneFn configuration invalid");
             return;
         }
 
