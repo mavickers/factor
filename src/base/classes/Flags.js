@@ -39,6 +39,17 @@ class Flags {
         return this;
     }
 
+    /*
+     *  equals(value)
+     *  Takes a single argument and determines if the flag instance is set
+     *  *only* to that argument. It does not compare the value of the arg
+     *  directly with the internal value integer so as to avoid confusion with
+     *  comparing it to two OR'd values (2 | 4 = 6). It will return false if it
+     *  is sent more than one argument.
+     *
+     *  - value: int value of the flag to check, or the string name of the flag.
+     *
+     */
     equals = function(...args) {
         if (!args && args.length === 1) return false;
 
@@ -51,6 +62,8 @@ class Flags {
     }
 
     hasAll = function(...args) {
+        if (args.length == 0) return false;
+
         const value = this.#value;
         const ctor = this.constructor;
         const { intArgs, stringArgs } = this.#validatedArgs(...args);
@@ -61,6 +74,8 @@ class Flags {
     }
 
     hasAny = function(...args) {
+        if (args.length == 0) return false;
+
         const value = this.#value;
         const ctor = this.constructor;
         const { intArgs, stringArgs } = this.#validatedArgs(...args);
