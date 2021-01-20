@@ -7,12 +7,10 @@ export default class SetNumberFieldFilter extends PipelineFilter {
         super((data) => {
             if (data.fieldDef.type !== Number) return;
 
-            const setOptions = data.config.setOptions;
             const getter = { get: () => data.fieldVals[data.propName] };
-            const setter = { set: (value) => data.fieldVals[data.propName] = Utilities.isNumber(value) && value || data.setterTypeMismatch(data.propName) };
+            const setter = { set: (value) => data.fieldVals[data.propName] = Utilities.isNumber(value) && value || data.setterTypeMismatch };
 
             Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
-
         });
     }
 };
