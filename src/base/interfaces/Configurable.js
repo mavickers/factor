@@ -33,6 +33,9 @@ class Configurable {
 
 const standardConfigFn = function(obj, config) {
     const setConfig = obj.hasOwnProperty("_config") && { ...obj._config, ...config } || config;
+    // console.log(obj._config);
+    // console.log(config);
+    // const setConfig = obj.hasOwnProperty("_config") && Utilities.merge(obj._config, config) || config;
 
     obj._config = setConfig;
 

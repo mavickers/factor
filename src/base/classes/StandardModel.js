@@ -31,7 +31,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     }
 
     static create(...args) {
-        const pipelineArgs = new PipelineArgs({ model: this, options: defaultSetOptions });
+        const pipelineArgs = new PipelineArgs({ model: this });
 
         this.configure(() => configureModelPipeline.execute(pipelineArgs));
 
@@ -44,7 +44,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         // iterate through the fields, replace with getter/setters, set default values
         propNames
             .filter(propName => !methods.includes(propName))
-            .map(propName => new PipelineArgs({ instance: instance, config: config, initialVals: initialVals, propName: propName }))
+            .map(propName => new PipelineArgs({ instance: instance, config: config, initialVals: initialVals, propName: propName, options: defaultSetOptions }))
             .forEach(args => processFieldsPipeline.execute(args));
 
         // iterate through the arguments and set the values accordingly

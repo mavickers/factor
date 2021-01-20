@@ -17,7 +17,7 @@ export default class InitializeFilter extends PipelineFilter {
 
                 if (setOptions.equals("NoopOnTypeMismatch")) return data.fieldVals[data.propName];
                 if (setOptions.equals("NullOnTypeMismatch")) return null;
-                if (setOptions.equals("ErrorOnTypeMismatch")) throw new Error(`Field Setting Filter for ${data.propName}: type mismatch`);
+                if (setOptions.equals("ErrorOnTypeMismatch")) throw new Error(`Field Setting Filter for '${data.propName}': type mismatch`);
 
                 throw new Error("setterTypeMismatchFn(): setOptions for type mismatch could not be determined");
             }});

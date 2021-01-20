@@ -72,6 +72,23 @@ class Utilities {
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
+    static merge = (...args) => {
+        let target = {};
+
+        const merger = (obj) => {
+            Object.keys(obj).forEach(key => {
+                if (!obj.hasOwnProperty(key)) return;
+
+                target[key] = Object.prototype.toString.call(target[key]) === "[object Object]"
+                    ? Utilities.merge(target[key], obj[key])
+                    : obj[key];
+            })
+        }
+
+        args.forEach(arg => merger(arg));
+
+        return target;
+    }
 }
 
 export default Utilities;
