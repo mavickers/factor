@@ -1,20 +1,18 @@
 import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 import Utilities from "../../../Utilities";
+import StandardModelSetOptions from "../../../classes/flags/StandardModelSetOptions";
 
 export default class SetNumberFieldFilter extends PipelineFilter {
     constructor() {
         super((data) => {
             if (data.fieldDef.type !== Number) return;
 
-            // todo: refactor setting to take setOptions into account (if you can)
-            console.log(data.config.setOptions);
-            Object.defineProperty(data.instance, data.propName, {
-                get: function() { return data.fieldVals[data.propName]; },
-                set: undefined
-                // ...(!data.readonly && {
-                //     set: function(value) { data.fieldVals[data.propName] = Utilities.isNumber(value) && value || null; }
-                //})
-            });
+            const setOptions = data.config.setOptions;
+            const getter = { get: () => data.fieldVals[data.propName] };
+            const setter = { set: (value) => data.fieldVals[data.propName] = Utilities.isNumber(value) && value || data.setterTypeMismatch(data.propName) };
+
+            Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
+
         });
     }
 };

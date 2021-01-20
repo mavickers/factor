@@ -10,7 +10,7 @@ import SetOptions from "./flags/StandardModelSetOptions"
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
-const defaultSetOptions = { setOptions: new SetOptions(SetOptions.NoopOnTypeMismatch) };
+const defaultSetOptions = { setOptions: new SetOptions().set(SetOptions.NoopOnTypeMismatch) };
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {

@@ -32,6 +32,7 @@ describe("StandardModel", () => {
         expect(() => testModel.numberField = 2.01).not.toThrow();
         expect(testModel.numberField).toEqual(2.01);
         expect(() => testModel.numberField = "test").not.toThrow();
+        console.log(testModel.numberField);
         expect(testModel.numberField).toEqual(2.01);
     });
 })

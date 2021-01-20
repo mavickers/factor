@@ -11,6 +11,22 @@ export default class InitializeFilter extends PipelineFilter {
             data.fieldValDefault = data.fieldDef.default || (data.fieldDef.type === Boolean ? false : null);
             data.readOnly = (data.fieldDef?.readOnly ?? false) || false;
             data.fieldVals = { };
+            data.setterTypeMismatch = setterTypeMismatchClosure(data);
+
         });
     }
+}
+
+const setterTypeMismatchClosure = (data) => {
+    const setterTypeMismatchFn = () => {
+        const setOptions = data.config.setOptions;
+
+        if (setOptions.equals("NoopOnTypeMismatch")) return data.fieldVals[data.propName];
+        if (setOptions.equals("NullOnTypeMismatch")) return null;
+        if (setOptions.equals("ErrorOnTypeMismatch")) throw new Error(`Field Setting Filter for ${data.propName}: type mismatch`);
+
+        throw new Error("setterTypeMismatchFn(): setOptions for type mismatch could not be determined");
+    }
+
+    return setterTypeMismatchFn;
 }
