@@ -39,6 +39,17 @@ class Flags {
         return this;
     }
 
+    equals = function(...args) {
+        if (!args && args.length === 1) return false;
+
+        const { intArgs, stringArgs } = this.#validatedArgs(...args)
+        const consolidatedArgs = [ ...intArgs, ...stringArgs ];
+
+        if (consolidatedArgs.length !== 1) return false;
+
+        return [ consolidatedArgs[0], this.constructor[consolidatedArgs[0]]].includes(this.#value);
+    }
+
     hasAll = function(...args) {
         const value = this.#value;
         const ctor = this.constructor;
