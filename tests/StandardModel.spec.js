@@ -11,7 +11,7 @@ describe("StandardModel", () => {
             stringField = { type: String };
         }
 
-        TestModel.configure({ setOptions: new SetOptions().set(SetOptions.ErrorOnTypeMismatch) });
+        //TestModel.configure({ setOptions: new SetOptions().set(SetOptions.ErrorOnTypeMismatch) });
 
         let testModel;
 
@@ -37,3 +37,7 @@ describe("StandardModel", () => {
         expect(testModel.numberField).toEqual(2.01);
     });
 })
+
+// todo: fix default setOptions
+// todo: add tests for SetOptions
+// todo: migrate tests from models.spec.js
