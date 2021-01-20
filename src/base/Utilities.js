@@ -57,6 +57,7 @@ class Utilities {
             ? (obj.reduce((acc, col) => acc && typeof col === type, true) || false)
             : (obj.reduce((acc, col) => acc && col instanceof type, true) || false);
     }
+    static isBoolean = (obj) => (typeof obj === "boolean" || obj instanceof Boolean) && true || false;
     static isClass = (obj) => {
         // if the string content of the given object satisfies any of these conditions,
         // consider the object as a class:
@@ -66,6 +67,7 @@ class Utilities {
 
         return typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
     };
+    static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;

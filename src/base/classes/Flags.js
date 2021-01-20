@@ -1,11 +1,12 @@
 class Flags {
     #value = 0;
 
-    constructor() {
+    constructor(...args) {
         const props = Object.getOwnPropertyNames(this.constructor);
         const blankProps = props.filter(prop => this.constructor[prop] == undefined);
         let power = 0;
         let flags = [];
+
 
         // iterate through all the static props that have an undefined value
         blankProps.forEach(prop => {
@@ -24,6 +25,8 @@ class Flags {
         // validating arguments for flag mutation/reading; this should only happen
         // once for each child class.
         if (!(props.includes("_flags"))) Object.defineProperty(this.constructor, "_flags", { get: () => flags });
+
+        this.set(...args);
     }
 
     get value() {

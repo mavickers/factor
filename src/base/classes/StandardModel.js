@@ -5,9 +5,12 @@ import Mappable from "../interfaces/Mappable";
 import PipelineArgs from "../components/Pipeline/PipelineArgs";
 import Pipelines from "../pipelines";
 import Utilities from "../Utilities";
+import SetOptions from "./flags/StandardModelSetOptions"
+
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
+const defaultSetOptions = { setOptions: new SetOptions(SetOptions.NoopOnTypeMismatch) };
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {
@@ -28,7 +31,9 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     }
 
     static create(...args) {
-        this.configure((model) => configureModelPipeline.execute(new PipelineArgs({ model: model })));
+        const pipelineArgs = new PipelineArgs({ model: this, options: defaultSetOptions });
+
+        this.configure(() => configureModelPipeline.execute(pipelineArgs));
 
         const instance = new this();
         const methods = this._inherited.instanceMethods;
@@ -44,8 +49,6 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
 
         // iterate through the arguments and set the values accordingly
         initialVals.forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
-
-        console.log(instance.className);
 
         return Object.seal(instance);
     }

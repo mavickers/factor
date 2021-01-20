@@ -123,7 +123,15 @@ describe("Utilities", () => {
         expect(Utilities.isClass(new ClassOne())).toEqual(false);
         expect(Utilities.isClass(Object)).toEqual(true);
         expect(Utilities.isClass(String)).toEqual(true);
-    })
+    });
+
+    it("should determine if an object is a date", () => {
+        expect(Utilities.isDate(new Date())).toEqual(true);
+        expect(Utilities.isDate(Date.now())).toEqual(false);
+        expect(Utilities.isDate(new Date(Date.now()))).toEqual(true);
+        expect(Utilities.isDate(new Date("test"))).toEqual(true);
+        expect(Utilities.isDate("1/1/2000")).toEqual(false);
+    });
 
     it("should determine if an object is a function", () => {
         const func1 = function() { };

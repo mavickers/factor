@@ -1,7 +1,7 @@
 import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 import StandardModel from "../../../classes/StandardModel";
 
-const fieldTypes = [ Boolean, Number, String, StandardModel, Object, Error ];
+const fieldTypes = [ Array, Boolean, Date, Number, String, StandardModel, Object, Error ];
 
 export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {

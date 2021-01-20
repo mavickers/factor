@@ -6,9 +6,13 @@ export default class SetNumberFieldFilter extends PipelineFilter {
         super((data) => {
             if (data.fieldDef.type !== Number) return;
 
+            // todo: refactor setting to take setOptions into account (if you can)
             Object.defineProperty(data.instance, data.propName, {
                 get: function() { return data.fieldVals[data.propName]; },
-                ...(!data.readonly && { set: function(value) { data.fieldVals[data.propName] = Utilities.isNumber(value) && value || null; }})
+                set: undefined
+                // ...(!data.readonly && {
+                //     set: function(value) { data.fieldVals[data.propName] = Utilities.isNumber(value) && value || null; }
+                //})
             });
         });
     }

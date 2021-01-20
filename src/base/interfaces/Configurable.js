@@ -2,24 +2,43 @@ import Utilities from "../Utilities";
 
 class Configurable {
     static get isConfigured() {
-        return this.hasOwnProperty("_config");
+        return this.hasOwnProperty("_config") && Object.isFrozen(this._config);
     }
 
     static get configuration() {
         return this._config;
     }
 
-    static configure = function(fn) {
-        const configFn = Utilities.isFunction(fn) && fn || standardConfigFn;
+    static configure = function(...args) {
+        if (this.isConfigured) return;
 
-        return configFn(this);
+        const configFn = args.find(arg => Utilities.isFunction(arg)) || standardConfigFn;
+        const config = args.find(arg => !Utilities.isFunction(arg)) || { };
+
+        return configFn(this, config);
+    }
+
+    static sealConfiguration = function() {
+        if (Object.isSealed(this) || Object.isSealed(this._config)) return;
+
+        const config = this.hasOwnProperty("_config") && this._config || { };
+
+        delete this._config
+        Object.freeze(config);
+        Object.defineProperty(this, "_config", { get: () => config });
+
+        return true;
     }
 }
 
 const standardConfigFn = function(obj, config) {
-    if (obj.hasOwnProperty("_config")) return false;
+    const setConfig = obj.hasOwnProperty("_config") && { ...obj._config, ...config } || config;
 
-    Object.defineProperty(obj, "_config", { get: () => config });
+    obj._config = setConfig;
+
+    // if (obj.hasOwnProperty("_config")) return false;
+    //
+    // Object.defineProperty(obj, "_config", { get: () => config });
 
     return true;
 }
