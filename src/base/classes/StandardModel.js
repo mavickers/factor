@@ -10,7 +10,7 @@ import SetOptions from "./flags/StandardModelSetOptions"
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
-const defaultSetOptions = { setOptions: new SetOptions().set(SetOptions.NoopOnTypeMismatch) };
+const defaultSetOptions = new SetOptions().set(SetOptions.NoopOnTypeMismatch);
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {
@@ -38,13 +38,13 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         const instance = new this();
         const methods = this._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);
-        const config = this._config;
+        const configuration = this.configuration;
         const initialVals = Utilities.isObject(args) && args || { };
 
         // iterate through the fields, replace with getter/setters, set default values
         propNames
             .filter(propName => !methods.includes(propName))
-            .map(propName => new PipelineArgs({ instance: instance, config: config, initialVals: initialVals, propName: propName, options: defaultSetOptions }))
+            .map(propName => new PipelineArgs({ instance: instance, config: configuration, initialVals: initialVals, propName: propName, defaultSetOptions: defaultSetOptions }))
             .forEach(args => processFieldsPipeline.execute(args));
 
         // iterate through the arguments and set the values accordingly
