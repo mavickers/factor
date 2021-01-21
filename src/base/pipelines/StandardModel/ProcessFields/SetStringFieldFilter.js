@@ -6,10 +6,10 @@ export default class SetStringFieldFilter extends PipelineFilter {
         super((data) => {
             if (data.fieldDef.type !== String) return;
 
-            Object.defineProperty(data.instance, data.propName, {
-                get: function() { return data.fieldVals[data.propName]; },
-                ...(!data.readOnly && { set: function(value) { data.fieldVals[data.propName] = Utilities.isString(value) && value.trim() || null; }})
-            });
+            const getter = { get: () => data.fieldVals[data.propName] };
+            const setter = { set: (value) => Utilities.isString(value) && value || data.setterTypeMismatch };
+
+            Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
         });
     }
 };

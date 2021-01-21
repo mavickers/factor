@@ -5,7 +5,7 @@ describe("StandardModel", () => {
     it("should run ProcessFields pipeline properly", () => {
         class TestModel extends StandardModel {
             boolField = { type: Boolean };
-            dateField = { type: Date };
+            dateField = { type: Date, required: false };
             numberField = { type: Number };
             objectField = { type: Object };
             stringField = { type: String };
@@ -14,16 +14,16 @@ describe("StandardModel", () => {
 
         let testModel;
 
-        TestModel.configure({ setOptions: new SetOptions().set(SetOptions.ErrorOnTypeMismatch) });
+        // TestModel.configure({ setOptions: new SetOptions().set(SetOptions.ErrorOnTypeMismatch) });
         expect(() => testModel = TestModel.create()).not.toThrow();
         expect(() => testModel = TestModel.create()).not.toThrow();
-        // expect(() => testModel.boolField = true).not.toThrow();
-        // expect(testModel.boolField).toEqual(true);
-        // expect(() => testModel.boolField = false).not.toThrow();
-        // expect(testModel.boolField).toEqual(false);
-        // expect(() => testModel.boolField = "test").not.toThrow();
-        // expect(testModel.boolField).toEqual(false);
-        //
+        expect(() => testModel.boolField = true).not.toThrow();
+        expect(testModel.boolField).toEqual(true);
+        expect(() => testModel.boolField = false).not.toThrow();
+        expect(testModel.boolField).toEqual(false);
+        expect(() => testModel.boolField = "test").not.toThrow();
+        expect(testModel.boolField).toEqual(false);
+
         // let dateTest = new Date(Date.now());
         // expect(() => testModel.dateField = dateTest).not.toThrow();
         // expect(testModel.dateField).toEqual(dateTest);

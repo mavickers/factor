@@ -6,10 +6,10 @@ export default class SetDateFieldFilter extends PipelineFilter {
         super((data) => {
             if (data.fieldDef.type !== Date) return;
 
-            Object.defineProperty(data.instance, data.propName, {
-                get: function() { return data.fieldVals[data.propName]; },
-                ...(!data.readonly && { set: function(value) { data.fieldVals[data.propName] = Utilities.isDate(value) && value || data.instance[data.propName]; }})
-            });
+            const getter = { get: () => data.fieldVals[data.propName] };
+            const setter = { set: (value) => data.fieldVals[data.propName] = Utilities.isDate(value) && value || data.setterTypeMismatch };
+
+            Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
         });
     }
 }

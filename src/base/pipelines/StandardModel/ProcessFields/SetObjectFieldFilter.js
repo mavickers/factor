@@ -6,10 +6,10 @@ export default class SetObjectFieldFilter extends PipelineFilter {
         super((data) => {
             if (data.fieldDef.type !== Object) return;
 
-            Object.defineProperty(data.instance, data.propName, {
-                get: function() { return data.fieldVals[data.propName]; },
-                ...(!data.readOnly && { set: function(value) { data.fieldVals[data.propName] = Utilities.isObject(value) && value || null; }})
-            });
+            const getter = { get: () => data.fieldVals[data.propName] };
+            const setter = { set: (value) => Utilities.isObject(value) && value || data.setterTypeMismatch };
+
+            Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
         });
     }
 };
