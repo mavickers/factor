@@ -41,7 +41,6 @@ class Utilities {
         // - ensure no undefined values are added.
         return args.split(',').map(arg => arg.trim()).filter(arg => arg);
     };
-    // todo: revisit the following two methods - these may confuse when using class vs instance
     /*
      *  getParentClass(obj)
      *  - obj: instantiated object

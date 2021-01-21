@@ -9,7 +9,7 @@ export default class InitializeFilter extends PipelineFilter {
             data.instance = new data.model();
             data.propNames = Object.getOwnPropertyNames(data.instance);
             data.methods = data.model._inherited.instanceMethods;
-            data.config = { ...data.options, fieldDefs: { }, isMisconfigured: false };
+            data.config = { options: data.options, fieldDefs: { }, isMisconfigured: false };
         });
     }
 }

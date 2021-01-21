@@ -14,14 +14,6 @@ const defaultSetOptions = new SetOptions().set(SetOptions.NoopOnTypeMismatch);
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {
-        // todo: figure out how to disable the constructor and force
-        //       usage of create(); the SO article below is a bit convoluted
-        //       but a Proxy or class wrapper may be the answer.
-        //       https://stackoverflow.com/questions/21667149/how-to-define-private-constructors-in-javascript
-
-        // todo: also consider migrating create() to eventual
-        //       repo-enabled class
-
         super();
 
         const modelChild = Utilities.getChildClass(this)
@@ -38,13 +30,13 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         const instance = new this();
         const methods = this._inherited.instanceMethods;
         const propNames = Object.getOwnPropertyNames(instance);
-        const configuration = this.configuration;
+        const modelConfig = this.configuration;
         const initialVals = Utilities.isObject(args) && args || { };
 
         // iterate through the fields, replace with getter/setters, set default values
         propNames
             .filter(propName => !methods.includes(propName))
-            .map(propName => new PipelineArgs({ instance: instance, config: configuration, initialVals: initialVals, propName: propName, defaultSetOptions: defaultSetOptions }))
+            .map(propName => new PipelineArgs({ instance: instance, config: modelConfig, initialVals: initialVals, propName: propName, defaultSetOptions: defaultSetOptions }))
             .forEach(args => processFieldsPipeline.execute(args));
 
         // iterate through the arguments and set the values accordingly

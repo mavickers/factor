@@ -7,7 +7,7 @@ export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
         super((data) => {
             data.propNames.filter(prop => !data.methods.includes(prop)).forEach(propName => {
-                const propConfig = { type: null, required: false, default: null, value: null };
+                const propConfig = { type: null, required: false, readonly: false, default: null, value: null, onTypeMismatch: null };
                 const prop = data.instance[propName];
 
                 if (!(typeof prop == "object" || prop instanceof Object)) return this.abort();

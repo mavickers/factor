@@ -4,11 +4,13 @@ import SetOptions from "../src/base/classes/flags/StandardModelSetOptions";
 describe("StandardModel", () => {
     it("should run ProcessFields pipeline properly", () => {
         class TestModel extends StandardModel {
-            boolField = { type: Boolean };
+            // fieldDef: type, default, required, readonly, onTypeMismatch
+
+            boolField = { type: Boolean, default: true, readonly: true };
             dateField = { type: Date, required: false };
             numberField = { type: Number };
             objectField = { type: Object };
-            stringField = { type: String };
+            stringField = { type: String, default: null, required: false  };
         }
 
 
@@ -37,7 +39,4 @@ describe("StandardModel", () => {
         expect(() => testModel.numberField = "test").not.toThrow();
         expect(testModel.numberField).toEqual(2.01);
     });
-})
-
-// todo: add tests for SetOptions
-// todo: migrate tests from models.spec.js
+});
