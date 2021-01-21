@@ -1,29 +1,64 @@
-import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 import StandardModel from "../../../classes/StandardModel";
-
-const fieldTypes = [ Array, Boolean, Date, Number, String, StandardModel, Object, Error ];
+import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
+import PipelineArgs from "../../../components/Pipeline/PipelineArgs";
+import ProcessFieldsPipeline from "../../StandardModel/ProcessFields";
+import Globals from "../../../Globals";
+import Utilities from "../../../Utilities";
+import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOptions";
 
 export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
         super((data) => {
             data.propNames.filter(prop => !data.methods.includes(prop)).forEach(propName => {
-                const propConfig = { type: null, required: false, readonly: false, default: null, value: null, onTypeMismatch: null };
                 const prop = data.instance[propName];
 
-                if (!(typeof prop == "object" || prop instanceof Object)) return this.abort();
-                if (prop.hasOwnProperty("type") && (fieldTypes.includes(prop["type"]) || fieldTypes.includes(Object.getPrototypeOf(prop["type"])))) propConfig["type"] = prop["type"];
+                if (!Utilities.isObject(prop)) return this.abort();
 
-                // if the type parameter was not valid there is not point in adding this
+                const propType = prop.hasOwnProperty("type") && Globals.FieldTypes.includes(prop.type) && prop.type || null;
+
+                // if the type parameter was not valid there is no point in adding this
                 // field to the config - throw a warning but continue, misconfigurations
                 // can be handled by the consumer.
-                if (propConfig["type"] == null) {
+                if (propType == null) {
                     console.warn(`Model configuration: field '${propName}' in model '${data.model.name}' does not contain valid configuration`);
                     data.config.isMisconfigured = true;
 
                     return this.abort();
                 }
 
-                data.config.fieldDefs[propName] = prop;
+                const propConfig = {
+                    type: propType,
+                    required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
+                    readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
+                    default: prop.hasOwnProperty("default") && prop.default || null,
+                    typeMismatchSetOption:
+                        prop.hasOwnProperty("onTypeMismatch") &&
+                        prop.onTypeMismatch instanceof TypeMismatchSetOptions &&
+                        prop.onTypeMismatch ||
+                        data.typeMismatchSetOptionDefault
+                };
+
+                data.config.fieldDefs[propName] = propConfig;
+
+                // propNames
+                //     .filter(propName => !methods.includes(propName))
+                //     .map(propName => new PipelineArgs({
+                //         instance: instance,
+                //         config: modelConfig,
+                //         initialVals: initialVals,
+                //         propName: propName,
+                //         defaultSetOptions: defaultSetOptions
+                //     }))
+                //     .forEach(args => processFieldsPipeline.execute(args));
+
+                const processFieldArgs = new PipelineArgs({
+                    instance: data.instance,
+                    config: data.config,
+                    initialVals: data.initialVals,
+                    propName: propName
+                });
+
+                ProcessFieldsPipeline.execute(processFieldArgs);
             });
         });
     }

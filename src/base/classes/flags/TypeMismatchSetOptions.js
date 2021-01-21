@@ -1,9 +1,10 @@
 import Flags from "../Flags";
 
-class StandardModelSetOptions extends Flags {
+class TypeMismatchSetOptions extends Flags {
     static ErrorOnTypeMismatch;
+    static IgnoreOnTypeMismatch
     static NoopOnTypeMismatch;
     static NullOnTypeMismatch;
 }
 
-export default StandardModelSetOptions;
+export default TypeMismatchSetOptions;

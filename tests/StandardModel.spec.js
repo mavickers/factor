@@ -1,25 +1,26 @@
 import StandardModel from "../src/base/classes/StandardModel";
-import SetOptions from "../src/base/classes/flags/StandardModelSetOptions";
+import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 
 describe("StandardModel", () => {
     it("should run ProcessFields pipeline properly", () => {
         class TestModel extends StandardModel {
-            // fieldDef: type, default, required, readonly, onTypeMismatch
-
-            boolField = { type: Boolean, default: true, readonly: true };
+            boolField = { type: Boolean, default: true, readonly: false };
             dateField = { type: Date, required: false };
             numberField = { type: Number };
             objectField = { type: Object };
             stringField = { type: String, default: null, required: false  };
         }
 
-
         let testModel;
 
-        // TestModel.configure({ setOptions: new SetOptions().set(SetOptions.ErrorOnTypeMismatch) });
+        TestModel.configure({ typeMismatchSetOptionDefault: new TypeMismatchSetOptions().set(TypeMismatchSetOptions.NoopOnTypeMismatch) });
+
         expect(() => testModel = TestModel.create()).not.toThrow();
         expect(() => testModel = TestModel.create()).not.toThrow();
+        // console.log(TestModel.configuration.fieldDefs.boolField);
+        console.log(1);
         expect(() => testModel.boolField = true).not.toThrow();
+        console.log(2);
         expect(testModel.boolField).toEqual(true);
         expect(() => testModel.boolField = false).not.toThrow();
         expect(testModel.boolField).toEqual(false);

@@ -1,5 +1,5 @@
 import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
-import StandardModelSetOptions from "../../../classes/flags/StandardModelSetOptions";
+import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOptions";
 
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
@@ -14,10 +14,11 @@ export default class InitializeFilter extends PipelineFilter {
             data.fieldVals = { };
 
             Object.defineProperty(data, "setterTypeMismatch", { get: () => {
-                const setOptions = ((data.config?.setOptions ?? { }) instanceof StandardModelSetOptions)
-                    && data.config.setOptions
-                    || data.defaultSetOptions;
+                const setOptions = data.fieldDef.typeMismatchSetOption || new TypeMismatchSetOptions();
 
+                console.log("mismatch");
+
+                // todo: implement ignore (how?)
                 if (setOptions.equals("NoopOnTypeMismatch")) return data.fieldVals[data.propName];
                 if (setOptions.equals("NullOnTypeMismatch")) return null;
                 if (setOptions.equals("ErrorOnTypeMismatch")) throw new Error(`Field Setting Filter for '${data.propName}': type mismatch`);

@@ -6,8 +6,8 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
         super((data) => {
             if (data.fieldDef.type !== Boolean) return;
 
-            const getter = { get: () => data.fieldVals[data.propName] };
-            const setter = { set: (value) => data.fieldVals[data.propName] = Utilities.isBoolean(value) ? value : data.setterTypeMismatch }
+            const getter = { get: () => { console.log("get"); data.fieldVals[data.propName] }};
+            const setter = { set: (value) => { data.fieldVals[data.propName] = Utilities.isBoolean(value) ? value : data.setterTypeMismatch; } }
 
             Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
         });
