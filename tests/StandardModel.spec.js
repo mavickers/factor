@@ -16,22 +16,9 @@ describe("StandardModel", () => {
 
         TestModel.configure({ onTypeMismatchDefault: new TypeMismatchSetOptions("Noop", true) });
 
-        console.log(new TypeMismatchSetOptions("Noop", "Null", "Throw", 1, true).value);
-
-        console.log(TestModel.configuration?.onTypeMismatchDefault?.value ?? undefined);
-
+        expect(TestModel.configuration.onTypeMismatchDefault.equals("Noop"));
         expect(() => testModel = TestModel.create()).not.toThrow();
-
-        console.log(TestModel.configuration.fieldDefs.boolField.onTypeMismatch.value);
-        // console.log(TestModel.configuration.onTypeMismatchDefault.value);
-        // console.log(TestModel.configuration);
-        // console.log(TestModel.configuration.onTypeMismatchDefault.value);
-        // console.log(TestModel.configuration.typeMismatchSetOptionDefault.value);
-        expect(() => testModel = TestModel.create()).not.toThrow();
-        // console.log(TestModel.configuration.fieldDefs.boolField);
-        // console.log(1);
         expect(() => testModel.boolField = true).not.toThrow();
-        // console.log(2);
         expect(testModel.boolField).toEqual(true);
         expect(() => testModel.boolField = false).not.toThrow();
         expect(testModel.boolField).toEqual(false);
