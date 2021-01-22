@@ -72,9 +72,13 @@ describe("Flags", () => {
         expect(() => flags.set(FlagOne.First, "Second", FlagOne.Third)).not.toThrow();
         expect(flags.equals("First")).toEqual(true);
         expect(flags.equals(FlagOne.First)).toEqual(true);
+        expect(flags.equals("Third")).toEqual(false);
+        expect(flags.equals(FlagOne.Third)).toEqual(false);
         expect(() => flags.set("First", FlagOne.Second, "Third")).not.toThrow();
         expect(flags.equals("First")).toEqual(true);
         expect(flags.equals(FlagOne.First)).toEqual(true);
+        expect(flags.equals("Third")).toEqual(false);
+        expect(flags.equals(FlagOne.Third)).toEqual(false);
     });
 
     it("should set and read multiple values properly", () => {
