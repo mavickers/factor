@@ -13,8 +13,8 @@ export default class InitializeFilter extends PipelineFilter {
             data.readOnly = (data.fieldDef?.readOnly ?? false) || false;
             data.fieldVals = { };
 
-            Object.defineProperty(data, "setterTypeMismatch", { get: () => {
-                const setOptions = data.fieldDef.typeMismatchSetOption || new TypeMismatchSetOptions();
+            Object.defineProperty(data, "typeMismatchHandler", { get: () => {
+                const setOptions = data.fieldDef.onTypeMismatch || new TypeMismatchSetOptions();
 
                 console.log("mismatch");
 

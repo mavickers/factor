@@ -26,13 +26,16 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         const initialVals = args.length > 0 && Utilities.isObject(args[0]) && args[0] || { };
         const pipelineArgs = new PipelineArgs({
             model: this,
-            typeMismatchSetOptionDefault: typeMismatchSetOptionDefault,
+            onTypeMismatchDefault:
+                (this.configuration?.onTypeMismatchDefault ?? null) instanceof TypeMismatchSetOptions &&
+                this.configuration.onTypeMismatchDefault ||
+                typeMismatchSetOptionDefault,
             initialVals: initialVals
         });
 
         this.configure(() => configureModelPipeline.execute(pipelineArgs));
 
-        // const instance = new this();
+        const instance = new this();
         // const methods = this._inherited.instanceMethods;
         // const propNames = Object.getOwnPropertyNames(instance);
         // const modelConfig = this.configuration;
@@ -48,7 +51,6 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
 
         //const instance = new this();
-
 
         return Object.seal(new this());
     }

@@ -191,6 +191,8 @@ describe("Utilities", () => {
         const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } };
         const obj6 = Utilities.merge(obj4, obj5);
 
+        console.log(obj6);
+
         expect(Object.keys(obj6)).toHaveLength(3);
         expect(Object.keys(obj6.one)).toHaveLength(1);
         expect(Object.keys(obj6.two)).toHaveLength(3);

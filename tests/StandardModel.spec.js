@@ -13,14 +13,19 @@ describe("StandardModel", () => {
 
         let testModel;
 
-        TestModel.configure({ typeMismatchSetOptionDefault: new TypeMismatchSetOptions().set(TypeMismatchSetOptions.NoopOnTypeMismatch) });
+        TestModel.configure({ onTypeMismatchDefault: new TypeMismatchSetOptions().set(TypeMismatchSetOptions.ErrorOnTypeMismatch) });
 
+        // console.log(TestModel.configuration);
+        // console.log(TestModel.configuration.onTypeMismatchDefault.value);
         expect(() => testModel = TestModel.create()).not.toThrow();
+        // console.log(TestModel.configuration);
+        // console.log(TestModel.configuration.onTypeMismatchDefault.value);
+        // console.log(TestModel.configuration.typeMismatchSetOptionDefault.value);
         expect(() => testModel = TestModel.create()).not.toThrow();
         // console.log(TestModel.configuration.fieldDefs.boolField);
-        console.log(1);
+        // console.log(1);
         expect(() => testModel.boolField = true).not.toThrow();
-        console.log(2);
+        // console.log(2);
         expect(testModel.boolField).toEqual(true);
         expect(() => testModel.boolField = false).not.toThrow();
         expect(testModel.boolField).toEqual(false);

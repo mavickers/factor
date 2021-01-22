@@ -31,11 +31,13 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                     required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
                     readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
                     default: prop.hasOwnProperty("default") && prop.default || null,
-                    typeMismatchSetOption:
+                    // this can be set three ways: on the prop config, on
+                    // the model config, or the default value in standard model.
+                    onTypeMismatch:
                         prop.hasOwnProperty("onTypeMismatch") &&
                         prop.onTypeMismatch instanceof TypeMismatchSetOptions &&
                         prop.onTypeMismatch ||
-                        data.typeMismatchSetOptionDefault
+                        data.config.onTypeMismatchDefault
                 };
 
                 data.config.fieldDefs[propName] = propConfig;

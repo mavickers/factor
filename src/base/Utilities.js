@@ -71,12 +71,38 @@ class Utilities {
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
+    // static merge = (...args) => {
+    //     // let target = { };
+    //     //
+    //     // const merger = (obj) => {
+    //     //     //target = target == null ? obj : { ...target, ...obj };
+    //     //     Object.assign(target, obj);
+    //     // }
+    //     //
+    //     // args.forEach(arg => merger(arg));
+    //     //
+    //     // return target;
+    //     for (var o = {}, i = 0; i < args.length; i++) {
+    //         // Uncomment to skip arguments that are not objects (to prevent errors)
+    //         if (arguments[i].constructor !== Object) continue;
+    //         for (var k in args[i]) {
+    //             if (args[i].hasOwnProperty(k)) {
+    //                 o[k] = args[i][k].constructor === Object
+    //                     ? this.merge(o[k] || {}, args[i][k])
+    //                     : args[i][k];
+    //             }
+    //         }
+    //     }
+    //     return o;
+    // }
     static merge = (...args) => {
         let target = {};
 
         const merger = (obj) => {
             Object.keys(obj).forEach(key => {
                 if (!obj.hasOwnProperty(key)) return;
+                //console.log(Object.prototype.toString.call(target[key]));
+                // console.log(Object.getPrototypeOf(obj.constructor).name + " , " + Object.prototype.toString.call(target[key]));
 
                 target[key] = Object.prototype.toString.call(target[key]) === "[object Object]"
                     ? Utilities.merge(target[key], obj[key])
