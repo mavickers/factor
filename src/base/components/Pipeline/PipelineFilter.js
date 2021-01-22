@@ -6,7 +6,7 @@ class PipelineFilter {
     #processFn = function(data) { return null };
 
     constructor(processFn) {
-        this.#name = Utilities.getChildClass(this).name;
+        this.#name = Utilities.getClass(this).name;
         this.#processFn = processFn;
     }
 

@@ -2,7 +2,7 @@ class Utilities {
 
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
     /*
-     *  getChildClass(obj)
+     *  getClass(obj)
      *  - obj: instantiated object
      *
      *  Returns the class/function that the instantiated object belongs to; use-
@@ -10,8 +10,8 @@ class Utilities {
      *  class.
      *
      */
-    static getChildClass = (obj) => Object.getPrototypeOf(obj).constructor;
-    static getChildClassName = function(obj) { return this.getChildClass(obj).name; };
+    static getClass = (obj) => Object.getPrototypeOf(obj).constructor;
+    static getClassName = function(obj) { return this.getClass(obj).name; };
 
     /*
      *  getFuncParams
@@ -50,6 +50,7 @@ class Utilities {
      */
     static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
+    static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
     static isArrayOfType = function(obj, type) {
         if (!(obj && Array.isArray(obj) && type && type.toString().trim())) return false;
         return (typeof type == "string")
@@ -70,50 +71,36 @@ class Utilities {
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
+    static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
-    // static merge = (...args) => {
-    //     // let target = { };
-    //     //
-    //     // const merger = (obj) => {
-    //     //     //target = target == null ? obj : { ...target, ...obj };
-    //     //     Object.assign(target, obj);
-    //     // }
-    //     //
-    //     // args.forEach(arg => merger(arg));
-    //     //
-    //     // return target;
-    //     for (var o = {}, i = 0; i < args.length; i++) {
-    //         // Uncomment to skip arguments that are not objects (to prevent errors)
-    //         if (arguments[i].constructor !== Object) continue;
-    //         for (var k in args[i]) {
-    //             if (args[i].hasOwnProperty(k)) {
-    //                 o[k] = args[i][k].constructor === Object
-    //                     ? this.merge(o[k] || {}, args[i][k])
-    //                     : args[i][k];
-    //             }
-    //         }
-    //     }
-    //     return o;
-    // }
     static merge = (...args) => {
-        let target = {};
+        if (!(args && args.length > 1)) return false;
 
-        const merger = (obj) => {
-            Object.keys(obj).forEach(key => {
-                if (!obj.hasOwnProperty(key)) return;
-                //console.log(Object.prototype.toString.call(target[key]));
-                // console.log(Object.getPrototypeOf(obj.constructor).name + " , " + Object.prototype.toString.call(target[key]));
+        const doMerge = function(target, obj) {
+            const keys = Object.keys(obj).filter(key => obj.hasOwnProperty(key));
 
-                target[key] = Object.prototype.toString.call(target[key]) === "[object Object]"
-                    ? Utilities.merge(target[key], obj[key])
-                    : obj[key];
-            })
+            keys.forEach(key => target[key] = target[key] != undefined && Utilities.isPureObject(obj[key]) && doMerge(target[key], obj[key]) || obj[key]);
         }
 
-        args.forEach(arg => merger(arg));
-
-        return target;
-    }
+        args.filter(arg => args.indexOf(arg) != 0).forEach(arg => doMerge(args[0], arg));
+    };
+    // static merge = (...args) => {
+    //     let target = {};
+    //
+    //     const merger = (obj) => {
+    //         Object.keys(obj).forEach(key => {
+    //             if (!obj.hasOwnProperty(key)) return;
+    //
+    //             target[key] = Object.prototype.toString.call(target[key]) === "[object Object]"
+    //                 ? Utilities.merge(target[key], obj[key])
+    //                 : obj[key];
+    //         })
+    //     }
+    //
+    //     args.forEach(arg => merger(arg));
+    //
+    //     return target;
+    // }
 }
 
 export default Utilities;

@@ -16,7 +16,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {
         super();
 
-        const modelChild = Utilities.getChildClass(this)
+        const modelChild = Utilities.getClass(this)
         const modelParent = Utilities.getParentClass(this);
 
         Classes.addInheritance(modelChild, modelParent);

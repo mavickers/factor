@@ -15,7 +15,7 @@ describe("Utilities", () => {
     it("should identify classes properly", () => {
        class ParentClass {
            #childClass;
-           constructor() { this.#childClass = Utilities.getChildClass(this); }
+           constructor() { this.#childClass = Utilities.getClass(this); }
            get childClass() { return this.#childClass };
        };
        class ChildClass extends ParentClass { }
@@ -23,9 +23,9 @@ describe("Utilities", () => {
        let childClass;
 
        expect(() => childClass = new ChildClass()).not.toThrow();
-       expect(Utilities.getChildClass(childClass)).toEqual(ChildClass);
-       expect(Utilities.getChildClass(childClass)).toEqual(childClass.childClass);
-       expect(Utilities.getChildClassName(childClass)).toEqual("ChildClass");
+       expect(Utilities.getClass(childClass)).toEqual(ChildClass);
+       expect(Utilities.getClass(childClass)).toEqual(childClass.childClass);
+       expect(Utilities.getClassName(childClass)).toEqual("ChildClass");
        expect(Utilities.getParentClass(childClass)).toEqual(ParentClass);
        expect(Utilities.getParentClassName(childClass)).toEqual("ParentClass");
     });
@@ -210,23 +210,22 @@ describe("Utilities", () => {
         }
 
         const testFlag = new TestFlag().set(TestFlag.Third);
-
-        console.log(testFlag.value);
-
         const obj1 = { one: "1", two: "2" };
         const obj2 = { three: "3", four: "4", fifth: testFlag };
-        const obj3 = Utilities.merge(obj1, obj2);
 
-        expect(Object.keys(obj3)).toHaveLength(5);
-        expect(Object.getPrototypeOf(obj3.fifth).constructor.name).toEqual("TestFlag");
-        expect(Object.getPrototypeOf(obj3.fifth.constructor).name).toEqual("Flags");
+        Utilities.merge(obj1, obj2);
+
+        expect(Object.keys(obj1)).toHaveLength(5);
+        expect(Object.getPrototypeOf(obj1.fifth).constructor.name).toEqual("TestFlag");
+        expect(Object.getPrototypeOf(obj1.fifth.constructor).name).toEqual("Flags");
 
         const obj4 = { one: "1", two: { first: "1", second: "2" }, three: { first: "1", second: "2", third: { first: "1" } } };
         const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2", third: { first: testFlag } } }, fourth: "4", fifth: "5" } };
-        const obj6 = Utilities.merge(obj4, obj5);
 
-        expect(Object.keys(obj6)).toHaveLength(3);
-        expect(Object.getPrototypeOf(obj6.three.third.second.third.first).constructor.name).toEqual("TestFlag");
-        expect(Object.getPrototypeOf(obj6.three.third.second.third.first.constructor).name).toEqual("Flags");
+        Utilities.merge(obj4, obj5);
+
+        expect(Object.keys(obj4)).toHaveLength(3);
+        expect(Object.getPrototypeOf(obj4.three.third.second.third.first).constructor.name).toEqual("TestFlag");
+        expect(Object.getPrototypeOf(obj4.three.third.second.third.first.constructor).name).toEqual("Flags");
     });
 });

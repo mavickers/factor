@@ -14,10 +14,11 @@ describe("StandardModel", () => {
         let testModel;
 
         TestModel.configure({ onTypeMismatchDefault: new TypeMismatchSetOptions().set(TypeMismatchSetOptions.ErrorOnTypeMismatch) });
-
-        // console.log(TestModel.configuration);
-        // console.log(TestModel.configuration.onTypeMismatchDefault.value);
+        console.log(TestModel.configuration);
         expect(() => testModel = TestModel.create()).not.toThrow();
+
+        console.log(TestModel.configuration);
+        // console.log(TestModel.configuration.onTypeMismatchDefault.value);
         // console.log(TestModel.configuration);
         // console.log(TestModel.configuration.onTypeMismatchDefault.value);
         // console.log(TestModel.configuration.typeMismatchSetOptionDefault.value);
