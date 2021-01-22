@@ -1,4 +1,5 @@
 import Utilities from "../src/base/Utilities";
+import Flags from "../src/base/classes/Flags";
 
 describe("Utilities", () => {
     it("should copy and seal an object", () => {
@@ -191,8 +192,6 @@ describe("Utilities", () => {
         const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } };
         const obj6 = Utilities.merge(obj4, obj5);
 
-        console.log(obj6);
-
         expect(Object.keys(obj6)).toHaveLength(3);
         expect(Object.keys(obj6.one)).toHaveLength(1);
         expect(Object.keys(obj6.two)).toHaveLength(3);
@@ -201,5 +200,33 @@ describe("Utilities", () => {
         expect(obj6.one).toEqual("2");
         expect(obj6.two).toEqual({ first: "1", second: "second", third: "2" });
         expect(obj6.three).toEqual({ first: "1", second: "2", third: { first: "1", second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } );
+    });
+
+    it("should preserve prototypes when merging objects", () => {
+        class TestFlag extends Flags {
+            static First;
+            static Second;
+            static Third;
+        }
+
+        const testFlag = new TestFlag().set(TestFlag.Third);
+
+        console.log(testFlag.value);
+
+        const obj1 = { one: "1", two: "2" };
+        const obj2 = { three: "3", four: "4", fifth: testFlag };
+        const obj3 = Utilities.merge(obj1, obj2);
+
+        expect(Object.keys(obj3)).toHaveLength(5);
+        expect(Object.getPrototypeOf(obj3.fifth).constructor.name).toEqual("TestFlag");
+        expect(Object.getPrototypeOf(obj3.fifth.constructor).name).toEqual("Flags");
+
+        const obj4 = { one: "1", two: { first: "1", second: "2" }, three: { first: "1", second: "2", third: { first: "1" } } };
+        const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2", third: { first: testFlag } } }, fourth: "4", fifth: "5" } };
+        const obj6 = Utilities.merge(obj4, obj5);
+
+        expect(Object.keys(obj6)).toHaveLength(3);
+        expect(Object.getPrototypeOf(obj6.three.third.second.third.first).constructor.name).toEqual("TestFlag");
+        expect(Object.getPrototypeOf(obj6.three.third.second.third.first.constructor).name).toEqual("Flags");
     });
 });
