@@ -48,6 +48,35 @@ describe("Flags", () => {
         expect(flags.hasAny()).toEqual(false);
     });
 
+    it("should set and read single-only values properly", () => {
+        class FlagOne extends Flags {
+            static First;
+            static Second;
+            static Third;
+        }
+
+        let flags;
+
+        expect(() => flags = new FlagOne("Second", true)).not.toThrow();
+        expect(flags.equals("Second")).toEqual(true);
+        expect(flags.equals("Third")).toEqual(false);
+        expect(flags.equals(FlagOne.Second)).toEqual(true);
+        expect(flags.equals(FlagOne.Third)).toEqual(false);
+        expect(() => flags.set("Third", "First")).not.toThrow();
+        expect(flags.equals("First")).toEqual(false);
+        expect(flags.equals("Second")).toEqual(false);
+        expect(flags.equals("Third")).toEqual(true);
+        expect(flags.equals(FlagOne.First)).toEqual(false);
+        expect(flags.equals(FlagOne.Second)).toEqual(false);
+        expect(flags.equals(FlagOne.Third)).toEqual(true);
+        expect(() => flags.set(FlagOne.First, "Second", FlagOne.Third)).not.toThrow();
+        expect(flags.equals("First")).toEqual(true);
+        expect(flags.equals(FlagOne.First)).toEqual(true);
+        expect(() => flags.set("First", FlagOne.Second, "Third")).not.toThrow();
+        expect(flags.equals("First")).toEqual(true);
+        expect(flags.equals(FlagOne.First)).toEqual(true);
+    });
+
     it("should set and read multiple values properly", () => {
         class FlagOne extends Flags {
             static First;

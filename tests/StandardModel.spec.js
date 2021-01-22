@@ -4,6 +4,7 @@ import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOpt
 describe("StandardModel", () => {
     it("should run ProcessFields pipeline properly", () => {
         class TestModel extends StandardModel {
+            //boolField = { type: Boolean, default: true, readonly: false, onTypeMismatch: new TypeMismatchSetOptions("Throw") };
             boolField = { type: Boolean, default: true, readonly: false };
             dateField = { type: Date, required: false };
             numberField = { type: Number };
@@ -13,11 +14,15 @@ describe("StandardModel", () => {
 
         let testModel;
 
-        TestModel.configure({ onTypeMismatchDefault: new TypeMismatchSetOptions().set(TypeMismatchSetOptions.ErrorOnTypeMismatch) });
-        console.log(TestModel.configuration);
+        TestModel.configure({ onTypeMismatchDefault: new TypeMismatchSetOptions("Noop", true) });
+
+        console.log(new TypeMismatchSetOptions("Noop", "Null", "Throw", 1, true).value);
+
+        console.log(TestModel.configuration?.onTypeMismatchDefault?.value ?? undefined);
+
         expect(() => testModel = TestModel.create()).not.toThrow();
 
-        console.log(TestModel.configuration);
+        console.log(TestModel.configuration.fieldDefs.boolField.onTypeMismatch.value);
         // console.log(TestModel.configuration.onTypeMismatchDefault.value);
         // console.log(TestModel.configuration);
         // console.log(TestModel.configuration.onTypeMismatchDefault.value);

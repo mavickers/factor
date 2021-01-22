@@ -10,7 +10,7 @@ import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
-const typeMismatchSetOptionDefault = new TypeMismatchSetOptions().set(TypeMismatchSetOptions.NoopOnTypeMismatch);
+const typeMismatchSetOptionDefault = new TypeMismatchSetOptions("Ignore");
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor() {

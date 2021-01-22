@@ -1,10 +1,10 @@
 import Flags from "../Flags";
 
 class TypeMismatchSetOptions extends Flags {
-    static ErrorOnTypeMismatch;
-    static IgnoreOnTypeMismatch
-    static NoopOnTypeMismatch;
-    static NullOnTypeMismatch;
+    static Ignore
+    static Throw;
+    static Noop;
+    static Null;
 }
 
 export default TypeMismatchSetOptions;

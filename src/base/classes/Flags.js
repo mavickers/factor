@@ -1,4 +1,7 @@
+import Utilities from "../Utilities";
+
 class Flags {
+    #isSingle = false;
     #value = 0;
 
     constructor(...args) {
@@ -7,6 +10,7 @@ class Flags {
         let power = 0;
         let flags = [];
 
+        this.#isSingle = args.length == 2 && Utilities.isBoolean(args[1]) && args[1] || this.#isSingle;
 
         // iterate through all the static props that have an undefined value
         blankProps.forEach(prop => {
@@ -26,7 +30,7 @@ class Flags {
         // once for each child class.
         if (!(props.includes("_flags"))) Object.defineProperty(this.constructor, "_flags", { get: () => flags });
 
-        this.set(...args);
+        this.set(...args.filter(arg => Utilities.isNumber(arg) || Utilities.isString(arg)));
     }
 
     get value() {
@@ -51,7 +55,7 @@ class Flags {
      *
      */
     equals = function(...args) {
-        if (!args && args.length === 1) return false;
+        if (!args || args.length !== 1) return false;
 
         const { intArgs, stringArgs } = this.#validatedArgs(...args)
         const consolidatedArgs = [ ...intArgs, ...stringArgs ];
@@ -90,10 +94,19 @@ class Flags {
         const ctor = this.constructor;
         const { intArgs, stringArgs } = this.#validatedArgs(...args);
 
-        // iterate through matching string and int args, bitwise-or the value
-        // onto the internal flag value
-        intArgs.forEach(arg => this.#value = this.#value | arg);
-        stringArgs.forEach(arg => this.#value = this.#value | ctor[arg]);
+        // if this is a single-value flag, combine the validated int and string vals
+        // into a single array, sort them so it matches the order of the args passed in,
+        // convert the string vals to their respective into values, then select the
+        // first value and set the flag to this value.
+        //
+        // if this is not a single-value flag, convert the string args to their
+        // respective int values and reduce them using bitwise-or (starting with the
+        // existing flag value) and pass the result into the reducer that performs the
+        // same operation over the int args.
+
+        this.#value = this.#isSingle
+            ? [...intArgs, ...stringArgs].sort((a,b) => args.indexOf(a) - args.indexOf(b)).map(arg => Utilities.isNumber(arg) ? arg : ctor[arg])[0]
+            : intArgs.reduce((acc, arg) => acc | arg, stringArgs.reduce((acc, arg) => acc | ctor[arg], this.#value));
 
         return this;
     }
