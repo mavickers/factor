@@ -76,31 +76,21 @@ class Utilities {
     static merge = (...args) => {
         if (!(args && args.length > 1)) return false;
 
-        const doMerge = function(target, obj) {
+        const doMerge = (target, obj) => {
             const keys = Object.keys(obj).filter(key => obj.hasOwnProperty(key));
 
             keys.forEach(key => target[key] = target[key] != undefined && Utilities.isPureObject(obj[key]) && doMerge(target[key], obj[key]) || obj[key]);
         }
 
-        args.filter(arg => args.indexOf(arg) != 0).forEach(arg => doMerge(args[0], arg));
+        args.filter(arg => args.indexOf(arg) != 0 && Utilities.isPureObject(arg)).forEach(arg => doMerge(args[0], arg));
     };
-    // static merge = (...args) => {
-    //     let target = {};
-    //
-    //     const merger = (obj) => {
-    //         Object.keys(obj).forEach(key => {
-    //             if (!obj.hasOwnProperty(key)) return;
-    //
-    //             target[key] = Object.prototype.toString.call(target[key]) === "[object Object]"
-    //                 ? Utilities.merge(target[key], obj[key])
-    //                 : obj[key];
-    //         })
-    //     }
-    //
-    //     args.forEach(arg => merger(arg));
-    //
-    //     return target;
-    // }
+    static mergeToNew(...args) {
+        const newObj = {}
+
+        Utilities.merge(newObj, ...args);
+
+        return newObj;
+    }
 }
 
 export default Utilities;
