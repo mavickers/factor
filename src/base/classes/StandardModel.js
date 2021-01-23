@@ -20,9 +20,14 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
 
         configureModelPipeline.execute(configureModelPipelineArgs);
 
+        const configureInstancePipelineArgs = new PipelineArgs({ instance: this, initialVals: initialVals, propNames: configureModelPipelineArgs.propNames });
+
+        configureInstancePipeline.execute(configureInstancePipelineArgs);
+
+
+
 
         // todo: restore the ConfigureInstance pipeline outside ConfigureModel
-        // todo: move all this to the constructor and deprecate create()
 
         // todo: move this to configureInstance
         // Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));

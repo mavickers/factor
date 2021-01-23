@@ -9,7 +9,7 @@ import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOption
 export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
         super((data) => {
-            data.propNames.filter(prop => !data.methods.includes(prop)).forEach(propName => {
+            data.propNames.forEach(propName => {
                 const prop = data.instance[propName];
 
                 if (!Utilities.isObject(prop)) return this.abort();
@@ -26,7 +26,7 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                     return this.abort();
                 }
 
-                const propConfig = {
+                data.config.fieldDefs[propName] = {
                     type: propType,
                     required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
                     readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
@@ -39,8 +39,6 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                         prop.onTypeMismatch ||
                         data.config.onTypeMismatchDefault
                 };
-
-                data.config.fieldDefs[propName] = propConfig;
 
                 // propNames
                 //     .filter(propName => !methods.includes(propName))
