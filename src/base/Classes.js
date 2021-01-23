@@ -4,7 +4,7 @@
 //        Classes.addInheritance(baseClass, newClass)
 // concept lifted from: https://stackoverflow.com/questions/29879267/es6-class-multiple-inheritance
 
-import Utilities from "../base/Utilities";
+// todo: write tests for this
 
 const Classes = function (oldBases) {
     class NewBase {

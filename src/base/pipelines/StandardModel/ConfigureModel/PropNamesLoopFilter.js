@@ -1,7 +1,7 @@
 import StandardModel from "../../../classes/StandardModel";
 import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 import PipelineArgs from "../../../components/Pipeline/PipelineArgs";
-import ProcessFieldsPipeline from "../../StandardModel/ProcessFields";
+import ConfigureInstancePipeline from "../../StandardModel/ConfigureInstance";
 import Globals from "../../../Globals";
 import Utilities from "../../../Utilities";
 import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOptions";
@@ -53,14 +53,14 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                 //     }))
                 //     .forEach(args => processFieldsPipeline.execute(args));
 
-                const processFieldArgs = new PipelineArgs({
-                    instance: data.instance,
-                    config: data.config,
-                    initialVals: data.initialVals,
-                    propName: propName
-                });
-
-                ProcessFieldsPipeline.execute(processFieldArgs);
+                // const configureInstanceArgs = new PipelineArgs({
+                //     instance: data.instance,
+                //     config: data.config,
+                //     initialVals: data.initialVals,
+                //     propName: propName
+                // });
+                //
+                // ConfigureInstancePipeline.execute(configureInstanceArgs);
             });
         });
     }

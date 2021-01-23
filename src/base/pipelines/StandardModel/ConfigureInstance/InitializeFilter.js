@@ -16,8 +16,6 @@ export default class InitializeFilter extends PipelineFilter {
             Object.defineProperty(data, "typeMismatchHandler", { get: () => {
                 const setOptions = data.fieldDef.onTypeMismatch || new TypeMismatchSetOptions();
 
-                console.log("mismatch");
-
                 // todo: implement ignore (how?)
                 if (setOptions.equals("NoopOnTypeMismatch")) return data.fieldVals[data.propName];
                 if (setOptions.equals("NullOnTypeMismatch")) return null;

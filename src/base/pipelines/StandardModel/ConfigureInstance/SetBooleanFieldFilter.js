@@ -16,6 +16,7 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
                 console.log(data.propName);
             }}
 
+
             Object.defineProperty(data.instance, data.propName, { ...getter, ...(!data.readonly && setter) });
         });
     }

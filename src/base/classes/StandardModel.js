@@ -7,52 +7,25 @@ import Pipelines from "../pipelines";
 import Utilities from "../Utilities";
 import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
 
-
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
-const processFieldsPipeline = Pipelines.StandardModel.ProcessFields;
+const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
 const typeMismatchSetOptionDefault = new TypeMismatchSetOptions("Ignore");
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
-    constructor() {
+    constructor(...args) {
         super();
 
-        const modelChild = Utilities.getClass(this)
-        const modelParent = Utilities.getParentClass(this);
-
-        Classes.addInheritance(modelChild, modelParent);
-    }
-
-    static create(...args) {
         const initialVals = args.length > 0 && Utilities.isObject(args[0]) && args[0] || { };
-        const pipelineArgs = new PipelineArgs({
-            model: this,
-            onTypeMismatchDefault:
-                (this.configuration?.onTypeMismatchDefault ?? null) instanceof TypeMismatchSetOptions &&
-                this.configuration.onTypeMismatchDefault ||
-                typeMismatchSetOptionDefault,
-            initialVals: initialVals
-        });
+        const configureModelPipelineArgs = new PipelineArgs({ instance: this, onTypeMismatchDefault: typeMismatchSetOptionDefault });
 
-        this.configure(() => configureModelPipeline.execute(pipelineArgs));
+        configureModelPipeline.execute(configureModelPipelineArgs);
 
-        const instance = new this();
-        // const methods = this._inherited.instanceMethods;
-        // const propNames = Object.getOwnPropertyNames(instance);
-        // const modelConfig = this.configuration;
-        // //const initialVals = Utilities.isObject(args) && args || { };
-        //
-        // // iterate through the fields, replace with getter/setters, set default values
-        // propNames
-        //     .filter(propName => !methods.includes(propName))
-        //     .map(propName => new PipelineArgs({ instance: instance, config: modelConfig, initialVals: initialVals, propName: propName, defaultSetOptions: defaultSetOptions }))
-        //     .forEach(args => processFieldsPipeline.execute(args));
 
-        // iterate through the arguments and set the values accordingly
-        Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
+        // todo: restore the ConfigureInstance pipeline outside ConfigureModel
+        // todo: move all this to the constructor and deprecate create()
 
-        //const instance = new this();
-
-        return Object.seal(new this());
+        // todo: move this to configureInstance
+        // Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));
     }
 }
 

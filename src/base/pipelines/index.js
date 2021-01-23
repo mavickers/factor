@@ -1,9 +1,9 @@
+import StandardModel_ConfigureInstance from "./StandardModel/ConfigureInstance";
 import StandardModel_ConfigureModel from "./StandardModel/ConfigureModel";
-import StandardModel_ProcessFields from "./StandardModel/ProcessFields";
 
 export default {
     StandardModel: {
-        ConfigureModel: StandardModel_ConfigureModel,
-        ProcessFields: StandardModel_ProcessFields
+        ConfigureInstance: StandardModel_ConfigureInstance,
+        ConfigureModel: StandardModel_ConfigureModel
     }
 };
