@@ -15,8 +15,8 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor(...args) {
         super();
 
+        // todo: move this parsing into the pipeline
         const initialVals = args.length > 0 && Utilities.isObject(args[0]) && args[0] || { };
-        // const configureModelPipelineArgs = new PipelineArgs({ instance: this, onTypeMismatchDefault: typeMismatchSetOptionDefault });
         const configureModelPipelineArgs = new PipelineArgs(this, typeMismatchSetOptionDefault);
 
         configureModelPipeline.execute(configureModelPipelineArgs);
@@ -24,9 +24,10 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         // todo: propNames should not be dependent on the previous pipeline as that pipeline
         //       only runs on the first instantiation; make sure propNames are available in
         //       configuration
-        const configureInstancePipelineArgs = new PipelineArgs({ instance: this, initialVals: initialVals, propNames: configureModelPipelineArgs.propNames });
+        //const configureInstancePipelineArgs = new PipelineArgs({ instance: this, initialVals: initialVals, propNames: configureModelPipelineArgs.propNames });
+        const configureInstancePipelineArgs = new PipelineArgs(this, args);
 
-//        configureInstancePipeline.execute(configureInstancePipelineArgs);
+       configureInstancePipeline.execute(configureInstancePipelineArgs);
 
 
 

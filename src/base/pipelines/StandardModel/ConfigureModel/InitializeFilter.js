@@ -46,7 +46,7 @@ export default class InitializeFilter extends PipelineFilter {
                 data.onTypeMismatchDefault ||
                 throw new Error("ConfigureModel Pipeline: onTypeMismatchDefault parameter invalid");
 
-            data.config = { fieldDefs: { }, isMisconfigured: false, onTypeMismatchDefault: onTypeMismatchDefault, propNames: data.propNames };
+            data.config = { fieldDefs: [ ], isMisconfigured: false, onTypeMismatchDefault: onTypeMismatchDefault, propNames: data.propNames };
         });
     }
 }

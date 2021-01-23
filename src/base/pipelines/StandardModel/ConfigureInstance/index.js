@@ -1,5 +1,6 @@
 import Pipeline from "../../../components/Pipeline/Pipeline";
 
+import Normalize from "../../Common/NormalizeDataParameters";
 import Initialize from "./InitializeFilter"
 import SetBooleanField from "./SetBooleanFieldFilter";
 import SetDateField from "./SetDateFieldFilter";
@@ -11,6 +12,6 @@ import Wrapup from "./WrapupFilter";
 export default
     Pipeline
         .create()
-        .filterWith(Initialize, SetBooleanField, SetDateField, SetNumberField)
-        .filterWith(SetStringField, SetObjectField)
+        .filterWith(Normalize, Initialize, SetBooleanField, SetDateField)
+        .filterWith(SetNumberField, SetStringField, SetObjectField)
         .finishWith(Wrapup);

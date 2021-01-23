@@ -28,7 +28,8 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                     return this.abort(abortMsg);
                 }
 
-                data.config.fieldDefs[propName] = {
+                data.config.fieldDefs.push({
+                    name: propName,
                     type: propType,
                     required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
                     readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
@@ -40,7 +41,7 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                         prop.onTypeMismatch instanceof TypeMismatchSetOptions &&
                         prop.onTypeMismatch ||
                         data.config.onTypeMismatchDefault
-                };
+                });
 
                 // propNames
                 //     .filter(propName => !methods.includes(propName))

@@ -19,7 +19,7 @@ describe("StandardModel", () => {
         expect(TestModel.configuration.onTypeMismatchDefault.equals("Noop"));
         expect(() => testModel = new TestModel()).not.toThrow();
         expect(TestModel.configuration.onTypeMismatchDefault.equals("Noop"));
-        console.log(TestModel.configuration);
+        // console.log(TestModel.configuration);
         // expect(() => testModel.boolField = true).not.toThrow();
         // expect(testModel.boolField).toEqual(true);
         // expect(() => testModel.boolField = false).not.toThrow();

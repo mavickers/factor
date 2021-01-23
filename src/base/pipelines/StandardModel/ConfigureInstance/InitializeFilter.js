@@ -1,26 +1,22 @@
 import PipelineFilter from "../../../components/Pipeline/PipelineFilter";
 import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOptions";
 import Utilities from "../../../Utilities";
+import StandardModel from "../../../classes/StandardModel";
 
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super((data) => {
-            delete data.instance[data.propName];
+            if (!data) return this.abort("data parameter is invalid");
 
-            data.model = Utilities.getClass(data.instance);
+            const { findFrom } = Utilities;
 
-            console.log(data.model.configuration);
-
-            if (!data.model.configuration?.fieldDefs.length ?? 0 === data.propNames.length)
-                throw Error("ConfigureInstance Pipeline: missing model configuration");
-
-            // todo: this stuff will need to move into each of the filters - search through
-            //       configuration.fieldDefs for matching types and process accordingly
-
-            data.fieldDef = data.config?.fieldDefs?.[data.propName] ?? null;
-            data.fieldValDefault = data.fieldDef.default || (data.fieldDef.type === Boolean ? false : null);
-            data.readOnly = (data.fieldDef?.readOnly ?? false) || false;
+            data.newInstance = data.newInstance || findFrom(data.arguments).firstInstanceOf(StandardModel);
+            data.parent = data.newInstance && Utilities.getParentClass(data.newInstance);
+            data.model = data.model || Utilities.getClass(data.newInstance) || findFrom(data.arguments).firstInheritanceOf(StandardModel);
+            data.config = data.model.configuration;
             data.fieldVals = { };
+
+            if (data.model?.configuration?.initializing) return this.abort();
 
             Object.defineProperty(data, "typeMismatchHandler", { get: () => {
                 const setOptions = data.fieldDef.onTypeMismatch || new TypeMismatchSetOptions();

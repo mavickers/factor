@@ -1,5 +1,6 @@
 import PipelineFilter from "./PipelineFilter";
 import Utilities from "../../Utilities";
+import PipelineArgs from "./PipelineArgs";
 
 const isFilter = (obj) => obj && (obj instanceof PipelineFilter || Object.getPrototypeOf(obj) === PipelineFilter);
 
@@ -28,7 +29,7 @@ class Pipeline {
 
     execute(args, callback) {
         this.#current = 0;
-        let lastResult;
+        let lastResult, pipelineArgs;
 
         while (this.#current < this.count && !args.isAborted) {
             const filter = new this.#filters[this.#current++]();

@@ -4,7 +4,7 @@ import Utilities from "../../../Utilities";
 export default class SetDateFieldFilter extends PipelineFilter {
     constructor() {
         super((data) => {
-            if (data.fieldDef.type !== Date) return;
+            if (data.fieldDefs.type !== Date) return;
 
             const getter = { get: () => data.fieldVals[data.propName] };
             const setter = { set: (value) => data.fieldVals[data.propName] = Utilities.isDate(value) && value || data.setterTypeMismatch };
