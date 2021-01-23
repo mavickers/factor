@@ -9,6 +9,8 @@ export default class InitializeFilter extends PipelineFilter {
 
             data.model = Utilities.getClass(data.instance);
 
+            console.log(data.model.configuration);
+
             if (!data.model.configuration?.fieldDefs.length ?? 0 === data.propNames.length)
                 throw Error("ConfigureInstance Pipeline: missing model configuration");
 

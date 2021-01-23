@@ -1,5 +1,6 @@
-class Utilities {
+import StandardModel from "./classes/StandardModel";
 
+class Utilities {
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
     /*
      *  getClass(obj)
@@ -10,8 +11,19 @@ class Utilities {
      *  class.
      *
      */
-    static getClass = (obj) => Object.getPrototypeOf(obj).constructor;
+    static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || null;
     static getClassName = function(obj) { return this.getClass(obj).name; };
+    static findFrom(...args) {
+        return {
+            firstInheritanceOf: (objClass) =>
+                Utilities.isClass(objClass) &&
+                Utilities.getClass(Utilities.findFrom(...args).firstInstanceOf(objClass)),
+            firstInstanceOf: (objClass) =>
+                Utilities.isClass(objClass) &&
+                args.flat().find(arg => Utilities.getParentClass(arg) === objClass) ||
+                null
+        }
+    }
 
     /*
      *  getFuncParams
@@ -48,7 +60,7 @@ class Utilities {
      *  Returns the class being extended.
      *
      */
-    static getParentClass = (obj) => Object.getPrototypeOf(obj.constructor);
+    static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
     static isArrayOfType = function(obj, type) {
@@ -73,6 +85,8 @@ class Utilities {
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
+
+    // todo: change this back to immutable
     static merge = (...args) => {
         if (!(args && args.length > 1)) return false;
 

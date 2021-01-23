@@ -10,7 +10,7 @@ export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
         super((data) => {
             data.propNames.forEach(propName => {
-                const prop = data.instance[propName];
+                const prop = data.configInstance[propName];
 
                 if (!Utilities.isObject(prop)) return this.abort();
 
@@ -20,10 +20,12 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                 // field to the config - throw a warning but continue, misconfigurations
                 // can be handled by the consumer.
                 if (propType == null) {
-                    console.warn(`Model configuration: field '${propName}' in model '${data.model.name}' does not contain valid configuration`);
+                    const abortMsg = `Model configuration: field '${propName}' in model '${data.model.name}' does not contain valid configuration`;
                     data.config.isMisconfigured = true;
 
-                    return this.abort();
+                    console.warn(abortMsg);
+
+                    return this.abort(abortMsg);
                 }
 
                 data.config.fieldDefs[propName] = {

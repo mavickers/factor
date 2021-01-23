@@ -5,10 +5,12 @@ class PipelineArgs {
     #error;
     #meta;
 
-    constructor(data) {
+    constructor(...args) {
         const self = this;
 
-        this.data = Utilities.isObject(data) && data || { };
+        //this.data = Utilities.isObject(data) && data || { };
+        // let the consumer parse out data as it sees fit
+        this.data = args;
         this.#error = null;
         this.#meta = { abort: false, abortedWith: null, filters: [ ] };
     }

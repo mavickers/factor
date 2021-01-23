@@ -28,6 +28,7 @@ class Pipeline {
 
     execute(args, callback) {
         this.#current = 0;
+        let lastResult;
 
         while (this.#current < this.count && !args.isAborted) {
             const filter = new this.#filters[this.#current++]();

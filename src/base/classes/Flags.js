@@ -44,14 +44,16 @@ class Flags {
     }
 
     /*
-     *  equals(value)
+     *  equals(args)
      *  Takes a single argument and determines if the flag instance is set
      *  *only* to that argument. It does not compare the value of the arg
      *  directly with the internal value integer so as to avoid confusion with
      *  comparing it to two OR'd values (2 | 4 = 6). It will return false if it
      *  is sent more than one argument.
      *
-     *  - value: int value of the flag to check, or the string name of the flag.
+     *  - args: the first argument (int or string) will be compared against
+     *  the flags; if anything other than a single int or string is passed
+     *  in the method will return false.
      *
      */
     equals = function(...args) {

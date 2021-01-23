@@ -19,7 +19,18 @@ class PipelineFilter {
     execute = function(pipelineArgs) {
         this.#pipelineArgs = pipelineArgs;
 
-        return this.#processFn(pipelineArgs.data) || null;
+        // keep the result separate from the args.data assignment below
+        // so we're able to indicate that the result had a value or was
+        // null when returning.
+        const results = this.#processFn(pipelineArgs.data) || null;
+
+        // if a result is returned from the filter the the arguments data
+        // property is replaced with these results; this allows modification
+        // of the data property by a filter (do not return anything) or
+        // replacement of the data property altogether (return something);
+        this.#pipelineArgs.data = results || this.#pipelineArgs.data;
+
+        return results;
     }
 
     get processor() {
