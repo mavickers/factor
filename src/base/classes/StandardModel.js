@@ -25,14 +25,11 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         //       only runs on the first instantiation; make sure propNames are available in
         //       configuration
         //const configureInstancePipelineArgs = new PipelineArgs({ instance: this, initialVals: initialVals, propNames: configureModelPipelineArgs.propNames });
+
         const configureInstancePipelineArgs = new PipelineArgs(this, args);
 
-       configureInstancePipeline.execute(configureInstancePipelineArgs);
+        configureInstancePipeline.execute(configureInstancePipelineArgs);
 
-
-
-
-        // todo: restore the ConfigureInstance pipeline outside ConfigureModel
 
         // todo: move this to configureInstance
         // Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));

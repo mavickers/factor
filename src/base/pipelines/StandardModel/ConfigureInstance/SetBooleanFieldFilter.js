@@ -6,29 +6,21 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
         super((data) => {
             if (!data) return this.abort("data parameter is invalid");
 
+            const { setter } = data;
             const { propNames, fieldDefs } = data.config;
+            const { is } = Utilities;
             const fields = fieldDefs.filter(field => field.type === Boolean);
 
             if (fields.length == 0) return;
 
-            console.log("set boolean");
-            data.newInstance.boolField = false;
-
             fields.forEach(field => {
                 const getter = { get: () => data.fieldVals[field.name] };
-                const setter = { set: (value) => {
-                        console.log("setter");
-                        console.log(Utilities.isBoolean(value));
-                        data.fieldVals[field.name] = Utilities.isBoolean(value)
-                            ? value :
-                            data.typeMismatchHandler
-                        console.log(field.name);
-                    }};
+                //const setter = { set: (value) => data.fieldVals[field.name] = Utilities.isBoolean(value) ? value : data.typeMismatchHandler };
+                const setter = { set: (value) => setter.forField(field.name).withValue(value);
 
-                console.log(field.name);
                 delete data.newInstance["boolField"];
 
-                Object.defineProperty(data.newInstance, field.name, { ...getter, ...(!field.readonly && setter) });
+                //Object.defineProperty(data.newInstance, field.name, { ...getter, ...(!field.readonly && setter) });
             });
 
             return this.abort();

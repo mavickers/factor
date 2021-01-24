@@ -15,11 +15,22 @@ export default class InitializeFilter extends PipelineFilter {
             data.model = data.model || Utilities.getClass(data.newInstance) || findFrom(data.arguments).firstInheritanceOf(StandardModel);
             data.config = data.model.configuration;
             data.fieldVals = { };
+            data.setter = {
+                forField: (name) => { return {
+                    withValue: (value) => {
+                        if (!(name && data.config.fieldDefs[name])) throw new Error("invalid field name in setter");
+
+                        return;
+                    }
+                }}
+            };
+
+            console.log(data.config.fieldDefs);
 
             if (data.model?.configuration?.initializing) return this.abort();
 
             Object.defineProperty(data, "typeMismatchHandler", { get: () => {
-                const setOptions = data.fieldDef.onTypeMismatch || new TypeMismatchSetOptions();
+                const setOptions = data.config.fieldDefs.onTypeMismatch || new TypeMismatchSetOptions();
 
                 // todo: implement ignore (how?)
                 if (setOptions.equals("NoopOnTypeMismatch")) return data.fieldVals[data.propName];

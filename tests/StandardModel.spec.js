@@ -6,6 +6,7 @@ describe("StandardModel", () => {
         class TestModel extends StandardModel {
             //boolField = { type: Boolean, default: true, readonly: false, onTypeMismatch: new TypeMismatchSetOptions("Throw") };
             boolField = { type: Boolean, default: true, readonly: false };
+            // boolField = { type: Boolean };
             // dateField = { type: Date, required: false };
             // numberField = { type: Number };
             // objectField = { type: Object };

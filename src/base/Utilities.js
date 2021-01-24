@@ -63,6 +63,14 @@ class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    static is(obj) {
+        return {
+            BooleanOrDefault: (defaultValue) =>
+                Utilities.isBoolean(obj)
+                    ? obj : Utilities.isBoolean(defaultValue)
+                    ? defaultValue : throw new Error("invalid default value")
+        }
+    }
     static isArrayOfType = function(obj, type) {
         if (!(obj && Array.isArray(obj) && type && type.toString().trim())) return false;
         return (typeof type == "string")

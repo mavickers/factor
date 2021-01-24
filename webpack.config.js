@@ -11,8 +11,8 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     "plugins": [
-                        "@babel/plugin-proposal-class-properties",
-                        "@babel/plugin-proposal-private-property-in-object",
+                        [ "@babel/plugin-proposal-class-properties", { "loose": true } ],
+                        [ "@babel/plugin-proposal-private-property-in-object", { "loose": true } ],
                         "@babel/plugin-syntax-dynamic-import",
                         "@babel/plugin-transform-classes",
                         "@babel/plugin-transform-runtime",
