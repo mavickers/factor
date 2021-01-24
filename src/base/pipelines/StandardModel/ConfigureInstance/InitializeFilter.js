@@ -11,21 +11,27 @@ export default class InitializeFilter extends PipelineFilter {
             const { findFrom } = Utilities;
 
             data.newInstance = data.newInstance || findFrom(data.arguments).firstInstanceOf(StandardModel);
-            data.parent = data.newInstance && Utilities.getParentClass(data.newInstance);
             data.model = data.model || Utilities.getClass(data.newInstance) || findFrom(data.arguments).firstInheritanceOf(StandardModel);
+
+            if (!data.newInstance) return this.abort("could not find StandardModel instance in arguments");
+            if (data.model.configuration?.initializing) return this.abort("model is initializing");
+
+
+            data.parent = data.newInstance && Utilities.getParentClass(data.newInstance);
             data.config = data.model.configuration;
             data.fieldVals = { };
             data.setter = {
-                forField: (name) => { return {
+                forBoolean: (name) => { return {
                     withValue: (value) => {
                         if (!(name && data.config.fieldDefs[name])) throw new Error("invalid field name in setter");
+
 
                         return;
                     }
                 }}
             };
 
-            console.log(data.config.fieldDefs);
+            // console.log(data.config);
 
             if (data.model?.configuration?.initializing) return this.abort();
 

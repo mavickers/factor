@@ -5,6 +5,7 @@ import ConfigureInstancePipeline from "../../StandardModel/ConfigureInstance";
 import Globals from "../../../Globals";
 import Utilities from "../../../Utilities";
 import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOptions";
+import FieldDefinition from "../../../classes/FieldDefinition";
 
 export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
@@ -28,12 +29,12 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                     return this.abort(abortMsg);
                 }
 
-                data.config.fieldDefs.push({
+                data.config.fieldDefs.push(new FieldDefinition({
                     name: propName,
                     type: propType,
-                    required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
-                    readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
-                    default: prop.hasOwnProperty("default") && prop.default || null,
+                    required: prop.required,
+                    readonly: prop.readonly,
+                    default: prop.default,
                     // this can be set three ways: on the prop config, on
                     // the model config, or the default value in standard model.
                     onTypeMismatch:
@@ -41,27 +42,22 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                         prop.onTypeMismatch instanceof TypeMismatchSetOptions &&
                         prop.onTypeMismatch ||
                         data.config.onTypeMismatchDefault
-                });
+                }));
 
-                // propNames
-                //     .filter(propName => !methods.includes(propName))
-                //     .map(propName => new PipelineArgs({
-                //         instance: instance,
-                //         config: modelConfig,
-                //         initialVals: initialVals,
-                //         propName: propName,
-                //         defaultSetOptions: defaultSetOptions
-                //     }))
-                //     .forEach(args => processFieldsPipeline.execute(args));
-
-                // const configureInstanceArgs = new PipelineArgs({
-                //     instance: data.instance,
-                //     config: data.config,
-                //     initialVals: data.initialVals,
-                //     propName: propName
+                // data.config.fieldDefs.push({
+                //     name: propName,
+                //     type: propType,
+                //     required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
+                //     readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
+                //     default: prop.hasOwnProperty("default") && prop.default || null,
+                //     // this can be set three ways: on the prop config, on
+                //     // the model config, or the default value in standard model.
+                //     onTypeMismatch:
+                //         prop.hasOwnProperty("onTypeMismatch") &&
+                //         prop.onTypeMismatch instanceof TypeMismatchSetOptions &&
+                //         prop.onTypeMismatch ||
+                //         data.config.onTypeMismatchDefault
                 // });
-                //
-                // ConfigureInstancePipeline.execute(configureInstanceArgs);
             });
         });
     }

@@ -1,4 +1,5 @@
 import StandardModel from "./classes/StandardModel";
+import Globals from "./Globals";
 
 class Utilities {
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
@@ -91,9 +92,15 @@ class Utilities {
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
+    static isPrimitive = (obj) => false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
+    static isType = (obj, type) => {
+        if (obj === null || obj === undefined || type === null || type === undefined) return false;
+        if (typeof type == "string") return typeof obj === type;
 
+        return obj instanceof type || Globals.Primitives.map(p => p.name).includes(typeof obj);
+    }
     // todo: change this back to immutable
     static merge = (...args) => {
         if (!(args && args.length > 1)) return false;

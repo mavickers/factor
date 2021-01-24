@@ -20,7 +20,7 @@ export default class InitializeFilter extends PipelineFilter {
             // abort the pipeline if it's initializing or if it's in the
             // process of being initialized
             if (!(Utilities.isClass(data.model)) || (data.model.isConfigured && Object.isSealed(data.model.configuration))) return this.abort();
-            if (data.model.configuration?.initializing) return this.abort();
+            if (data.model.configuration?.initializing) return this.abort("model is initializing");
 
             // we don't want to run this pipeline twice, only the first time it is instantiated
             data.model.configure({ initializing: true });
