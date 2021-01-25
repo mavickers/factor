@@ -28,6 +28,8 @@ class Pipeline {
     }
 
     execute(args, callback) {
+        if (!Utilities.isType(args, PipelineArgs)) throw new Error("Pipeline.execute(): invalid PipelineArgs argument");
+
         this.#current = 0;
         let lastResult, pipelineArgs;
 

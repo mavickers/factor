@@ -1,8 +1,45 @@
 import StandardModel from "./classes/StandardModel";
 import Globals from "./Globals";
 
+const isStrict = (function(){ return !this; })();
+
 class Utilities {
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
+    static currentLineNumber() {
+        let initiator;
+        try { throw new Error() }
+        catch (e) {
+            if (typeof e.stack === 'string') {
+                let isFirst = true;
+                for (const line of e.stack.split('\n')) {
+                    const matches = line.match(/^\s+at\s+(.*)/);
+                    if (matches) {
+                        if (!isFirst) { // first line - current function
+                            // second line - caller (what we are looking for)
+                            initiator = matches[1];
+                            break;
+                        }
+                        isFirst = false;
+                    }
+                }
+            }
+        }
+
+        return initiator;
+        // const stack = function() {
+        //     const orig = Error.prepareStackTrace;
+        //     Error.prepareStackTrace = function(_, stack) {
+        //         return stack;
+        //     };
+        //     const err = new Error;
+        //     Error.captureStackTrace(err, this);
+        //     const stack = err.stack;
+        //     Error.prepareStackTrace = orig;
+        //     return stack;
+        // };
+        //
+        // return stack()[1].getLineNumber();
+    };
     /*
      *  getClass(obj)
      *  - obj: instantiated object
@@ -94,6 +131,7 @@ class Utilities {
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isPrimitive = (obj) => false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
+    static get isStrict() { return isStrict; };
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
     static isType = (obj, type) => {
         if (obj === null || obj === undefined || type === null || type === undefined) return false;
@@ -119,6 +157,13 @@ class Utilities {
         Utilities.merge(newObj, ...args);
 
         return newObj;
+    };
+    static newUuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+
+            return v.toString(16);
+        });
     }
 }
 

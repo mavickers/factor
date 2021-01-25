@@ -19,6 +19,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         const initialVals = args.length > 0 && Utilities.isObject(args[0]) && args[0] || { };
         const configureModelPipelineArgs = new PipelineArgs(this, typeMismatchSetOptionDefault);
 
+        console.log(1);
         configureModelPipeline.execute(configureModelPipelineArgs);
 
         // todo: propNames should not be dependent on the previous pipeline as that pipeline
@@ -28,7 +29,11 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
 
         const configureInstancePipelineArgs = new PipelineArgs(this, args);
 
-        configureInstancePipeline.execute(configureInstancePipelineArgs);
+        console.log(2);
+        const result = configureInstancePipeline.execute(configureInstancePipelineArgs);
+        console.log(3);
+
+        // console.log(configureInstancePipelineArgs.meta);
 
 
         // todo: move this to configureInstance

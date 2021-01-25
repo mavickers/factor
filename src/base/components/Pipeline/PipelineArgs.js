@@ -12,7 +12,7 @@ class PipelineArgs {
         // let the consumer parse out data as it sees fit
         this.data = args;
         this.#error = null;
-        this.#meta = { abort: false, abortedWith: null, filters: [ ] };
+        this.#meta = { abort: false, abortedWith: null, filters: [ ], executionId: Utilities.newUuid(), messages: [ ] };
     }
 
     abort(obj) {
@@ -34,6 +34,23 @@ class PipelineArgs {
 
     set error(msg) {
         this.#error = Utilities.isString(msg) && msg.trim() && Error(msg.trim()) || this.#error;
+    }
+
+    message(msg) {
+        this.#meta.messages.push(msg);
+    }
+
+    get messages() {
+        const objects = this.#meta.messages.map(msg => !Utilities.isString(msg));
+        let output = "";
+
+        this.#meta.messages.forEach(msg => {
+            output += `\r\n${msg.id} ${msg.name}\r\n`;
+            output += Utilities.isString(msg.message) && msg.message && `${msg.message}` || "";
+            output += !Utilities.isString && `%O` || "";
+        });
+
+        return [ output, objects ];
     }
 
     get meta() {

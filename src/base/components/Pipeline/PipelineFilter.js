@@ -33,6 +33,19 @@ class PipelineFilter {
         return results;
     }
 
+    get executionId() {
+        return this.#pipelineArgs.meta.executionId;
+        // return this.#name;
+    }
+
+    message(msg) {
+        this.#pipelineArgs.message({ id: this.executionId, name: this.#name, message: msg });
+    }
+
+    get messages() {
+        return this.#pipelineArgs.messages;
+    }
+
     get processor() {
         return this.#processFn;
     }

@@ -7,6 +7,8 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
         super((data) => {
             if (!data) return this.abort("data parameter is invalid");
 
+            console.log("instance bool");
+
             const { propNames, fieldDefs } = data.config;
             const { is } = Utilities;
             const fields = fieldDefs.filter(field => field.type === Boolean);
@@ -14,21 +16,22 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
             if (fields.length == 0) return;
 
             const setter = function(field) { return function(value) {
-                console.log("setting");
-                // console.log(field);
+                console.log("setting " + data.executionId);
                 console.log(value);
+                // console.log(field);
 
                 if (!field) throw new Error("setter received invalid 'field' parameter");
-                if (Utilities.isBoolean(value)) return data.fieldVals[field.name] = value;
+                if (Utilities.isBoolean(value)) { data.fieldVals[field.name] = value; return; }
 
                 console.log("mismatch");
+                return;
                 throw new Error("mismatch");
 
                 const typeMismatch = field.onTypeMismatch || data.config.onTypeMismatch || new TypeMismatchSetOptions("Noop");
 
-                if (typeMismatch.equals("Ignore")) return data.fieldVals[field.name] = value;
-                if (typeMismatch.equals("Noop")) return data.fieldVals[field.name] = data.fieldVals[field.name];
-                if (typeMismatch.equals("Null")) return data.fieldVals[field.name] = null;
+                if (typeMismatch.equals("Ignore")) { data.fieldVals[field.name] = value; return; }
+                if (typeMismatch.equals("Noop")) { data.fieldVals[field.name] = data.fieldVals[field.name]; return; }
+                if (typeMismatch.equals("Null")) { data.fieldVals[field.name] = null; }
                 if (typeMismatch.equals("Throw")) throw new Error(`type mismatch attempting to set value on ${field.name}`);
             }};
 

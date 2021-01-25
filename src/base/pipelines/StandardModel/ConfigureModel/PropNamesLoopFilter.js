@@ -13,7 +13,8 @@ export default class PropNamesLoopFilter extends PipelineFilter {
             data.propNames.forEach(propName => {
                 const prop = data.configInstance[propName];
 
-                if (!Utilities.isObject(prop)) return this.abort();
+                if (!Utilities.isObject(prop)) return this.abort("invalid prop");
+                console.log("model loop " + this.executionId);
 
                 const propType = prop.hasOwnProperty("type") && Globals.FieldTypes.includes(prop.type) && prop.type || null;
 
@@ -43,21 +44,6 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                         prop.onTypeMismatch ||
                         data.config.onTypeMismatchDefault
                 }));
-
-                // data.config.fieldDefs.push({
-                //     name: propName,
-                //     type: propType,
-                //     required: prop.hasOwnProperty("required") && Utilities.isBoolean(prop.required) ? prop.required : false,
-                //     readonly: prop.hasOwnProperty("readonly") && Utilities.isBoolean(prop.readonly) ? prop.readonly : false,
-                //     default: prop.hasOwnProperty("default") && prop.default || null,
-                //     // this can be set three ways: on the prop config, on
-                //     // the model config, or the default value in standard model.
-                //     onTypeMismatch:
-                //         prop.hasOwnProperty("onTypeMismatch") &&
-                //         prop.onTypeMismatch instanceof TypeMismatchSetOptions &&
-                //         prop.onTypeMismatch ||
-                //         data.config.onTypeMismatchDefault
-                // });
             });
         });
     }
