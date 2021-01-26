@@ -16,7 +16,7 @@ export default class Location {
         catch (err) {
             this.#stack = err.stack.split("\n").map(s => s.trim()).filter(s => s.startsWith("at "));
             this.#location = this.#stack[1 + back];
-            this.#file = this.#location.split(" ").slice(-1)[0].split(":");
+            this.#file = this.#location.split(" ").slice(-1)[0].replace(/[\(\)]/g, "").split(":");
             this.#fileName = this.#file.length === 3 && this.#file[0].split("\/").slice(-1)[0] || this.#location.split(" ").slice(1).join(" ")
             this.#lineNumber = this.#file.length === 3 && this.#file[1] || 0;
             this.#colNumber = this.#file.length === 3 && this.#file[2].split(")")[0] || 0;
