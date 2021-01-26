@@ -8,7 +8,6 @@ export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
             logger.log();
-            // logger.log();
 
             if (!data) return this.abort("data parameter is invalid");
 
@@ -20,14 +19,16 @@ export default class InitializeFilter extends PipelineFilter {
 
             if (!data.newInstance) return this.abort("could not find StandardModel instance in arguments");
 
-            // logger.log();
+            logger.log("checking initializing", data.model.isConfigured);
 
             // abort the pipeline if it's initializing or if it's in the
             // process of being initialized
             if (!(Utilities.isClass(data.model)) || (data.model.isConfigured && Object.isSealed(data.model.configuration))) return this.abort();
             if (data.model?.configuration?.initializing) return this.abort("model is initializing");
 
-            //logger.log("doing initialization");
+            logger.log();
+            logger.log("initializing");
+            console.log("initializing");
 
             // we don't want to run this pipeline twice, only the first time it is instantiated
             data.model.configure({ initializing: true });
@@ -56,7 +57,7 @@ export default class InitializeFilter extends PipelineFilter {
 
             data.config = { fieldDefs: [ ], isMisconfigured: false, onTypeMismatchDefault: onTypeMismatchDefault, propNames: data.propNames };
 
-            // logger.log("exit");
+            logger.log("exit");
         });
     }
 }

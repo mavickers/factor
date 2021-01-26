@@ -19,14 +19,10 @@ class PipelineFilter {
     execute = function(pipelineArgs) {
         this.#pipelineArgs = pipelineArgs;
 
-        pipelineArgs.logger.group(this.#name);
-
         // keep the result separate from the args.data assignment below
         // so we're able to indicate that the result had a value or was
         // null when returning.
         const results = this.#processFn(pipelineArgs.data, pipelineArgs.logger) || null;
-
-        pipelineArgs.logger.group();
 
         // if a result is returned from the filter the the arguments data
         // property is replaced with these results; this allows modification

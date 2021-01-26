@@ -9,8 +9,10 @@ import FieldDefinition from "../../../classes/FieldDefinition";
 
 export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
-        super((data) => {
+        super((data, logger) => {
             data.propNames.forEach(propName => {
+                logger.log();
+
                 const prop = data.configInstance[propName];
 
                 if (!Utilities.isObject(prop)) return this.abort("invalid prop");

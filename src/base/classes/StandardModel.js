@@ -15,6 +15,9 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         super();
 
         const logger = new Logger();
+
+        logger.log("constructor");
+
         const configureModelPipelineArgs = new PipelineArgs(this, typeMismatchSetOptionDefault, logger);
         const configureInstancePipelineArgs = new PipelineArgs(this, args, logger);
 
@@ -22,6 +25,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         configureInstancePipeline.execute(configureInstancePipelineArgs);
 
         logger.log();
+
         console.log(logger.formattedLogs);
 
         // todo: move this to configureInstance
