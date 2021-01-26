@@ -19,11 +19,19 @@ export default class InitializeFilter extends PipelineFilter {
 
             if (!data.newInstance) return this.abort("could not find StandardModel instance in arguments");
 
-            logger.log("checking initializing", data.model.isConfigured);
+            logger.log(
+                "checking initializing",
+                `Utilities.isClass(data.model): ${Utilities.isClass(data.model)}`,
+                `data.model.isConfigured: ${data.model.isConfigured}`,
+                `Object.isSealed(data.model.configuration): ${Object.isSealed(data.model.configuration)}`
+            );
 
             // abort the pipeline if it's initializing or if it's in the
             // process of being initialized
             if (!(Utilities.isClass(data.model)) || (data.model.isConfigured && Object.isSealed(data.model.configuration))) return this.abort();
+            logger.log("model is not sealed");
+            logger.log(`model is initializing: ${data.model?.configuration?.initializing}`)
+            logger.flush();
             if (data.model?.configuration?.initializing) return this.abort("model is initializing");
 
             logger.log();

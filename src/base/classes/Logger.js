@@ -18,9 +18,15 @@ export default class Logger {
         return this;
     }
 
+    flush() {
+        console.log(this.formattedLogs);
+        this.clear();
+
+        return this;
+    }
+
     get formattedLogs() {
         const objects = this.#logs.map(log => log.messages.filter(message => !Utilities.isString(message))).flat();
-        // const groups = this.#logs.map(log => log.group.id).reduce((acc, group) => { console.log(acc); return !acc.includes(group) && acc.push(group) || acc }, []);
 
         let output = "";
 
@@ -47,7 +53,7 @@ export default class Logger {
     // }
 
     log(...args) {
-        // todo: single call with multiple args should be on one line
+        // todo: single call with multiple args should be on one line, maybe?
         const locations = args.filter(arg => Utilities.isType(arg, Location) && arg);
         const location = locations && locations.length > 0 && locations.slice(-1) || Location.locate(2);
         const messages = args.filter(arg => !Utilities.isType(arg, Location));
