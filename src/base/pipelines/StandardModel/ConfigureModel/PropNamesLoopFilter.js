@@ -14,7 +14,6 @@ export default class PropNamesLoopFilter extends PipelineFilter {
                 const prop = data.configInstance[propName];
 
                 if (!Utilities.isObject(prop)) return this.abort("invalid prop");
-                console.log("model loop " + this.executionId);
 
                 const propType = prop.hasOwnProperty("type") && Globals.FieldTypes.includes(prop.type) && prop.type || null;
 

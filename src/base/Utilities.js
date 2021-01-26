@@ -5,41 +5,6 @@ const isStrict = (function(){ return !this; })();
 
 class Utilities {
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
-    static currentLineNumber() {
-        let initiator;
-        try { throw new Error() }
-        catch (e) {
-            if (typeof e.stack === 'string') {
-                let isFirst = true;
-                for (const line of e.stack.split('\n')) {
-                    const matches = line.match(/^\s+at\s+(.*)/);
-                    if (matches) {
-                        if (!isFirst) { // first line - current function
-                            // second line - caller (what we are looking for)
-                            initiator = matches[1];
-                            break;
-                        }
-                        isFirst = false;
-                    }
-                }
-            }
-        }
-
-        return initiator;
-        // const stack = function() {
-        //     const orig = Error.prepareStackTrace;
-        //     Error.prepareStackTrace = function(_, stack) {
-        //         return stack;
-        //     };
-        //     const err = new Error;
-        //     Error.captureStackTrace(err, this);
-        //     const stack = err.stack;
-        //     Error.prepareStackTrace = orig;
-        //     return stack;
-        // };
-        //
-        // return stack()[1].getLineNumber();
-    };
     /*
      *  getClass(obj)
      *  - obj: instantiated object
@@ -51,6 +16,21 @@ class Utilities {
      */
     static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || null;
     static getClassName = function(obj) { return this.getClass(obj).name; };
+    static getCurrentLocation(back) {
+        back = Utilities.isNumber(back) && back || 0;
+
+        try { throw new Error() }
+        catch (err) {
+            const stack = err.stack.split("\n").map(s => s.trim()).filter(s => s.startsWith("at "));
+            const location = stack[1 + back];
+            const file = location.split(" ").slice(-1)[0].split(":");
+            const fileName = file.length === 3 && file[0].split("\/").slice(-1)[0] || location.split(" ").slice(1).join(" ")
+            const lineNumber = file.length === 3 && file[1] || 0;
+            const colNumber = file.length === 3 && file[2].split(")")[0] || 0;
+
+            return { fileName: fileName, lineNumber: lineNumber, colNumber: colNumber, location: location, stack: stack };
+        }
+    };
     static findFrom(...args) {
         return {
             firstInheritanceOf: (objClass) =>
@@ -137,7 +117,7 @@ class Utilities {
         if (obj === null || obj === undefined || type === null || type === undefined) return false;
         if (typeof type == "string") return typeof obj === type;
 
-        return obj instanceof type || Globals.Primitives.map(p => p.name).includes(typeof obj);
+        return obj instanceof type || Globals.Primitives.map(p => p.name).includes(type) && type === typeof obj;
     }
     // todo: change this back to immutable
     static merge = (...args) => {
@@ -164,6 +144,9 @@ class Utilities {
 
             return v.toString(16);
         });
+    }
+    static newUuidShort() {
+        return Utilities.newUuid().split("-").slice(-1)[0];
     }
 }
 

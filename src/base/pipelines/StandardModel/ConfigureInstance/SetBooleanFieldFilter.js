@@ -7,32 +7,22 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
         super((data) => {
             if (!data) return this.abort("data parameter is invalid");
 
-            console.log("instance bool");
-
             const { propNames, fieldDefs } = data.config;
             const { is } = Utilities;
             const fields = fieldDefs.filter(field => field.type === Boolean);
 
-            if (fields.length == 0) return;
+            if (fields.length === 0) return;
 
             const setter = function(field) { return function(value) {
-                console.log("setting " + data.executionId);
-                console.log(value);
-                // console.log(field);
-
                 if (!field) throw new Error("setter received invalid 'field' parameter");
                 if (Utilities.isBoolean(value)) { data.fieldVals[field.name] = value; return; }
-
-                console.log("mismatch");
-                return;
-                throw new Error("mismatch");
 
                 const typeMismatch = field.onTypeMismatch || data.config.onTypeMismatch || new TypeMismatchSetOptions("Noop");
 
                 if (typeMismatch.equals("Ignore")) { data.fieldVals[field.name] = value; return; }
                 if (typeMismatch.equals("Noop")) { data.fieldVals[field.name] = data.fieldVals[field.name]; return; }
                 if (typeMismatch.equals("Null")) { data.fieldVals[field.name] = null; }
-                if (typeMismatch.equals("Throw")) throw new Error(`type mismatch attempting to set value on ${field.name}`);
+                if (typeMismatch.equals("Throw")) throw new Error(`type mismatch attempting to set value on ${ field.name }`);
             }};
 
             fields.forEach(field => {
@@ -46,7 +36,6 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
 
                 Object.defineProperty(data.newInstance, field.name, config);
 
-                console.log("loop " + field.default);
                 if (field.hasOwnProperty("default")) data.newInstance[field.name] = field.default;
             });
 

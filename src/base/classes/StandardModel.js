@@ -1,11 +1,10 @@
 import Classes from "../Classes";
-import Configurable from "../interfaces/Configurable";
-import Describable from "../interfaces/Describable";
-import Mappable from "../interfaces/Mappable";
-import PipelineArgs from "../components/Pipeline/PipelineArgs";
+import { Configurable, Describable, Mappable } from "../interfaces";
+import { Pipeline, PipelineArgs } from "../components/Pipeline";
+// import PipelineArgs from "../components/Pipeline/PipelineArgs";
 import Pipelines from "../pipelines";
-import Utilities from "../Utilities";
 import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
+import Logger from "./Logger";
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
@@ -15,26 +14,15 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor(...args) {
         super();
 
-        // todo: move this parsing into the pipeline
-        const initialVals = args.length > 0 && Utilities.isObject(args[0]) && args[0] || { };
-        const configureModelPipelineArgs = new PipelineArgs(this, typeMismatchSetOptionDefault);
+        const logger = new Logger();
+        const configureModelPipelineArgs = new PipelineArgs(this, typeMismatchSetOptionDefault, logger);
+        const configureInstancePipelineArgs = new PipelineArgs(this, args, logger);
 
-        console.log(1);
         configureModelPipeline.execute(configureModelPipelineArgs);
+        configureInstancePipeline.execute(configureInstancePipelineArgs);
 
-        // todo: propNames should not be dependent on the previous pipeline as that pipeline
-        //       only runs on the first instantiation; make sure propNames are available in
-        //       configuration
-        //const configureInstancePipelineArgs = new PipelineArgs({ instance: this, initialVals: initialVals, propNames: configureModelPipelineArgs.propNames });
-
-        const configureInstancePipelineArgs = new PipelineArgs(this, args);
-
-        console.log(2);
-        const result = configureInstancePipeline.execute(configureInstancePipelineArgs);
-        console.log(3);
-
-        // console.log(configureInstancePipelineArgs.meta);
-
+        logger.log();
+        console.log(logger.formattedLogs);
 
         // todo: move this to configureInstance
         // Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));

@@ -15,7 +15,9 @@ export default class InitializeFilter extends PipelineFilter {
 
             if (!data.newInstance) return this.abort("could not find StandardModel instance in arguments");
             if (data.model.configuration?.initializing) return this.abort("model is initializing");
-            console.log("instance initialize " + data.executionId);
+
+            // todo: parse out initialVals from args; the below was stripped from the StandardModel constructor
+            // const initialVals = args.length > 0 && Utilities.isObject(args[0]) && args[0] || { };
 
             data.parent = data.newInstance && Utilities.getParentClass(data.newInstance);
             data.config = data.model.configuration;

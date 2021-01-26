@@ -5,12 +5,15 @@ import PipelineArgs from "./PipelineArgs";
 const isFilter = (obj) => obj && (obj instanceof PipelineFilter || Object.getPrototypeOf(obj) === PipelineFilter);
 
 class Pipeline {
+    #executionId;
     #filters = [];
     #finally;
     #current = 0;
 
     constructor(...filters) {
         this.filterWith(...filters);
+
+        this.#executionId = Utilities.newUuid().split("-").slice(-1);
 
         return this;
     }
@@ -35,7 +38,6 @@ class Pipeline {
 
         while (this.#current < this.count && !args.isAborted) {
             const filter = new this.#filters[this.#current++]();
-
             args.addFilterResult(filter.name, filter.execute(args));
         }
 
