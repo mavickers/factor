@@ -1,5 +1,5 @@
 import Utilities from "../../Utilities";
-import Logger from "../../classes/Logger";
+import Logger from "../Logger/Logger";
 import Location from "../../classes/Location";
 
 class PipelineArgs {
@@ -33,7 +33,10 @@ class PipelineArgs {
     }
 
     set error(msg) {
-        this.#error = Utilities.isString(msg) && msg.trim() && Error(msg.trim()) || this.#error;
+        this.#error =
+            Utilities.isString(msg) && msg.trim() && Error(msg.trim()) ||
+            msg instanceof Error && msg ||
+            this.#error;
     }
 
     get logger() {

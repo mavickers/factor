@@ -4,7 +4,7 @@ import { Pipeline, PipelineArgs } from "../components/Pipeline";
 // import PipelineArgs from "../components/Pipeline/PipelineArgs";
 import Pipelines from "../pipelines";
 import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
-import Logger from "./Logger";
+import Logger from "../components/Logger/Logger";
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
@@ -24,9 +24,7 @@ class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
         configureModelPipeline.execute(configureModelPipelineArgs);
         configureInstancePipeline.execute(configureInstancePipelineArgs);
 
-        logger.log();
-
-        console.log(logger.formattedLogs);
+        logger.flush();
 
         // todo: move this to configureInstance
         // Object.keys(initialVals).forEach(key => instance.hasOwnProperty(key) && (instance[key] = initialVals[key]));

@@ -1,7 +1,7 @@
 import PipelineFilter from "../../components/Pipeline/PipelineFilter";
 import Utilities from "../../Utilities";
 
-export default class NormalizeDataParameters extends PipelineFilter {
+export default class NormalizeDataParametersFilter extends PipelineFilter {
     constructor() {
         super((data) => {
             if (!data) return this.abort("data parameter is invalid");

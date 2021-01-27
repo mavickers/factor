@@ -1,5 +1,5 @@
-import Utilities from "../Utilities";
-import Location from "./Location";
+import Utilities from "../../Utilities";
+import Location from "../../classes/Location";
 
 export default class LogMessage {
     #messages;

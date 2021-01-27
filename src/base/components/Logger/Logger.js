@@ -1,14 +1,16 @@
-import Utilities from "../Utilities";
+import Utilities from "../../Utilities";
 import LogMessage from "./LogMessage";
-import Location from "./Location";
+import Location from "../../classes/Location";
 
 export default class Logger {
     // todo: group functionality - will need to be support nested groups which indent content accordingly.
 
+    #id;
     #logs;
     #group = null;
 
     constructor() {
+        this.#id = Utilities.newUuidShort();
         this.#logs = [ ];
     }
 
@@ -19,7 +21,7 @@ export default class Logger {
     }
 
     flush() {
-        console.log(this.formattedLogs);
+        if (this.#logs.length > 0) console.log(this.formattedLogs);
         this.clear();
 
         return this;
@@ -32,8 +34,8 @@ export default class Logger {
 
         this.#logs.forEach(log => {
             const logIndex = this.#logs.indexOf(log);
-            const coordinates = `[${log.location.lineNumber}:${log.location.colNumber}]`;
-            const fileNameHeader = `\n=== ${log.location.fileName} `.padEnd(80, "=");
+            const coordinates = `[${log.location.lineNumber.padStart(4,"0")}:${log.location.colNumber.padStart(4, "0")}]`;
+            const fileNameHeader = `\n=== ${this.#id} ${log.location.fileName} `.padEnd(80, "=");
             const withHeader = (logIndex === 0 || log.location.file[0] !== this.#logs[logIndex - 1].location.file[0]);
 
             output += withHeader && fileNameHeader || "";
@@ -46,31 +48,24 @@ export default class Logger {
 
                 output += Utilities.isString(message)
                     ? `${" ".repeat(indent)} ${message}`
-                    : (message || Utilities.isBoolean(message)) && `  {{obj}}`.padStart(indent, " ") || "";
+                    : (message || Utilities.isBoolean(message)) && `            {{obj}}`.padStart(indent, " ") || "";
             });
-
         });
 
         objects.forEach(object => {
-            output = output.replace(/\{\{obj\}\}/, JSON.stringify(object, null, 2).replace(/[\r\n]+/gm, "\n  "));
+            output = object && output.replace(/\{\{obj\}\}/, JSON.stringify(object, null, 2)?.replace(/[\r\n]+/gm, "\n            ") ?? "<< unable to serialize object >>") || output;
         });
 
         return output;
     }
 
-    // group(name) {
-    //     this.#group = { name: name, id: Utilities.newUuidShort() };
-    //
-    //     return this;
-    // }
-
     log(...args) {
-        // todo: single call with multiple args should be on one line, maybe?
         const locations = args.filter(arg => Utilities.isType(arg, Location) && arg);
         const location = locations && locations.length > 0 && locations.slice(-1) || Location.locate(2);
         const messages = args.filter(arg => !Utilities.isType(arg, Location));
 
-        this.#logs.push(new LogMessage(location, ...messages));
+        //this.#logs.push(new LogMessage(location, ...(messages.length > 0 && messages || [ "" ])));
+        messages.length > 0 && this.#logs.push(new LogMessage(location, ...messages));
 
         return this;
     }

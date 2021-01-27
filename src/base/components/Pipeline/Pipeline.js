@@ -36,9 +36,16 @@ class Pipeline {
         this.#current = 0;
         let lastResult, pipelineArgs;
 
-        while (this.#current < this.count && !args.isAborted) {
+        while (this.#current < this.count && !args.isAborted && !args.error) {
             const filter = new this.#filters[this.#current++]();
-            args.addFilterResult(filter.name, filter.execute(args));
+
+            try {
+                args.addFilterResult(filter.name, filter.execute(args));
+            }
+            catch (err) {
+                args.error = err;
+            }
+
         }
 
         isFilter(this.#finally) && args.addFilterResult(this.#finally.name, new this.#finally().execute(args));

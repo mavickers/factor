@@ -11,7 +11,7 @@ export default class PropNamesLoopFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
             data.propNames.forEach(propName => {
-                logger.log();
+                logger.log("PropNamesLoopFilter");
 
                 const prop = data.configInstance[propName];
 

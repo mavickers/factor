@@ -7,7 +7,7 @@ import StandardModel from "../../../classes/StandardModel";
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
-            logger.log();
+            logger.log("InitializeFilter");
 
             if (!data) return this.abort("data parameter is invalid");
 
@@ -16,6 +16,8 @@ export default class InitializeFilter extends PipelineFilter {
             data.newInstance = data.newInstance || findFrom(data.arguments).firstInstanceOf(StandardModel);
             data.parent = data.newInstance && Utilities.getParentClass(data.newInstance);
             data.model = data.model || Utilities.getClass(data.newInstance) || findFrom(data.arguments).firstInheritanceOf(StandardModel);
+
+            const modelIsInitializing = data?.model?.configuration?.initializing ?? false;
 
             if (!data.newInstance) return this.abort("could not find StandardModel instance in arguments");
 
@@ -29,17 +31,17 @@ export default class InitializeFilter extends PipelineFilter {
             // abort the pipeline if it's initializing or if it's in the
             // process of being initialized
             if (!(Utilities.isClass(data.model)) || (data.model.isConfigured && Object.isSealed(data.model.configuration))) return this.abort();
-            logger.log("model is not sealed");
-            logger.log(`model is initializing: ${data.model?.configuration?.initializing}`)
-            logger.flush();
-            if (data.model?.configuration?.initializing) return this.abort("model is initializing");
 
-            logger.log();
+            logger.log("model is not sealed");
+            logger.log(`model is initializing (a): ${modelIsInitializing}`);
+
+            if (modelIsInitializing) return this.abort("model is initializing");
+
             logger.log("initializing");
-            console.log("initializing");
 
             // we don't want to run this pipeline twice, only the first time it is instantiated
             data.model.configure({ initializing: true });
+            logger.log(`model is initializing (b): ${data?.model?.configuration?.initializing ?? false}`);
 
             // store classes into inheritance chain for reference
             Classes.addInheritance(data.model, data.parent);

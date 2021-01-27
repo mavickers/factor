@@ -16,12 +16,17 @@ class PipelineFilter {
 
     get name() { return this.#name; }
 
+    get error() {
+        return this.#pipelineArgs.error;
+    }
+
     execute = function(pipelineArgs) {
         this.#pipelineArgs = pipelineArgs;
 
         // keep the result separate from the args.data assignment below
         // so we're able to indicate that the result had a value or was
         // null when returning.
+
         const results = this.#processFn(pipelineArgs.data, pipelineArgs.logger) || null;
 
         // if a result is returned from the filter the the arguments data
