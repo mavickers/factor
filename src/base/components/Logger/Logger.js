@@ -1,3 +1,4 @@
+import Globals from "../../Globals";
 import Utilities from "../../Utilities";
 import LogMessage from "./LogMessage";
 import Location from "../../classes/Location";
@@ -53,6 +54,12 @@ export default class Logger {
         });
 
         objects.forEach(object => {
+            if (!object) return;
+
+            // const objString = Utilities.isError(object) && !Globals.Factor["logErrorStack"]
+            //     ? JSON.stringify({ "Error": object.message })
+            //     : JSON.stringify(object, null, 2)?.replace(/[\r\n]+/gm, "\n            ") ?? "<< unable to serialize object >>";
+
             output = object && output.replace(/\{\{obj\}\}/, JSON.stringify(object, null, 2)?.replace(/[\r\n]+/gm, "\n            ") ?? "<< unable to serialize object >>") || output;
         });
 
@@ -62,9 +69,9 @@ export default class Logger {
     log(...args) {
         const locations = args.filter(arg => Utilities.isType(arg, Location) && arg);
         const location = locations && locations.length > 0 && locations.slice(-1) || Location.locate(2);
-        const messages = args.filter(arg => !Utilities.isType(arg, Location));
+        let messages = args.filter(arg => !Utilities.isType(arg, Location));
 
-        //this.#logs.push(new LogMessage(location, ...(messages.length > 0 && messages || [ "" ])));
+        messages = messages.map(message => Utilities.isError(message) && !Globals.Factor.logErrorStack ? `error thrown: ${message.message}` : message);
         messages.length > 0 && this.#logs.push(new LogMessage(location, ...messages));
 
         return this;

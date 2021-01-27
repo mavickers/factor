@@ -1,6 +1,7 @@
 import Utilities from "../Utilities";
 
 export default class Location {
+    #error;
     #colNumber;
     #file;
     #fileName;

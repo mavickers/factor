@@ -106,6 +106,7 @@ class Utilities {
         return typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
     };
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
+    static isError = (obj) => obj && obj instanceof Error && true || false;
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;

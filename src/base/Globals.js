@@ -36,3 +36,5 @@ export default class Globals {
         // { name: "symbol", type: Symbol }
     ]};
 }
+
+Globals.Factor["logErrorStack"] = true;

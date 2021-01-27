@@ -9,6 +9,8 @@ export default class InitializeFilter extends PipelineFilter {
         super((data, logger) => {
             logger.log("InitializeFilter");
 
+            throw new Error("just testing");
+
             if (!data) return this.abort("data parameter is invalid");
 
             const { findFrom } = Utilities;
