@@ -5,12 +5,11 @@ import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
 const typeMismatchSetOptionDefault = new TypeMismatchSetOptions("Ignore");
+const logger = new Logger();
 
 class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
     constructor(...args) {
         super();
-
-        const logger = new Logger();
 
         logger.log("constructor");
 

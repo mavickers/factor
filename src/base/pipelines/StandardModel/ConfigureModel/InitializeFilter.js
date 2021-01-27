@@ -32,15 +32,12 @@ export default class InitializeFilter extends PipelineFilter {
             // process of being initialized
             if (!(Utilities.isClass(data.model)) || (data.model.isConfigured && Object.isSealed(data.model.configuration))) return this.abort();
 
-            logger.log(`model is initializing (a): ${modelIsInitializing}`);
-
             if (modelIsInitializing) return this.abort("model is initializing");
 
             logger.log("initializing");
 
             // we don't want to run this pipeline twice, only the first time it is instantiated
             data.model.configure({ initializing: true });
-            logger.log(`model is initializing (b): ${data?.model?.configuration?.initializing ?? false}`);
 
             // store classes into inheritance chain for reference
             Classes.addInheritance(data.model, data.parent);
