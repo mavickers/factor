@@ -6,7 +6,7 @@ import StandardModel from "../../../classes/StandardModel";
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
-            logger.log("InitializeFilter");
+            logger.group("ConfigureInstance").log("InitializeFilter");
 
             if (!data) return this.abort("data parameter is invalid");
 
@@ -15,6 +15,7 @@ export default class InitializeFilter extends PipelineFilter {
             data.newInstance = data.newInstance || findFrom(data.arguments).firstInstanceOf(StandardModel);
             data.model = data.model || Utilities.getClass(data.newInstance) || findFrom(data.arguments).firstInheritanceOf(StandardModel);
 
+            logger.log(`model is initializing: ${data.model.configuration?.initializing ?? false}`);
             if (!data.newInstance) return this.abort("could not find StandardModel instance in arguments");
             if (data.model.configuration?.initializing) return this.abort("model is initializing");
 

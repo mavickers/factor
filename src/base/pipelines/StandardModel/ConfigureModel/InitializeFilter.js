@@ -7,9 +7,7 @@ import StandardModel from "../../../classes/StandardModel";
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
-            logger.log("InitializeFilter");
-
-            throw new Error("just testing");
+            logger.group("ConfigureModel").log("InitializeFilter");
 
             if (!data) return this.abort("data parameter is invalid");
 
@@ -34,7 +32,6 @@ export default class InitializeFilter extends PipelineFilter {
             // process of being initialized
             if (!(Utilities.isClass(data.model)) || (data.model.isConfigured && Object.isSealed(data.model.configuration))) return this.abort();
 
-            logger.log("model is not sealed");
             logger.log(`model is initializing (a): ${modelIsInitializing}`);
 
             if (modelIsInitializing) return this.abort("model is initializing");

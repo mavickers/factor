@@ -14,6 +14,10 @@ class PipelineFilter {
         return this.#pipelineArgs.abort(obj);
     }
 
+    get abortedWith() {
+        return this.#pipelineArgs.meta.abortedWith;
+    }
+
     get name() { return this.#name; }
 
     get error() {

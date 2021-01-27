@@ -37,4 +37,5 @@ export default class Globals {
     ]};
 }
 
-Globals.Factor["logErrorStack"] = true;
+Globals.Factor["logMute"] = true;
+Globals.Factor["logErrorStack"] = false;

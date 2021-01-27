@@ -28,6 +28,8 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
             }};
 
             fields.forEach(field => {
+                logger.log("forEach");
+
                 const config = {
                     enumerable: true,
                     get:() => data.fieldVals[field.name] || false,
