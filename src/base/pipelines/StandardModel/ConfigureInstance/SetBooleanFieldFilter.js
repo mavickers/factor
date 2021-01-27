@@ -4,7 +4,9 @@ import TypeMismatchSetOptions from "../../../classes/flags/TypeMismatchSetOption
 
 export default class SetBooleanFieldFilter extends PipelineFilter {
     constructor() {
-        super((data) => {
+        super((data, logger) => {
+            logger.log("SetBooleanFieldFilter");
+
             if (!data) return this.abort("data parameter is invalid");
 
             const { propNames, fieldDefs } = data.config;

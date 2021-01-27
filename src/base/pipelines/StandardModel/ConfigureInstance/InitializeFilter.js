@@ -5,7 +5,9 @@ import StandardModel from "../../../classes/StandardModel";
 
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
-        super((data) => {
+        super((data, logger) => {
+            logger.log("InitializeFilter");
+
             if (!data) return this.abort("data parameter is invalid");
 
             const { findFrom } = Utilities;

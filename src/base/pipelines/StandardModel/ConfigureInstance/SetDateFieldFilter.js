@@ -3,7 +3,9 @@ import Utilities from "../../../Utilities";
 
 export default class SetDateFieldFilter extends PipelineFilter {
     constructor() {
-        super((data) => {
+        super((data, logger) => {
+            logger.log("SetDateFieldFilter");
+
             if (data.fieldDefs.type !== Date) return;
 
             const getter = { get: () => data.fieldVals[data.propName] };

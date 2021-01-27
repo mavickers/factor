@@ -3,7 +3,9 @@ import Utilities from "../../../Utilities";
 
 export default class SetStringFieldFilter extends PipelineFilter {
     constructor() {
-        super((data) => {
+        super((data, logger) => {
+            logger.log("SetStringFieldFilter");
+
             if (data.fieldDef.type !== String) return;
 
             const getter = { get: () => data.fieldVals[data.propName] };

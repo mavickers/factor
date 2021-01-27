@@ -3,8 +3,9 @@ import Utilities from "../../../Utilities";
 
 export default class SetNumberFieldFilter extends PipelineFilter {
     constructor() {
-        super((data) => {
-            console.log("instance number");
+        super((data, logger) => {
+            logger.log("SetNumberFieldFilter");
+
             if (data.fieldDef.type !== Number) return;
 
             const getter = { get: () => data.fieldVals[data.propName] };

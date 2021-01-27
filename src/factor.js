@@ -1,8 +1,12 @@
+import Globals from "./base/Globals";
+
 import Classes from "./base/Classes";
 import Configurable from "./base/interfaces/Configurable";
 import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
 import StandardModel from "./base/classes/StandardModel";
+
+import Logger from "./base/components/Logger/Logger";
 
 import Pipeline from "./base/components/Pipeline/Pipeline";
 import PipelineArgs from "./base/components/Pipeline/PipelineArgs";
@@ -21,6 +25,8 @@ export {
     Describable,
     Enum,
     Flags,
+    Globals,
+    Logger,
     Mappable,
     Mapper,
     MapperOptionsFlag,
@@ -38,6 +44,8 @@ export default {
     Describing: Describable,
     Enum: Enum,
     Flags: Flags,
+    Globals: Globals,
+    Logger: Logger,
     Mappable: Mappable,
     Mapper: Mapper,
     MapperOptionsFlag: MapperOptionsFlag,

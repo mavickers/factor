@@ -1,6 +1,12 @@
 import StandardModel from "./classes/StandardModel";
 
 export default class Globals {
+    static get Factor() {
+        if (!global["@mavickers/factor"]) global["@mavickers/factor"] = { };
+
+        return global["@mavickers/factor"];
+    }
+
     static get FieldTypes() {
         const obj = {
             Array: { type: Array, name: "object" },

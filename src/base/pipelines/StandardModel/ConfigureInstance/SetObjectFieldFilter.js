@@ -4,6 +4,8 @@ import Utilities from "../../../Utilities";
 export default class SetObjectFieldFilter extends PipelineFilter {
     constructor() {
         super((data) => {
+            logger.log("SetObjectFieldFilter");
+
             if (data.fieldDef.type !== Object) return;
 
             const getter = { get: () => data.fieldVals[data.propName] };

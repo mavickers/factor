@@ -1,10 +1,6 @@
-import Classes from "../Classes";
-import { Configurable, Describable, Mappable } from "../interfaces";
-import { Pipeline, PipelineArgs } from "../components/Pipeline";
-// import PipelineArgs from "../components/Pipeline/PipelineArgs";
+import { Classes, Globals, Configurable, Describable, Mappable, Logger, PipelineArgs } from "../../factor";
 import Pipelines from "../pipelines";
 import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
-import Logger from "../components/Logger/Logger";
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
