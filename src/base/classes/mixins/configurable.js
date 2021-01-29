@@ -5,20 +5,23 @@ const configKey = Symbol("configuration");
 
 const obj = {
     get isConfigured() {
-        return this.hasOwnProperty(configKey) && Object.isFrozen(this._config);
+        return this.hasOwnProperty(configKey) && Object.isFrozen(this[configKey]);
     },
 
     get configuration() {
-        return this._config;
+        console.log("configuration", this.name);
+        return this[configKey];
     },
 
     configure(...args) {
         if (this.isConfigured) return;
 
-        const standardConfigFn = function(obj, config) {
-            const setConfig = obj.hasOwnProperty(configKey) && Utilities.mergeToNew(obj._config, config) || config;
+        console.log("configure", this.name);
 
-            obj._config = setConfig;
+        const standardConfigFn = function(obj, config) {
+            const setConfig = obj.hasOwnProperty(configKey) && Utilities.mergeToNew(obj[configKey], config) || config;
+
+            obj[configKey] = setConfig;
 
             return true;
         }
@@ -29,17 +32,17 @@ const obj = {
     },
 
     sealConfiguration() {
-        if (Object.isSealed(this) || Object.isSealed(this._config)) return;
+        if (Object.isSealed(this) || Object.isSealed(this[configKey])) return;
 
-        const config = this.hasOwnProperty(configKey) && this._config || { };
+        const config = this.hasOwnProperty(configKey) && this[configKey] || { };
 
-        delete this._config
+        delete this[configKey];
         Object.freeze(config);
-        Object.defineProperty(this, "_config", { get: () => config });
+        Object.defineProperty(this, configKey, { get: () => config });
 
         return true;
     }
 
 }
 
-export default new Mixin(obj, true);
+export default Utilities.newMixin(obj, true);

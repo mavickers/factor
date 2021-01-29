@@ -12,7 +12,5 @@ export default (target, name, descriptor) => {
     newDescriptor.get = () => fieldValue || false;
     newDescriptor.set = (value) => fieldValue = value;
 
-    console.log(newDescriptor);
-
     return newDescriptor;
 }

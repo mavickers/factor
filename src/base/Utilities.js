@@ -167,6 +167,25 @@ class Utilities {
         return _mixin;
     }
 
+    static newMixin(behaviors, isShared = false) {
+        const keys = Reflect.ownKeys(behaviors);
+        console.log(keys);
+        const typeTag = Symbol("isa");
+
+        function _mixin(targetClass) {
+            !isShared && keys.forEach(property => Object.defineProperty(targetClass.prototype, property, { value: behaviors[property], writable: true }));
+            isShared && keys.forEach(property => Object.defineProperty(targetClass, property, { value: behaviors[property], enumerable: behaviors.propertyIsEnumerable(property)}));
+
+            Object.defineProperty(targetClass.prototype, typeTag, { value: true });
+            Object.defineProperty(targetClass, Symbol.hasInstance, { value: (i) => !!i[typeTag] });
+
+            return targetClass;
+        }
+
+
+        return _mixin;
+    }
+
     static newUuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);

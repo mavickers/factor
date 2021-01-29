@@ -1,9 +1,8 @@
 import { Configurable, Utilities } from "../../../factor";
-import Classes from "../../Classes";
-import configurable from "../mixins/configurable";
+import Mixin from "../Mixin";
 
 export default function(target, name, descriptor) {
     if (!Utilities.isClass(target)) return target;
 
-    return configurable(target);
+    return Mixin(target, Configurable);
 }

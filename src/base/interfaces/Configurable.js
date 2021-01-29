@@ -1,6 +1,8 @@
 import Utilities from "../Utilities";
 
 class Configurable {
+    #propId = Symbol.for("Configurable");
+
     static get isConfigured() {
         return this.hasOwnProperty("_config") && Object.isFrozen(this._config);
     }

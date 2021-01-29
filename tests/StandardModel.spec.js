@@ -21,7 +21,7 @@ describe("StandardModel", () => {
             return descriptor;
         }
 
-        @tracked @configurable
+        @configurable
         class TestModel {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
@@ -36,8 +36,6 @@ describe("StandardModel", () => {
             // boolField4 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Throw") };
         }
 
-        console.log(Object.getOwnPropertyDescriptors(TestModel));
-
         let testModel;
 
         Factor.logMute = false;
@@ -45,8 +43,10 @@ describe("StandardModel", () => {
         logger.log("expect");
         expect(() => testModel = new TestModel()).not.toThrow();
         testModel.boolField2 = false;
-
-        console.log(TestModel.configure);
+        console.log(TestModel.configure({ "first": 1 }));
+        TestModel.sealConfiguration();
+        console.log(TestModel.configure({ "first": 2 }));
+        console.log(TestModel.configuration, TestModel.isConfigured);
 
         logger.log(testModel.boolField2?.toString() ?? "");
 
