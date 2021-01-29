@@ -38,14 +38,16 @@ describe("StandardModel", () => {
 
         let testModel;
 
+
+
         Factor.logMute = false;
 
         logger.log("expect");
         expect(() => testModel = new TestModel()).not.toThrow();
         testModel.boolField2 = false;
-        console.log(TestModel.configure({ "first": 1 }));
-        TestModel.sealConfiguration();
         console.log(TestModel.configure({ "first": 2 }));
+        TestModel.sealConfiguration();
+        console.log(TestModel.configure({ "first": 1 }));
         console.log(TestModel.configuration, TestModel.isConfigured);
 
         logger.log(testModel.boolField2?.toString() ?? "");

@@ -48,16 +48,6 @@ const Mixin = function (...classes) {
 
     classes.filter(cls => cls != classes[0]).forEach(cls => addMethods(classes[0], cls));
 
-
-    // class NewBase {
-    //     constructor() {
-    //         classes.forEach(cls => Object.assign(this, new cls()));
-    //     }
-    // }
-    //
-    //
-    // return NewBase;
-
     return classes[0];
 }
 
