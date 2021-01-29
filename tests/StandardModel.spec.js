@@ -46,6 +46,8 @@ describe("StandardModel", () => {
         expect(() => testModel = new TestModel()).not.toThrow();
         testModel.boolField2 = false;
 
+        console.log(TestModel.configure);
+
         logger.log(testModel.boolField2?.toString() ?? "");
 
         logger.log("resetting");

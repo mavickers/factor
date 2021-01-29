@@ -2,9 +2,11 @@ import StandardModel from "./classes/StandardModel";
 
 export default class Globals {
     static get Factor() {
-        if (!global["@mavickers/factor"]) global["@mavickers/factor"] = { };
+        const factorId = Symbol.for("@mavickers/factor");
 
-        return global["@mavickers/factor"];
+        if (!global[factorId]) global[factorId] = { };
+
+        return global[factorId];
     }
 
     static get FieldTypes() {

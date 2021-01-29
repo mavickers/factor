@@ -143,6 +143,30 @@ class Utilities {
 
         return newObj;
     };
+
+    //
+    // mixin
+    // lifted from http://raganwald.com/2015/06/26/decorators-in-es7.html
+    //
+
+    static mixin(behaviour, sharedBehaviour = {}) {
+        const instanceKeys = Reflect.ownKeys(behaviour);
+        const sharedKeys = Reflect.ownKeys(sharedBehaviour);
+        const typeTag = Symbol('isa');
+
+        function _mixin (clazz) {
+            instanceKeys.forEach(property => Object.defineProperty(clazz.prototype, property, { value: behaviour[property], writable: true }));
+            Object.defineProperty(clazz.prototype, typeTag, { value: true });
+
+            return clazz;
+        }
+
+        sharedKeys.forEach(property => Object.defineProperty(_mixin, property, { value: sharedBehaviour[property], enumerable: sharedBehaviour.propertyIsEnumerable(property)}));
+        Object.defineProperty(_mixin, Symbol.hasInstance, { value: (i) => !!i[typeTag] });
+
+        return _mixin;
+    }
+
     static newUuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
