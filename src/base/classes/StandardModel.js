@@ -7,7 +7,7 @@ const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
 const typeMismatchSetOptionDefault = new TypeMismatchSetOptions("Ignore");
 const logger = new Logger();
 
-class StandardModel extends Classes([ Configurable, Describable, Mappable ]) {
+class StandardModel extends Classes(Configurable, Describable, Mappable) {
     constructor(...args) {
         super();
 

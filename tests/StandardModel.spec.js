@@ -2,9 +2,8 @@ import StandardModel from "../src/base/classes/StandardModel";
 import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 import Globals from "../src/base/Globals";
 import { Configurable, Logger, Utilities } from "../src/factor";
-import { readOnly } from "../src/base/classes/decorators";
-import isBoolean from "../src/base/classes/decorators/isBoolean";
-import noopMismatch from "../src/base/classes/decorators/noopMismatch";
+import { configurable, isBoolean, noopMismatch, readOnly } from "../src/base/classes/decorators";
+import Classes from "../src/base/Classes";
 
 const { Factor } = Globals;
 
@@ -13,24 +12,22 @@ describe("StandardModel", () => {
         const logger = new Logger();
 
         function tracked(target, name, descriptor) {
-            console.log(descriptor);
-            console.log(Object.getOwnPropertyDescriptors(target))
+            if (!Utilities.isInheriting(target, Configurable)) return target;
 
-            // descriptor = descriptor || { }
-            //
-            // descriptor.test = "hello";
-            //
+
+
+            console.log("this is a configurable class");
+
             return descriptor;
         }
 
-        @tracked
-        class TestModel extends Configurable {
+        @tracked @configurable
+        class TestModel {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
             boolField2 = true;
 
             constructor() {
-                super();
                 logger.log("constructor");
             }
 

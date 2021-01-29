@@ -6,7 +6,7 @@
 
 // todo: write tests for this
 
-const Classes = function (oldBases) {
+const Classes = function (...oldBases) {
     class NewBase {
         constructor() {
             oldBases.forEach(oldBase => Object.assign(this, new oldBase()));

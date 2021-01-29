@@ -108,6 +108,10 @@ class Utilities {
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = (obj) => obj && obj instanceof Error && true || false;
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
+    static isInheriting = (obj, cl) =>
+        Utilities.isClass(obj) &&
+        Array.isArray(obj._inherited?.classes) &&
+        obj._inherited.classes.includes(cl);
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isPrimitive = (obj) => false;
