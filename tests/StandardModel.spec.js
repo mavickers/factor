@@ -1,8 +1,10 @@
 import StandardModel from "../src/base/classes/StandardModel";
 import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 import Globals from "../src/base/Globals";
-import { Logger } from "../src/factor";
+import { Configurable, Logger, Utilities } from "../src/factor";
 import { readOnly } from "../src/base/classes/decorators";
+import isBoolean from "../src/base/classes/decorators/isBoolean";
+import noopMismatch from "../src/base/classes/decorators/noopMismatch";
 
 const { Factor } = Globals;
 
@@ -10,49 +12,25 @@ describe("StandardModel", () => {
     it("should handle boolean fields correctly", () => {
         const logger = new Logger();
 
-        const is = (...extArgs) => {
-            logger.log("is ext", extArgs.length, extArgs[0] === Boolean);
-            return (...intArgs) => {
-                logger.log("is int", intArgs.length, intArgs[0]);
-            }
-        }
+        function tracked(target, name, descriptor) {
+            console.log(descriptor);
+            console.log(Object.getOwnPropertyDescriptors(target))
 
-
-
-        const testing = function(descriptor) {
-            console.log(descriptor.value);
-
+            // descriptor = descriptor || { }
+            //
+            // descriptor.test = "hello";
+            //
             return descriptor;
         }
 
-        function tracked({get, set}) {
-            return {
-                kind: "field",
-                placement: "prototype",
-                get: (value) => value,
-                set(value) {
-                    if (get.call(this) !== value) {
-                        set.call(this, value);
-                        this.render();
-                    }
-                }
-            };
-        }
-
-        const model = function(target) {
-            logger.log("model");
-
-            return target;
-        }
-
-        logger.log("class def");
-
-        class TestModel {
+        @tracked
+        class TestModel extends Configurable {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
-            @tracked
+            @isBoolean @noopMismatch
             boolField2 = true;
 
             constructor() {
+                super();
                 logger.log("constructor");
             }
 
@@ -61,6 +39,7 @@ describe("StandardModel", () => {
             // boolField4 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Throw") };
         }
 
+        console.log(Object.getOwnPropertyDescriptors(TestModel));
 
         let testModel;
 
@@ -68,6 +47,7 @@ describe("StandardModel", () => {
 
         logger.log("expect");
         expect(() => testModel = new TestModel()).not.toThrow();
+        testModel.boolField2 = false;
 
         logger.log(testModel.boolField2?.toString() ?? "");
 
