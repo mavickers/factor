@@ -1,11 +1,11 @@
 import Utilities from "../Utilities";
 
-const configurableId = Symbol("configurable");
+const configurableId = Symbol("configuration");
 
 class Configurable {
     static get configurableId() { return configurableId; }
 
-    static get isConfigured() {
+    static get isFrozen() {
         return this.hasOwnProperty(configurableId) && Object.isFrozen(this[configurableId]);
     }
 
@@ -14,7 +14,7 @@ class Configurable {
     }
 
     static configure = function(...args) {
-        if (this.isConfigured) return;
+        if (this.isFrozen) throw new Error("Configuration is frozen");
 
         const configFn = args.find(arg => Utilities.isFunction(arg)) || standardConfigFn;
         const config = args.find(arg => !Utilities.isFunction(arg)) || { };
