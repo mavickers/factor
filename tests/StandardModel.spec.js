@@ -1,9 +1,6 @@
-// import StandardModel from "../src/base/classes/StandardModel";
-import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 import Globals from "../src/base/Globals";
-import { Configurable, Logger, Utilities } from "../src/factor";
+import { Logger} from "../src/factor";
 import { configurable, describable, isBoolean, noopMismatch, readOnly } from "../src/base/classes/decorators";
-import Classes from "../src/base/Classes";
 
 const { Factor } = Globals;
 
@@ -11,7 +8,7 @@ describe("StandardModel", () => {
     it("should handle boolean fields correctly", () => {
         const logger = new Logger();
 
-        @noopMismatch @describable
+        @describable @configurable
         class Test1 {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
@@ -29,10 +26,10 @@ describe("StandardModel", () => {
         let testModel;
 
 
-
         Factor.logMute = false;
 
         expect(() => testModel = new Test1()).not.toThrow();
+        console.log(testModel.className);
     });
 
 
