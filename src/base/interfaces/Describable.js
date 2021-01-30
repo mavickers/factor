@@ -1,6 +1,9 @@
 import Utilities from "../Utilities";
 import { configurable } from "../classes/decorators";
 
+// todo: move dependency on Configurable - it's currently there because
+//       of static function injection.
+
 @configurable
 class Describable {
     differencesFrom(obj) {

@@ -1,13 +1,16 @@
 import { Classes, Globals, Configurable, Describable, Mappable, Logger, PipelineArgs } from "../../factor";
 import Pipelines from "../pipelines";
 import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions"
+import mappable from "./decorators/mappable";
+import describable from "./decorators/describable";
 
 const configureModelPipeline = Pipelines.StandardModel.ConfigureModel;
 const configureInstancePipeline = Pipelines.StandardModel.ConfigureInstance;
 const typeMismatchSetOptionDefault = new TypeMismatchSetOptions("Ignore");
 const logger = new Logger();
 
-class StandardModel extends Classes(Configurable, Describable, Mappable) {
+@mappable @describable
+class StandardModel extends Classes(Describable, Mappable) {
     constructor(...args) {
         super();
 

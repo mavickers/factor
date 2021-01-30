@@ -1,6 +1,6 @@
 import Globals from "../src/base/Globals";
 import { Logger} from "../src/factor";
-import { configurable, describable, isBoolean, noopMismatch, readOnly } from "../src/base/classes/decorators";
+import { configurable, describable, isBoolean, mappable, noopMismatch, readOnly } from "../src/base/classes/decorators";
 
 const { Factor } = Globals;
 
@@ -8,7 +8,7 @@ describe("StandardModel", () => {
     it("should handle boolean fields correctly", () => {
         const logger = new Logger();
 
-        @describable @configurable
+        @mappable @describable @configurable
         class Test1 {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
