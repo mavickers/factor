@@ -1,7 +1,8 @@
 import Utilities from "../Utilities";
-import Configurable from "../interfaces/Configurable";
+import { configurable } from "../classes/decorators";
 
-class Describable extends Configurable {
+@configurable
+class Describable {
     differencesFrom(obj) {
         const diffs = { };
 

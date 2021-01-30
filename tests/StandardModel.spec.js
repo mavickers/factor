@@ -1,4 +1,4 @@
-import StandardModel from "../src/base/classes/StandardModel";
+// import StandardModel from "../src/base/classes/StandardModel";
 import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 import Globals from "../src/base/Globals";
 import { Configurable, Logger, Utilities } from "../src/factor";
@@ -11,7 +11,7 @@ describe("StandardModel", () => {
     it("should handle boolean fields correctly", () => {
         const logger = new Logger();
 
-        @noopMismatch @describable @configurable
+        @noopMismatch @describable
         class Test1 {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
