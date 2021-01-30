@@ -1,6 +1,7 @@
 import Globals from "../src/base/Globals";
 import { Logger} from "../src/factor";
 import { configurable, describable, isBoolean, mappable, noopMismatch, readOnly } from "../src/base/classes/decorators";
+import StandardModel from "../src/base/classes/StandardModel";
 
 const { Factor } = Globals;
 
@@ -8,7 +9,7 @@ describe("StandardModel", () => {
     it("should handle boolean fields correctly", () => {
         const logger = new Logger();
 
-        @mappable @describable @configurable
+        @noopMismatch @mappable @describable @configurable
         class Test1 {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
@@ -22,6 +23,12 @@ describe("StandardModel", () => {
             // boolField3 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Null") };
             // boolField4 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Throw") };
         }
+
+        class Test2 extends StandardModel {
+            field1 = { type: String }
+        }
+
+
 
         let testModel;
 

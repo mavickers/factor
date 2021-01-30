@@ -1,6 +1,8 @@
-import { Configurable, Utilities } from "../../factor";
+import Utilities from "../Utilities";
+import { configurable } from "./decorators";
 
-export default class extends Configurable {
+@configurable
+export default class {
     configurable = false;
     enumerable = false;
     writable = true;
@@ -8,8 +10,6 @@ export default class extends Configurable {
     #configuration = { };
 
     constructor(args) {
-        super();
-
         if (!args) return;
 
         this.configurable = Utilities.isBoolean(args.configurable) ? args.configurable : this.configurable;

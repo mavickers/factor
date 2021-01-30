@@ -1,6 +1,6 @@
 import Utilities from "../Utilities";
 
-const configurableId = Symbol.for("ConfigurableClass");
+const configurableId = Symbol("configurable");
 
 class Configurable {
     static get configurableId() { return configurableId; }
@@ -10,7 +10,7 @@ class Configurable {
     }
 
     static get configuration() {
-        return this[configurableId];
+        return this[configurableId] || { };
     }
 
     static configure = function(...args) {

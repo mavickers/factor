@@ -1,9 +1,8 @@
-import StandardModel from "./classes/StandardModel";
 import Globals from "./Globals";
 
 const isStrict = (function(){ return !this; })();
 
-class Utilities {
+export default class Utilities {
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
     /*
      *  getClass(obj)
@@ -197,5 +196,3 @@ class Utilities {
         return Utilities.newUuid().split("-").slice(-1)[0];
     }
 }
-
-export default Utilities;

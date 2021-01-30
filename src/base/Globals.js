@@ -1,4 +1,4 @@
-import StandardModel from "./classes/StandardModel";
+// import StandardModel from "./classes/StandardModel";
 
 export default class Globals {
     static get Factor() {
@@ -16,7 +16,7 @@ export default class Globals {
             Date: { type: Date, name: "number" },
             Number: { type: Number, name: "number" },
             Object: { type: Object, name: "object" },
-            StandardModel: { type: StandardModel, name: "object" },
+            // StandardModel: { type: StandardModel, name: "object" },
             String: { type: String, name: "string" }
         }
 
