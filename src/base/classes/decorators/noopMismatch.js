@@ -5,6 +5,7 @@ import { Configurable, Utilities } from "../../../factor";
 export default (target, name, descriptor) => {
     const isConfigurableCLass = Utilities.isInheriting(target, Configurable);
 
+    console.log(isConfigurableCLass);
 
 
     // const newDescriptor = new FieldDescriptor(descriptor);

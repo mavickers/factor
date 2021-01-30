@@ -15,7 +15,7 @@ const Classes = function (...oldBases) {
         }
     }
 
-    return Mixin([NewBase, ...oldBases]);
+    return Mixin(...[class { }, ...oldBases]);
     //
     // oldBases.forEach(oldBase => Classes.addMethods(NewBase, oldBase));
     //

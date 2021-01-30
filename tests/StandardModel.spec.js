@@ -2,7 +2,7 @@ import StandardModel from "../src/base/classes/StandardModel";
 import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 import Globals from "../src/base/Globals";
 import { Configurable, Logger, Utilities } from "../src/factor";
-import { configurable, isBoolean, noopMismatch, readOnly } from "../src/base/classes/decorators";
+import { configurable, describable, isBoolean, noopMismatch, readOnly } from "../src/base/classes/decorators";
 import Classes from "../src/base/Classes";
 
 const { Factor } = Globals;
@@ -11,18 +11,8 @@ describe("StandardModel", () => {
     it("should handle boolean fields correctly", () => {
         const logger = new Logger();
 
-        function tracked(target, name, descriptor) {
-            if (!Utilities.isInheriting(target, Configurable)) return target;
-
-
-
-            console.log("this is a configurable class");
-
-            return descriptor;
-        }
-
-        @configurable
-        class TestModel {
+        @noopMismatch @describable @configurable
+        class Test1 {
             //boolField1 = { type: Boolean, default: false, onTypeMismatch: new TypeMismatchSetOptions("Ignore") };
             @isBoolean @noopMismatch
             boolField2 = true;
@@ -42,34 +32,7 @@ describe("StandardModel", () => {
 
         Factor.logMute = false;
 
-        logger.log("expect");
-        expect(() => testModel = new TestModel()).not.toThrow();
-        testModel.boolField2 = false;
-        console.log(TestModel.configure({ "first": 2 }));
-        TestModel.sealConfiguration();
-        console.log(TestModel.configure({ "first": 1 }));
-        console.log(TestModel.configuration, TestModel.isConfigured);
-
-        logger.log(testModel.boolField2?.toString() ?? "");
-
-        logger.log("resetting");
-        logger.log(testModel.boolField3);
-        logger.flush();
-
-
-        // expect(testModel.boolField1).toEqual(false);
-        // expect(testModel.boolField2).toEqual(false);
-        // expect(testModel.boolField3).toEqual(false);
-        // expect(testModel.boolField4).toEqual(false);
-        //
-        // expect(() => testModel.boolField1 = true).not.toThrow();
-        // expect(testModel.boolField1).toEqual(true);
-        //
-        // expect(() => testModel.boolField2 = "true").not.toThrow();
-        // expect(() => testModel.boolField2).toEqual(false);
-        //
-        // expect(() => testModel.boolField3 = "true").not.toThrow();
-        // expect(() => testModel.boolField3).toEqual(false);
+        expect(() => testModel = new Test1()).not.toThrow();
     });
 
 

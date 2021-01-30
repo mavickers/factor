@@ -4,6 +4,7 @@ import Classes from "./base/Classes";
 import Configurable from "./base/interfaces/Configurable";
 import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
+import Mixin from "./base/classes/Mixin";
 import StandardModel from "./base/classes/StandardModel";
 
 import Logger from "./base/components/Logger/Logger";
@@ -30,6 +31,7 @@ export {
     Mappable,
     Mapper,
     MapperOptionsFlag,
+    Mixin,
     Pipeline,
     PipelineArgs,
     PipelineFilter,
@@ -49,6 +51,7 @@ export default {
     Mappable: Mappable,
     Mapper: Mapper,
     MapperOptionsFlag: MapperOptionsFlag,
+    Mixin: Mixin,
     Pipeline,
     PipelineArgs,
     PipelineFilter,

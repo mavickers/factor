@@ -1,4 +1,5 @@
-import { StandardModel, Configurable } from "../src/factor";
+import Configurable from "../src/base/interfaces/Configurable";
+import StandardModel from "../src/base/classes/StandardModel"
 
 describe("StandardModel", () => {
     it("Should not fail on secondary instantiations", () => {

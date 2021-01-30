@@ -3,6 +3,8 @@ import Utilities from "../Utilities";
 const configurableId = Symbol.for("ConfigurableClass");
 
 class Configurable {
+    static get configurableId() { return configurableId; }
+
     static get isConfigured() {
         return this.hasOwnProperty(configurableId) && Object.isFrozen(this[configurableId]);
     }
