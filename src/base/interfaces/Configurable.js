@@ -1,16 +1,14 @@
 import Utilities from "../Utilities";
 
-const configurableId = Symbol("configuration");
+const configId = Symbol("configuration");
 
 class Configurable {
-    static get configurableId() { return configurableId; }
-
     static get isFrozen() {
-        return this.hasOwnProperty(configurableId) && Object.isFrozen(this[configurableId]);
+        return this.hasOwnProperty(configId) && Object.isFrozen(this[configId]);
     }
 
     static get configuration() {
-        return this[configurableId] || { };
+        return this[configId] || { };
     }
 
     static configure = function(...args) {
@@ -23,22 +21,22 @@ class Configurable {
     }
 
     static sealConfiguration = function() {
-        if (Object.isSealed(this) || Object.isSealed(this[configurableId])) return;
+        if (Object.isSealed(this) || Object.isSealed(this[configId])) return;
 
-        const config = this.hasOwnProperty(configurableId) && this[configurableId] || { };
+        const config = this.hasOwnProperty(configId) && this[configId] || { };
 
-        delete this[configurableId]
+        delete this[configId]
         Object.freeze(config);
-        Object.defineProperty(this, configurableId, { get: () => config });
+        Object.defineProperty(this, configId, { get: () => config });
 
         return true;
     }
 }
 
 const standardConfigFn = function(obj, config) {
-    const setConfig = obj.hasOwnProperty(configurableId) && Utilities.mergeToNew(obj[configurableId], config) || config;
+    const setConfig = obj.hasOwnProperty(configId) && Utilities.mergeToNew(obj[configId], config) || config;
 
-    obj[configurableId] = setConfig;
+    obj[configId] = setConfig;
 
     return true;
 }

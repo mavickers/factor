@@ -1,10 +1,8 @@
 import Utilities from "../Utilities";
-import { configurable } from "../classes/decorators";
 
-// todo: move dependency on Configurable - it's currently there because
-//       of static function injection.
+//const configId = Symbol("describable");
+const configId = "16B663BC-F892-4BF2-B628-A4331F9C874D";
 
-@configurable
 class Describable {
     differencesFrom(obj) {
         const diffs = { };
@@ -17,6 +15,8 @@ class Describable {
                 !(this[prop] instanceof Function)
             )
             .forEach(prop => {
+                const hashFn = Utilities.isFunction(Describable[configId]?.["hashFn"] ?? false) && Describable[configId]?.["hashFn"] || throw Error("Hash function not available");
+
                 // if the property is an object and the hash of the property of this object is same
                 // to the hash of the property of the comparing object, the property not considered different.
                 if (this[prop] instanceof Object && obj[prop] && hashFn(this[prop]) == hashFn(obj[prop])) return;
@@ -36,33 +36,36 @@ class Describable {
         return this.__proto__.constructor.name;
     }
 
-    get hash() {
-        if (!(Describable.configuration && Describable.configuration.hashFn)) {
-            console.warn("Describing.hash(): hashFn configuration missing");
-            return;
-        }
-        if (!(typeof Describable.configuration.hashFn == "function" || Describable.configuration.hashFn instanceof Function)) {
-            console.warn("Describing.hash(): scanFn configuration invalid");
-            return;
-        }
-
-        return Describable.configuration.hashFn(this);
-    }
-
     clone() {
-        if (!(Describable.configuration && Describable.configuration.cloneFn)) {
-            console.warn("Describable.clone(): cloneFn configuration missing");
-            return;
-        }
-        if (!(typeof Describable.configuration.cloneFn == "function" || Describable.configuration.cloneFn instanceof Function)) {
-            console.warn("Describable.clone(): cloneFn configuration invalid");
-            return;
-        }
-
-        return Describable.configuration.cloneFn(this);
+        console.log("clone");
+        console.log(Describable[configId]);
+        return Utilities.isFunction(Describable[configId]?.["cloneFn"] ?? false)
+            ? Describable[configId]["cloneFn"](this)
+            : throw new Error("Describing.clone(): clone function invalid");
     }
 
-    static isArrayOf = function(obj) { return Utilities.isArrayOfType(obj, this); }
+    get hash() {
+        return Utilities.isFunction(Describable[configId]?.["hashFn"] ?? false)
+            ? Describable[configId]["hashFn"](this)
+            : throw new Error("Describing.hash(): hash function invalid");
+    }
+
+    static isArrayOfThis = function(obj) { return Utilities.isArrayOfType(obj, this); }
+
+    static useHashFunction(hashFn) {
+        if (!Utilities.isFunction(hashFn)) throw new Error("Provided hash function is not valid");
+
+        this[configId] = this[configId] || { };
+        this[configId]["hashFn"] = hashFn;
+    }
+
+    static useCloneFunction(cloneFn) {
+        if (!Utilities.isFunction(cloneFn)) throw new Error("Provided clone function is not valid");
+
+        this[configId] = this[configId] || { };
+        this[configId]["cloneFn"] = cloneFn;
+        console.log("use", this[configId]["cloneFn"]);
+    }
 }
 
 export default Describable;
