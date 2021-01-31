@@ -15,7 +15,7 @@ class Describable {
                 !(this[prop] instanceof Function)
             )
             .forEach(prop => {
-                const hashFn = Utilities.isFunction(Describable[configId]?.["hashFn"] ?? false) && Describable[configId]?.["hashFn"] || throw Error("Hash function not available");
+                const hashFn = Utilities.isFunction(this.constructor[configId]?.["hashFn"] ?? false) && this.constructor[configId]?.["hashFn"] || throw Error("Hash function not available");
 
                 // if the property is an object and the hash of the property of this object is same
                 // to the hash of the property of the comparing object, the property not considered different.
@@ -37,16 +37,14 @@ class Describable {
     }
 
     clone() {
-        console.log("clone");
-        console.log(Describable[configId]);
-        return Utilities.isFunction(Describable[configId]?.["cloneFn"] ?? false)
-            ? Describable[configId]["cloneFn"](this)
+        return Utilities.isFunction(this.constructor[configId]?.["cloneFn"] ?? false)
+            ? this.constructor[configId]["cloneFn"](this)
             : throw new Error("Describing.clone(): clone function invalid");
     }
 
     get hash() {
-        return Utilities.isFunction(Describable[configId]?.["hashFn"] ?? false)
-            ? Describable[configId]["hashFn"](this)
+        return Utilities.isFunction(this.constructor[configId]?.["hashFn"] ?? false)
+            ? this.constructor[configId]["hashFn"](this)
             : throw new Error("Describing.hash(): hash function invalid");
     }
 
@@ -64,7 +62,6 @@ class Describable {
 
         this[configId] = this[configId] || { };
         this[configId]["cloneFn"] = cloneFn;
-        console.log("use", this[configId]["cloneFn"]);
     }
 }
 
