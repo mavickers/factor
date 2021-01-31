@@ -1,6 +1,7 @@
 import { describable } from "../src/base/classes/decorators";
 import { Describable } from "../src/base/interfaces";
 import cloneFn from "lodash.clonedeep";
+import "jest-extended";
 import hashFn from "object-hash";
 
 @describable
@@ -69,5 +70,37 @@ describe("Describable", () => {
         expect(clone2).toEqual(cloneFn(model2));
         expect(clone1).toEqual(clone2);
         expect(clone1).not.toEqual(clone3);
+    });
+
+    it("should hash objects properly", () => {
+        expect(()=> Model1.useHashFunction()).toThrow();
+        expect(()=> Model2.useHashFunction()).toThrow();
+        expect(()=> Model1.useHashFunction("test")).toThrow();
+        expect(()=> Model2.useHashFunction("test")).toThrow();
+
+        expect(() => model1 = new Model1()).not.toThrow();
+        expect(() => model2 = new Model2()).not.toThrow();
+        expect(() => model3 = new Model3()).not.toThrow();
+
+        expect(() => model1.hash).toThrow();
+        expect(() => model2.hash).toThrow();
+
+        expect(()=> Model1.useHashFunction(hashFn)).not.toThrow();
+        expect(()=> Model2.useHashFunction(hashFn)).not.toThrow();
+        expect(()=> Model3.useHashFunction(hashFn)).not.toThrow();
+
+        expect(Model1.hash).toBeUndefined();
+        expect(Model2.hash).toBeUndefined()
+        expect(Model3.hash).toBeUndefined()
+
+        expect(model1.hash).not.toBeUndefined();
+        expect(model2.hash).not.toBeUndefined();
+        expect(model1.hash).toEqual(hashFn(model1));
+        expect(model2.hash).toEqual(hashFn(model2));
+        // these will not be equal because of they was they were
+        // instantiated (decorator vs. class extension)
+        expect(model1.hash).not.toEqual(model2.hash);
+        expect(hashFn(model1)).not.toEqual(hashFn(model2));
+        expect(model3.hash).not.toEqual(model2.hash);
     });
 })
