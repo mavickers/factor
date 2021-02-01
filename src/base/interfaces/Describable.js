@@ -25,7 +25,9 @@ class Describable {
             : throw new Error("Describing.hash(): hash function invalid");
     }
 
-    static isArrayOfThis = function(obj) { return Utilities.isArrayOfType(obj, this); }
+    static isArrayOfThis = function(obj) {
+        return Utilities.isArrayOfType(obj, this);
+    }
 
     static useCloneFunction(cloneFn) {
         if (!Utilities.isFunction(cloneFn)) throw new Error("Provided clone function parameter is not valid");

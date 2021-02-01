@@ -89,7 +89,7 @@ export default class Utilities {
         }
     }
     static isArrayOfType = function(obj, type) {
-        if (!(obj && Array.isArray(obj) && type && type.toString().trim())) return false;
+        if (!(obj && Array.isArray(obj) && obj.length > 0 && type && type.toString().trim())) return false;
         return (typeof type == "string")
             ? (obj.reduce((acc, col) => acc && typeof col === type, true) || false)
             : (obj.reduce((acc, col) => acc && col instanceof type, true) || false);

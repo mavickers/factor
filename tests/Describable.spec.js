@@ -27,8 +27,6 @@ describe("Describable", () => {
         expect(model2.className).toEqual("Model2");
         expect(model1.clone instanceof Function).toEqual(true);
         expect(model2.clone instanceof Function).toEqual(true);
-        expect(model1.differencesFrom instanceof Function).toEqual(true);
-        expect(model2.differencesFrom instanceof Function).toEqual(true);
         expect(Model1.isArrayOfThis instanceof Function).toEqual(true);
         expect(Model2.isArrayOfThis instanceof Function).toEqual(true);
         expect(Model1.useCloneFunction instanceof Function).toEqual(true);
@@ -135,5 +133,26 @@ describe("Describable", () => {
         expect(diff1.added).toEqual({ field2: { second: { third: 3 }}});
         expect(diff1.deleted).toEqual({ field2: { first: undefined, second: { second: undefined }}});
         expect(diff1.updated).toEqual({ field2: { fourth: "quad" }});
-    })
+    });
+
+    it("should detect an array of it's own type/class properly", () => {
+        expect(() => model1 = new Model1()).not.toThrow();
+        expect(() => model2 = new Model2()).not.toThrow();
+        expect(() => model3 = new Model3()).not.toThrow();
+
+        const arr1 = [ model1, model1 ];
+        const arr2 = [ model1, model2 ];
+        const arr3 = [ model3 ];
+
+        expect(Model1.isArrayOfThis(arr1)).toBeTrue();
+        expect(Model2.isArrayOfThis(arr2)).toBeFalse();
+        expect(Model3.isArrayOfThis(arr3)).toBeTrue();
+        expect(Model3.isArrayOfThis([ ])).toBeFalse();
+        expect(Model3.isArrayOfThis([ undefined ])).toBeFalse();
+        expect(Model3.isArrayOfThis([ null ])).toBeFalse();
+        // using decorators will not alter instanceof...
+        expect(Describable.isArrayOfThis([ model1 ])).toBeFalse();
+        // ...but using "extends" will!
+        expect(Describable.isArrayOfThis([ model2 ])).toBeTrue();
+    });
 })
