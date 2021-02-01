@@ -1,8 +1,8 @@
 import "jest-extended";
 import { describable } from "../src/base/classes/decorators";
 import { Describable } from "../src/base/interfaces";
-import cloneFn from "lodash.clonedeep";
 import { detailedDiff as diffFn } from "deep-object-diff";
+import cloneFn from "lodash.clonedeep";
 import hashFn from "object-hash";
 
 @describable

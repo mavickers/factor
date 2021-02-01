@@ -1,7 +1,6 @@
 import Utilities from "../Utilities";
 
-//const configId = Symbol("describable");
-const configId = "16B663BC-F892-4BF2-B628-A4331F9C874D";
+const configId = Symbol("describable");
 
 class Describable {
     differencesFrom(obj) {
