@@ -42,6 +42,12 @@ class Describable {
             : throw new Error("Describing.clone(): clone function invalid");
     }
 
+    diff(obj) {
+        return Utilities.isFunction(this.constructor[configId]?.["diffFn"] ?? false)
+            ? this.constructor[configId]["diffFn"](this, obj)
+            : throw new Error("Describing.diff(): diff function invalid");
+    }
+
     get hash() {
         return Utilities.isFunction(this.constructor[configId]?.["hashFn"] ?? false)
             ? this.constructor[configId]["hashFn"](this)
@@ -50,18 +56,25 @@ class Describable {
 
     static isArrayOfThis = function(obj) { return Utilities.isArrayOfType(obj, this); }
 
-    static useHashFunction(hashFn) {
-        if (!Utilities.isFunction(hashFn)) throw new Error("Provided hash function is not valid");
-
-        this[configId] = this[configId] || { };
-        this[configId]["hashFn"] = hashFn;
-    }
-
     static useCloneFunction(cloneFn) {
-        if (!Utilities.isFunction(cloneFn)) throw new Error("Provided clone function is not valid");
+        if (!Utilities.isFunction(cloneFn)) throw new Error("Provided clone function parameter is not valid");
 
         this[configId] = this[configId] || { };
         this[configId]["cloneFn"] = cloneFn;
+    }
+
+    static useDiffFunction(diffFn) {
+        if (!Utilities.isFunction(diffFn)) throw new Error("Provided diff function parameter is not valid");
+
+        this[configId] = this[configId] || { };
+        this[configId]["diffFn"] = diffFn;
+    }
+
+    static useHashFunction(hashFn) {
+        if (!Utilities.isFunction(hashFn)) throw new Error("Provided hash function parameter is not valid");
+
+        this[configId] = this[configId] || { };
+        this[configId]["hashFn"] = hashFn;
     }
 }
 

@@ -1,7 +1,8 @@
+import "jest-extended";
 import { describable } from "../src/base/classes/decorators";
 import { Describable } from "../src/base/interfaces";
 import cloneFn from "lodash.clonedeep";
-import "jest-extended";
+import { detailedDiff as diffFn } from "deep-object-diff";
 import hashFn from "object-hash";
 
 @describable
@@ -103,4 +104,36 @@ describe("Describable", () => {
         expect(hashFn(model1)).not.toEqual(hashFn(model2));
         expect(model3.hash).not.toEqual(model2.hash);
     });
+
+    it("should detect differences between objects properly", () => {
+        let diff1, diff2, diff3;
+
+        expect(() => Model1.useDiffFunction()).toThrow();
+        expect(() => Model2.useDiffFunction()).toThrow();
+        expect(() => Model1.useDiffFunction("test")).toThrow();
+        expect(() => Model2.useDiffFunction("test")).toThrow();
+
+        expect(()=> Model1.useDiffFunction(diffFn)).not.toThrow();
+        expect(()=> Model2.useDiffFunction(diffFn)).not.toThrow();
+        expect(()=> Model3.useDiffFunction(diffFn)).not.toThrow();
+
+        expect(() => model1 = new Model1()).not.toThrow();
+        expect(() => model2 = new Model2()).not.toThrow();
+        expect(() => model3 = new Model3()).not.toThrow();
+
+        const noChange = diffFn({},{});
+
+        expect(model1.diff(model2)).toEqual(noChange);
+        expect(model1.diff(model3)).toEqual({ added: { field1: "test" }, deleted: { }, updated: { }});
+        expect(model2.diff(model3)).toEqual({ added: { field1: "test" }, deleted: { }, updated: { }});
+        expect(model3.diff(model1)).toEqual({ added: { }, deleted: { field1: undefined }, updated: { }});
+
+        model1.field2 = { "first": 1, "second": { "second": 2 }, "fourth": 4 };
+        model2.field2 = { "second": { "third": 3 }, "fourth": "quad" };
+
+        expect(()=> diff1 = model1.diff(model2)).not.toThrow()
+        expect(diff1.added).toEqual({ field2: { second: { third: 3 }}});
+        expect(diff1.deleted).toEqual({ field2: { first: undefined, second: { second: undefined }}});
+        expect(diff1.updated).toEqual({ field2: { fourth: "quad" }});
+    })
 })

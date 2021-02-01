@@ -1,5 +1,5 @@
 {
-    "collectCoverage": false,
+    "collectCoverage": true,
     "moduleFileExtensions": [
         "js",
         "mjs"
