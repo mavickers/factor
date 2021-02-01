@@ -25,6 +25,13 @@ const Mixin = function (...classes) {
 
         instanceMethods.forEach(prop => !targetClass[configId].instanceMethods.includes(prop) && targetClass[configId].instanceMethods.push(prop));
         staticMethods.forEach(prop => !targetClass[configId].staticMethods.includes(prop) && targetClass[configId].staticMethods.push(prop));
+
+        if (sourceClass[configId]) {
+            targetClass[configId].classes = [ ...sourceClass[configId].classes, ...targetClass[configId].classes];
+            targetClass[configId].classNames = [ ...sourceClass[configId].classNames, ...targetClass[configId].classNames];
+            targetClass[configId].instanceMethods = [ ...sourceClass[configId].instanceMethods, ...targetClass[configId].instanceMethods];
+            targetClass[configId].staticMethods = [ ...sourceClass[configId].staticMethods, ...targetClass[configId].staticMethods];
+        }
     }
 
     const addMethods = function(targetClass, sourceClass) {
