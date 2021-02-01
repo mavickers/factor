@@ -106,10 +106,10 @@ describe("Describable", () => {
     });
 
     it("should detect differences between objects properly", () => {
-        let diff1, diff2, diff3;
+        let diff1;
 
-        expect(() => Model1.useDiffFunction()).toThrow();
         expect(() => Model2.useDiffFunction()).toThrow();
+        expect(() => Model1.useDiffFunction()).toThrow();
         expect(() => Model1.useDiffFunction("test")).toThrow();
         expect(() => Model2.useDiffFunction("test")).toThrow();
 
