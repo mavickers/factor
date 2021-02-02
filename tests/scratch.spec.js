@@ -21,4 +21,14 @@ describe("Scratch Tests", () => {
 
        expect(1).toEqual(1);
    });
+
+   it("scratch", () => {
+       function limiter(n) {
+           if (n === 6) return 3;
+           else return 3 * limiter(n + 1)
+       }
+
+       console.log(limiter(5));
+       console.log(limiter(3));
+   })
 });
