@@ -4,6 +4,17 @@ const isStrict = (function(){ return !this; })();
 
 export default class Utilities {
     static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
+    static findFrom(...args) {
+        return {
+            firstInheritanceOf: (objClass) =>
+                Utilities.isClass(objClass) &&
+                Utilities.getClass(Utilities.findFrom(...args).firstInstanceOf(objClass)),
+            firstInstanceOf: (objClass) =>
+                Utilities.isClass(objClass) &&
+                args.flat().find(arg => Utilities.getParentClass(arg) === objClass) ||
+                null
+        }
+    }
     /*
      *  getClass(obj)
      *  - obj: instantiated object
@@ -14,6 +25,17 @@ export default class Utilities {
      *
      */
     static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || null;
+    static getClassInheritance = (obj) => {
+        let prototype = Utilities.isClass(obj) ? Object.getPrototypeOf(obj) : Utilities.getClass(obj);
+        let classes = [];
+
+        while (this.isClass(prototype)) {
+            classes.push(prototype);
+            prototype = Object.getPrototypeOf(prototype);
+        }
+
+        return classes.reverse();
+    };
     static getClassName = function(obj) { return this.getClass(obj).name; };
     static getCurrentLocation(back) {
         back = Utilities.isNumber(back) && back || 0;
@@ -30,17 +52,6 @@ export default class Utilities {
             return { fileName: fileName, lineNumber: lineNumber, colNumber: colNumber, location: location, stack: stack };
         }
     };
-    static findFrom(...args) {
-        return {
-            firstInheritanceOf: (objClass) =>
-                Utilities.isClass(objClass) &&
-                Utilities.getClass(Utilities.findFrom(...args).firstInstanceOf(objClass)),
-            firstInstanceOf: (objClass) =>
-                Utilities.isClass(objClass) &&
-                args.flat().find(arg => Utilities.getParentClass(arg) === objClass) ||
-                null
-        }
-    }
 
     /*
      *  getFuncParams
@@ -102,7 +113,7 @@ export default class Utilities {
         // - string contains "_classCallCheck" (babelized class)
         // - string contains "native code" (native object)
 
-        return typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
+        return obj instanceof Function && typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
     };
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = (obj) => obj && obj instanceof Error && true || false;

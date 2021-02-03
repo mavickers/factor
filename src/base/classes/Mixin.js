@@ -60,7 +60,7 @@ const Mixin = function (...classes) {
 
 
 
-    classes.filter(cls => cls != classes[0]).forEach(cls => addMethods(classes[0], cls));
+    classes.filter(cls => cls !== classes[0]).forEach(cls => addMethods(classes[0], cls));
 
     return classes[0];
 }
