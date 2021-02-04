@@ -155,10 +155,10 @@ export default class Utilities {
         const doMerge = (target, obj) => {
             const keys = Object.keys(obj).filter(key => obj.hasOwnProperty(key));
 
-            keys.forEach(key => target[key] = target[key] != undefined && Utilities.isPureObject(obj[key]) && doMerge(target[key], obj[key]) || obj[key]);
+            keys.forEach(key => target[key] = (target[key] !== undefined && Utilities.isPureObject(obj[key]) && doMerge(target[key], obj[key])) || obj[key]);
         }
 
-        args.filter(arg => args.indexOf(arg) != 0 && Utilities.isPureObject(arg)).forEach(arg => doMerge(args[0], arg));
+        args.filter(arg => args.indexOf(arg) !== 0 && Utilities.isPureObject(arg)).forEach(arg => doMerge(args[0], arg));
     };
     static mergeToNew(...args) {
         const newObj = {}
@@ -170,7 +170,7 @@ export default class Utilities {
 
     static newUuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
 
             return v.toString(16);
         });

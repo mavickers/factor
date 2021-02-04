@@ -195,6 +195,8 @@ describe("Utilities", () => {
         const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } };
         const obj6 = Utilities.mergeToNew(obj4, obj5);
 
+        logger.log(obj4).flush();
+        logger.log(obj5).flush();
         logger.log(obj6).flush();
 
         expect(Object.keys(obj6)).toHaveLength(3);
