@@ -1,15 +1,27 @@
 import Utilities from "../src/base/Utilities";
+import { Mixin } from "../src/factor";
+import { describable, mappable } from "../src/base/classes/decorators";
 
 describe("Scratch Tests", () => {
    it("is testing classes", () => {
+       @describable
        class ClassA { methodA() { } }
        class ClassB extends ClassA { methodB() { } }
        class ClassC extends ClassB { methodC() { } }
 
+       @describable
+       class Model1 { }
+       @mappable @describable
+       class Model2 { }
+
        const modelC = new ClassC();
 
-       console.log(Utilities.getClassInheritance(modelC));
+       console.log(ClassA[Mixin.configId].classes);
+       console.log(Utilities.getClassInheritance(ClassA));
+       // console.log(Model1);
 
+       // console.log(Utilities.getClassInheritance(modelC));
+       // console.log(Mixin.test(Mixin.configId));
 
        // const classes = [ ];
        // let prototype = Utilities.isClass(modelC) ? Object.getPrototypeOf(modelC) : Utilities.getClass(modelC);

@@ -36,6 +36,7 @@ export default class Utilities {
 
         return classes.reverse();
     };
+    static getClassInheritanceNames = (obj) => Utilities.getClassInheritance().map(cl => cl.name);
     static getClassName = function(obj) { return this.getClass(obj).name; };
     static getCurrentLocation(back) {
         back = Utilities.isNumber(back) && back || 0;

@@ -58,11 +58,11 @@ const Mixin = function (...classes) {
         };
     }
 
-
-
     classes.filter(cls => cls !== classes[0]).forEach(cls => addMethods(classes[0], cls));
 
     return classes[0];
 }
+
+Object.defineProperty(Mixin, "configId", { get: () => configId });
 
 export default Mixin;
