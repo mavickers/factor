@@ -151,24 +151,25 @@ export default class Utilities {
     }
     // todo: change this back to immutable
     static merge = (...args) => {
-        if (!(args && args.length > 1)) return false;
+        const newObj = { };
+
+        if (!(args && args.length > 0)) return { };
+        if (args.length == 1) return args[0];
 
         const doMerge = (target, obj) => {
             const keys = Object.keys(obj).filter(key => obj.hasOwnProperty(key));
 
             keys.forEach(key => {
-                if (target[key] === undefined) return target[key] = obj[key];
-                if (Utilities.isPureObject(obj[key])) return doMerge(target[key], obj[key]);
-                target[key] = obj[key];
+                target[key] &&
+                Utilities.isPureObject(obj[key]) &&
+                doMerge(target[key], obj[key]) ||
+                (target[key] = obj[key]);
             });
+
+            return true;
         }
 
-        args.filter(arg => args.indexOf(arg) !== 0 && Utilities.isPureObject(arg)).forEach(arg => { doMerge(args[0], arg) });
-    };
-    static mergeToNew(...args) {
-        const newObj = {}
-
-        Utilities.merge(newObj, ...args);
+        args.filter(arg => Utilities.isPureObject(arg)).forEach(arg => { doMerge(newObj, arg) });
 
         return newObj;
     };

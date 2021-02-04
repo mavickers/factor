@@ -187,13 +187,13 @@ describe("Utilities", () => {
     it("should merge objects properly", () => {
         const obj1 = { one: "1", two: "2" };
         const obj2 = { three: "3", four: "4" };
-        const obj3 = Utilities.mergeToNew(obj1, obj2);
+        const obj3 = Utilities.merge(obj1, obj2);
 
         expect(Object.keys(obj3)).toHaveLength(4);
 
         const obj4 = { one: "1", two: { first: "1", second: "2", thrice: "2" }, three: { first: "1", second: "2", third: { first: "1" } } };
         const obj5 = { one: "2", two: { first: "1", second: "second" }, three: { third: { second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } };
-        const obj6 = Utilities.mergeToNew(obj4, obj5);
+        const obj6 = Utilities.merge(obj4, obj5);
 
         expect(Object.keys(obj6)).toHaveLength(3);
         expect(Object.keys(obj6.one)).toHaveLength(1);
@@ -216,15 +216,15 @@ describe("Utilities", () => {
 
         const obj1 = { one: "1", two: "2" };
         const obj2 = { three: "3", four: "4", fifth: testFlag };
-        Utilities.merge(obj1, obj2);
+        const obj3 = Utilities.merge(obj1, obj2);
 
-        expect(Object.keys(obj1)).toHaveLength(5);
-        expect(Object.getPrototypeOf(obj1.fifth).constructor.name).toEqual("TestFlag");
-        expect(Object.getPrototypeOf(obj1.fifth.constructor).name).toEqual("Flags");
+        expect(Object.keys(obj3)).toHaveLength(5);
+        expect(Object.getPrototypeOf(obj3.fifth).constructor.name).toEqual("TestFlag");
+        expect(Object.getPrototypeOf(obj3.fifth.constructor).name).toEqual("Flags");
 
         const obj4 = { one: "1", two: { first: "1", second: "2" }, three: { first: "1", second: "2", third: { first: "1" } } };
         const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2", third: { first: testFlag } } }, fourth: "4", fifth: "5" } };
-        const obj6 = Utilities.mergeToNew(obj4, obj5);
+        const obj6 = Utilities.merge(obj4, obj5);
 
         expect(Object.keys(obj6)).toHaveLength(3);
         expect(Object.getPrototypeOf(obj6.three.third.second.third.first).constructor.name).toEqual("TestFlag");
