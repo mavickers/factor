@@ -57,7 +57,7 @@ export default class Logger {
 
                 output += Utilities.isString(message)
                     ? `${" ".repeat(indent)} ${message}`
-                    : (message || Utilities.isBoolean(message)) && `            {{obj}}`.padStart(indent, " ") || "";
+                    : (message || Utilities.isBoolean(message)) && `${isFirst && " " || "            "}{{obj}}`.padStart(indent, " ") || "";
             });
         });
 

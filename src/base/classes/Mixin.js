@@ -1,8 +1,7 @@
 // Mixin.js
 // Support for copying functionality from one object to another.
-// todo: write tests for this
-
-import Utilities from "../Utilities";
+// Idea lifted from http://raganwald.com/2015/06/26/decorators-in-es7.html
+// todo: write more tests for this
 
 const configId = Symbol.for("@mavickers/factor/Mixin");
 

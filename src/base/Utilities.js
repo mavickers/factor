@@ -168,48 +168,6 @@ export default class Utilities {
         return newObj;
     };
 
-    //
-    // mixin
-    // lifted from http://raganwald.com/2015/06/26/decorators-in-es7.html
-    //
-
-    static mixin(behaviour, sharedBehaviour = {}) {
-        const instanceKeys = Reflect.ownKeys(behaviour);
-        const sharedKeys = Reflect.ownKeys(sharedBehaviour);
-        const typeTag = Symbol('isa');
-
-        function _mixin (clazz) {
-            instanceKeys.forEach(property => Object.defineProperty(clazz.prototype, property, { value: behaviour[property], writable: true }));
-            Object.defineProperty(clazz.prototype, typeTag, { value: true });
-
-            return clazz;
-        }
-
-        sharedKeys.forEach(property => Object.defineProperty(_mixin, property, { value: sharedBehaviour[property], enumerable: sharedBehaviour.propertyIsEnumerable(property)}));
-        Object.defineProperty(_mixin, Symbol.hasInstance, { value: (i) => !!i[typeTag] });
-
-        return _mixin;
-    }
-
-    static newMixin(behaviors, isShared = false) {
-        const keys = Reflect.ownKeys(behaviors);
-        console.log(keys);
-        const typeTag = Symbol("isa");
-
-        function _mixin(targetClass) {
-            !isShared && keys.forEach(property => Object.defineProperty(targetClass.prototype, property, { value: behaviors[property], writable: true }));
-            isShared && keys.forEach(property => Object.defineProperty(targetClass, property, { value: behaviors[property], enumerable: behaviors.propertyIsEnumerable(property)}));
-
-            Object.defineProperty(targetClass.prototype, typeTag, { value: true });
-            Object.defineProperty(targetClass, Symbol.hasInstance, { value: (i) => !!i[typeTag] });
-
-            return targetClass;
-        }
-
-
-        return _mixin;
-    }
-
     static newUuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -217,6 +175,7 @@ export default class Utilities {
             return v.toString(16);
         });
     }
+
     static newUuidShort() {
         return Utilities.newUuid().split("-").slice(-1)[0];
     }
