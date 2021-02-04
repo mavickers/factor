@@ -17,7 +17,8 @@ describe("Scratch Tests", () => {
        const modelC = new ClassC();
 
        console.log(ClassA[Mixin.configId].classes);
-       console.log(Utilities.getClassInheritance(ClassA));
+       console.log(ClassB[Mixin.configId].classes);
+       console.log(Utilities.getInheritances(ClassC));
        // console.log(Model1);
 
        // console.log(Utilities.getClassInheritance(modelC));

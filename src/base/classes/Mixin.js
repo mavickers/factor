@@ -4,7 +4,7 @@
 
 import Utilities from "../Utilities";
 
-const configId = Symbol("mixin");
+const configId = Symbol.for("@mavickers/factor/Mixin");
 
 const Mixin = function (...classes) {
     if (classes.length === 0) return undefined;
@@ -49,13 +49,6 @@ const Mixin = function (...classes) {
         staticMethods.forEach(prop => Object.defineProperty(targetClass, prop, Object.getOwnPropertyDescriptor(sourceClass, prop)));
 
         addInheritance(targetClass, sourceClass, instanceMethods, staticMethods);
-
-        targetClass.isMixedWith = function(obj) {
-            if(Utilities.isString(obj)) return targetClass[configId].classNames.includes(obj);
-            if(Utilities.isClass(obj)) return targetClass[configId].classes.includes(obj);
-
-            return false;
-        };
     }
 
     classes.filter(cls => cls !== classes[0]).forEach(cls => addMethods(classes[0], cls));

@@ -1,4 +1,5 @@
 import Globals from "./Globals";
+import Mixin from "./classes/Mixin";
 
 const isStrict = (function(){ return !this; })();
 
@@ -25,18 +26,6 @@ export default class Utilities {
      *
      */
     static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || null;
-    static getClassInheritance = (obj) => {
-        let prototype = Utilities.isClass(obj) ? Object.getPrototypeOf(obj) : Utilities.getClass(obj);
-        let classes = [];
-
-        while (this.isClass(prototype)) {
-            classes.push(prototype);
-            prototype = Object.getPrototypeOf(prototype);
-        }
-
-        return classes.reverse();
-    };
-    static getClassInheritanceNames = (obj) => Utilities.getClassInheritance().map(cl => cl.name);
     static getClassName = function(obj) { return this.getClass(obj).name; };
     static getCurrentLocation(back) {
         back = Utilities.isNumber(back) && back || 0;
@@ -82,6 +71,23 @@ export default class Utilities {
         // - ensure no undefined values are added.
         return args.split(',').map(arg => arg.trim()).filter(arg => arg);
     };
+    static getInheritances = (obj) => {
+        // get the prototype, whether this is an instance or a class
+        let prototype = Utilities.isClass(obj) ? Object.getPrototypeOf(obj) : Utilities.getClass(obj);
+        // add any mixin classes if they are on the object
+        let classes = obj[Mixin.configId]?.classes || [];
+
+        while (this.isClass(prototype)) {
+            classes.push(prototype);
+            // if there are unique mixin classes on the current prototype
+            // push them into classes
+            prototype[Mixin.configId]?.classes?.forEach(cls => !classes.includes(cls) && classes.push(cls));
+            prototype = Object.getPrototypeOf(prototype);
+        }
+
+        return classes.reverse();
+    };
+    static getInheritanceNames = (obj) => Utilities.getInheritances(obj).map(cl => cl.name);
     /*
      *  getParentClass(obj)
      *  - obj: instantiated object
@@ -92,6 +98,13 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    static hasInheritance = (obj, targetClass) => {
+        const inheritances = this.getInheritances(obj);
+
+        return (this.isClass(targetClass) && inheritances.includes(targetClass)) ||
+               (this.isString(targetClass) && inheritances.map(inheritance => inheritance.name).includes(targetClass)) ||
+               false;
+    };
     static is(obj) {
         return {
             BooleanOrDefault: (defaultValue) =>
