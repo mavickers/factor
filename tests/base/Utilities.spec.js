@@ -1,6 +1,6 @@
-import Utilities from "../src/base/Utilities";
-import Flags from "../src/base/classes/Flags";
-import Logger from "../src/base/components/Logger/Logger";
+import Utilities from "../../src/base/Utilities";
+import Flags from "../../src/base/classes/Flags";
+import Logger from "../../src/base/components/Logger/Logger";
 
 const logger = new Logger();
 

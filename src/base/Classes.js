@@ -1,10 +1,8 @@
 // Classes.js
-// Mimics the ability to inherit multiple classes in js.
+// A syntactic shortcut mimicking the ability to inherit multiple classes
+// in by calling Mixing function.
+//
 // usage: class ClassName extends Classes([ Class1, Class2 ]) { }
-//        Classes.addInheritance(baseClass, newClass)
-// concept lifted from: https://stackoverflow.com/questions/29879267/es6-class-multiple-inheritance
-
-// todo: write tests for this
 
 import Mixin from "./classes/Mixin";
 

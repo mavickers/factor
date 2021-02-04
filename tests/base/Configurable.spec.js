@@ -1,5 +1,5 @@
-import { Configurable } from "../src/base/interfaces";
-import { configurable } from "../src/base/classes/decorators";
+import { Configurable } from "../../src/base/interfaces";
+import { configurable } from "../../src/base/classes/decorators";
 
 class Config1 extends Configurable { }
 @configurable class Config2 { }

@@ -1,9 +1,9 @@
 import "jest-extended";
-import { Configurable, Describable, Mappable } from "../src/base/interfaces";
-import Classes from "../src/base/Classes.js";
-import { describable, mappable } from "../src/base/classes/decorators";
-import Mixin from "../src/base/classes/Mixin";
-import Utilities from "../src/base/Utilities";
+import { Configurable, Describable, Mappable } from "../../src/base/interfaces";
+import Classes from "../../src/base/Classes.js";
+import { describable, mappable } from "../../src/base/classes/decorators";
+import Mixin from "../../src/base/classes/Mixin";
+import Utilities from "../../src/base/Utilities";
 
 describe("Mixins", () => {
     it("should determine basic mixins", () => {
