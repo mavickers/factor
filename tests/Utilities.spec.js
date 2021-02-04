@@ -191,13 +191,9 @@ describe("Utilities", () => {
 
         expect(Object.keys(obj3)).toHaveLength(4);
 
-        const obj4 = { one: "1", two: { first: "1", second: "2" }, three: { first: "1", second: "2", third: { first: "1" } } };
-        const obj5 = { one: "2", two: { first: "1", second: "second", third: "2" }, three: { third: { second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } };
+        const obj4 = { one: "1", two: { first: "1", second: "2", thrice: "2" }, three: { first: "1", second: "2", third: { first: "1" } } };
+        const obj5 = { one: "2", two: { first: "1", second: "second" }, three: { third: { second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } };
         const obj6 = Utilities.mergeToNew(obj4, obj5);
-
-        logger.log(obj4).flush();
-        logger.log(obj5).flush();
-        logger.log(obj6).flush();
 
         expect(Object.keys(obj6)).toHaveLength(3);
         expect(Object.keys(obj6.one)).toHaveLength(1);
@@ -205,7 +201,7 @@ describe("Utilities", () => {
         expect(Object.keys(obj6.three)).toHaveLength(5);
 
         expect(obj6.one).toEqual("2");
-        expect(obj6.two).toEqual({ first: "1", second: "second", third: "2" });
+        expect(obj6.two).toEqual({ first: "1", second: "second", thrice: "2" });
         expect(obj6.three).toEqual({ first: "1", second: "2", third: { first: "1", second: { first: "1", second: "2" } }, fourth: "4", fifth: "5" } );
     });
 

@@ -132,6 +132,7 @@ export default class Utilities {
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = (obj) => obj && obj instanceof Error && true || false;
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
+    // todo: this needs to be deprecated
     static isInheriting = (obj, cl) =>
         Utilities.isClass(obj) &&
         Array.isArray(obj._inherited?.classes) &&
@@ -155,10 +156,14 @@ export default class Utilities {
         const doMerge = (target, obj) => {
             const keys = Object.keys(obj).filter(key => obj.hasOwnProperty(key));
 
-            keys.forEach(key => target[key] = (target[key] !== undefined && Utilities.isPureObject(obj[key]) && doMerge(target[key], obj[key])) || obj[key]);
+            keys.forEach(key => {
+                if (target[key] === undefined) return target[key] = obj[key];
+                if (Utilities.isPureObject(obj[key])) return doMerge(target[key], obj[key]);
+                target[key] = obj[key];
+            });
         }
 
-        args.filter(arg => args.indexOf(arg) !== 0 && Utilities.isPureObject(arg)).forEach(arg => doMerge(args[0], arg));
+        args.filter(arg => args.indexOf(arg) !== 0 && Utilities.isPureObject(arg)).forEach(arg => { doMerge(args[0], arg) });
     };
     static mergeToNew(...args) {
         const newObj = {}
