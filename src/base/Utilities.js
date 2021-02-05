@@ -98,7 +98,7 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
-    static hasInheritance = (obj, targetClass) => {
+    static isInheriting = (obj, targetClass) => {
         const inheritances = this.getInheritances(obj);
 
         return (this.isClass(targetClass) && inheritances.includes(targetClass)) ||
@@ -132,11 +132,6 @@ export default class Utilities {
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = (obj) => obj && obj instanceof Error && true || false;
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
-    // todo: this needs to be deprecated
-    static isInheriting = (obj, cl) =>
-        Utilities.isClass(obj) &&
-        Array.isArray(obj._inherited?.classes) &&
-        obj._inherited.classes.includes(cl);
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;

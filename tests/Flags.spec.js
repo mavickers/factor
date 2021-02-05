@@ -1,4 +1,4 @@
-import Flags from "../../src/base/classes/Flags";
+import Flags from "../src/base/classes/Flags";
 
 describe("Flags", () => {
     it("should set and read single values properly", () => {
