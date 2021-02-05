@@ -9,9 +9,7 @@
         "github": "https://github.com/mavickers"
     },
     "scripts": {
-        "build": "webpack",
-        "test-models": "jest tests/models.spec.js",
-        "test-pipeline": "jest tests/pipelines/PipelineFilter.spec.js"
+        "build": "webpack"
     },
     "repository": {
         "type": "git",
