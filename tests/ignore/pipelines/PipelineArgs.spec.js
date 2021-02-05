@@ -1,4 +1,4 @@
-import PipelineArgs from "../../src/base/components/Pipeline/PipelineArgs";
+import PipelineArgs from "../../../src/base/components/Pipeline/PipelineArgs";
 
 describe("PipelineArgs", () => {
     it("should instantiate and operate PipelineArgs correctly", () => {

@@ -1,6 +1,6 @@
-import Utilities from "../../src/base/Utilities";
-import { Mixin } from "../../src/factor";
-import { describable, mappable } from "../../src/base/classes/decorators";
+import Utilities from "../../../src/base/Utilities";
+import { Mixin } from "../../../src/factor";
+import { describable, mappable } from "../../../src/base/classes/decorators";
 
 describe("Scratch Tests", () => {
    it("is testing classes", () => {

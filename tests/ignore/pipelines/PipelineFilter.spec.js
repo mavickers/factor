@@ -1,5 +1,5 @@
-import PipelineArgs from "../../src/base/components/Pipeline/PipelineArgs";
-import PipelineFilter from "../../src/base/components/Pipeline/PipelineFilter";
+import PipelineArgs from "../../../src/base/components/Pipeline/PipelineArgs";
+import PipelineFilter from "../../../src/base/components/Pipeline/PipelineFilter";
 
 class TestFilterA extends PipelineFilter {
     constructor() {

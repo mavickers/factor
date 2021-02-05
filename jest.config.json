@@ -4,6 +4,9 @@
         "js",
         "mjs"
     ],
+    "modulePathIgnorePatterns": [
+        "/ignore/"
+    ],
     "transform": {
         "^.+\\.js$": [ "babel-jest", {
             "presets": [
@@ -26,5 +29,5 @@
         }],
         "^.+\\.mjs$": "babel-jest"
     },
-    "testRegex": "((\\.|/*.)(spec))\\.js?$"
+    "testRegex": "((\\.|/*.)(spec|test))\\.js?$"
 }

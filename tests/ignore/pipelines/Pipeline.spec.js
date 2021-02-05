@@ -1,4 +1,4 @@
-import { Pipeline, PipelineFilter, PipelineArgs } from "../../src/base/components/Pipeline";
+import { Pipeline, PipelineFilter, PipelineArgs } from "../../../src/base/components/Pipeline";
 
 class FilterA extends PipelineFilter {
     constructor() {
