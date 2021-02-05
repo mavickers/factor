@@ -9,8 +9,10 @@
  *
  */
 
+import Utilities from "../../Utilities";
+
 export default function(target, name, descriptor) {
-    if (!target || !descriptor) return target;
+    if (!target || Utilities.isClass(target) || !descriptor) return target;
 
     descriptor.writable = false;
 
