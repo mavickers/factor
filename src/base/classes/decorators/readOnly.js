@@ -10,7 +10,9 @@
  */
 
 export default function(target, name, descriptor) {
+    if (!target || !descriptor) return target;
+
     descriptor.writable = false;
 
-    return target;
+    return descriptor;
 }
