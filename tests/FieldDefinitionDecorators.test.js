@@ -1,6 +1,5 @@
 import "jest-extended";
 import { readOnly } from "../src/base/classes/decorators";
-import Utilities from "../src/base/Utilities";
 
 describe("readOnly Field Definition", () => {
     it("should apply readOnly property properly", () => {
