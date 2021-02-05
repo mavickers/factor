@@ -139,7 +139,6 @@ export default class Utilities {
         obj._inherited.classes.includes(cl);
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
-    static isPrimitive = (obj) => false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
     static get isStrict() { return isStrict; };
     static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
@@ -149,21 +148,28 @@ export default class Utilities {
 
         return obj instanceof type || Globals.Primitives.map(p => p.name).includes(type) && type === typeof obj;
     }
-    // todo: change this back to immutable
     static merge = (...args) => {
         const newObj = { };
 
         if (!(args && args.length > 0)) return { };
         if (args.length == 1) return args[0];
 
-        const doMerge = (target, obj) => {
-            const keys = Object.keys(obj).filter(key => obj.hasOwnProperty(key));
+        const doMerge = (target, source) => {
+            const keys = Object.keys(source).filter(key => source.hasOwnProperty(key));
+
+            // iterate through the source keys; if a) there is a corresponding
+            // key in the target and b) the key value in the source is an
+            // object the recursively merge the object; otherwise, set the
+            // value in the target to the value in the source; recursively
+            // this will drill down until the unit operated on is a primitive
+            // which is then copied to the source; this also also copies
+            // keys in the source that are not in the target.
 
             keys.forEach(key => {
                 target[key] &&
-                Utilities.isPureObject(obj[key]) &&
-                doMerge(target[key], obj[key]) ||
-                (target[key] = obj[key]);
+                Utilities.isPureObject(source[key]) &&
+                doMerge(target[key], source[key]) ||
+                (target[key] = source[key]);
             });
 
             return true;
