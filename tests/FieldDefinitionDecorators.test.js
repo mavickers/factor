@@ -1,5 +1,5 @@
 import "jest-extended";
-import { readOnly } from "../src/base/classes/decorators";
+import { readOnly, required } from "../src/base/classes/decorators";
 
 describe("readOnly Field Definition", () => {
     it("should apply readOnly property properly", () => {
@@ -31,5 +31,23 @@ describe("readOnly Field Definition", () => {
         expect(model1.field1).toBeFalse();
         expect(() => model1.field1 = true).not.toThrow();
         expect(model1.field1).toBeTrue();
+    });
+
+    it("should apply 'required' property properly", () => {
+        let Class1;
+        let Class2;
+        let model1;
+
+        expect(() => Class1 = class { @required field1; }).toThrow();
+        expect(Class1).toBeUndefined();
+        expect(() => Class2 = class { @required field1 = false; }).not.toThrow();
+        expect(() => model1 = new Class2()).not.toThrow();
+        expect(model1.field1).toBeFalse();
+        expect(() => model1.field1 = true).not.toThrow();
+        expect(model1.field1).toBeTrue();
+        expect(() => model1.field1 = null).toThrow();
+        expect(model1.field1).toBeTrue();
+        expect(() => model1.field1 = "hello").not.toThrow();
+        expect(model1.field1).toEqual("hello");
     });
 });

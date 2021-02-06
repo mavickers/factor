@@ -6,6 +6,7 @@ import isBoolean from "./isBoolean";
 import mappable from "./mappable";
 import noopMismatch from "./noopMismatch";
 import readOnly from "./readOnly";
+import required from "./required";
 
 export {
     configurable,
@@ -15,5 +16,6 @@ export {
     isBoolean,
     mappable,
     noopMismatch,
-    readOnly
+    readOnly,
+    required
 };
