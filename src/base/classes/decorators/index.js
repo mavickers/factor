@@ -1,7 +1,7 @@
 import configurable from "./configurable";
-import defaultValue from "./defaultValue";
 import describable from "./describable";
 import enumerable from "./enumerable";
+import is from "./is";
 import isBoolean from "./isBoolean";
 import mappable from "./mappable";
 import noopMismatch from "./noopMismatch";
@@ -10,9 +10,9 @@ import required from "./required";
 
 export {
     configurable,
-    defaultValue,
     describable,
     enumerable,
+    is,
     isBoolean,
     mappable,
     noopMismatch,

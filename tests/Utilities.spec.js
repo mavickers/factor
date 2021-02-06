@@ -1,6 +1,8 @@
+import "jest-extended";
 import Utilities from "../src/base/Utilities";
 import Flags from "../src/base/classes/Flags";
 import Logger from "../src/base/components/Logger/Logger";
+import Mixin from "../src/base/classes/Mixin";
 
 const logger = new Logger();
 
@@ -229,5 +231,21 @@ describe("Utilities", () => {
         expect(Object.keys(obj6)).toHaveLength(3);
         expect(Object.getPrototypeOf(obj6.three.third.second.third.first).constructor.name).toEqual("TestFlag");
         expect(Object.getPrototypeOf(obj6.three.third.second.third.first.constructor).name).toEqual("Flags");
+    });
+
+    it("should determine if objects are of a specific type properly", () => {
+        const Class1 = class { };
+
+        expect(Utilities.isType(true, Boolean)).toBeTrue();
+        expect(Utilities.isType(true, "boolean")).toBeTrue();
+        expect(Utilities.isType("test", String)).toBeTrue();
+        expect(Utilities.isType("test", "string")).toBeTrue();
+        expect(Utilities.isType(1, Number)).toBeTrue();
+        expect(Utilities.isType(1, "number")).toBeTrue();
+        expect(Utilities.isType(Mixin.configId, Symbol)).toBeTrue();
+        expect(Utilities.isType(Mixin.configId, "symbol")).toBeTrue();
+        expect(Utilities.isType(new Class1(), Class1)).toBeTrue();
+        expect(Utilities.isType(new Class1(), Function)).toBeFalse();
+        expect(Utilities.isType(new Class1(), Object)).toBeTrue();
     });
 });

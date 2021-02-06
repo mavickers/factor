@@ -140,8 +140,10 @@ export default class Utilities {
     static isType = (obj, type) => {
         if (obj === null || obj === undefined || type === null || type === undefined) return false;
         if (typeof type == "string") return typeof obj === type;
+        if (obj instanceof type) return true;
+        if (Globals.Primitives.find(p => p.type === type) && typeof obj === type.name.toLowerCase()) return true;
 
-        return obj instanceof type || Globals.Primitives.map(p => p.name).includes(type) && type === typeof obj;
+        return false;
     }
     static merge = (...args) => {
         const newObj = { };

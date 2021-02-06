@@ -31,11 +31,10 @@ export default class Globals {
     static get Primitives() { return [
         { name: "boolean", type: Boolean },
         { name: "number", type: Number },
-        { name: "string", type: String }
+        { name: "string", type: String },
         // not going to support bigint at this time
         // { name: "bigint", type: BigInt },
-        // not going to support symbol at this time
-        // { name: "symbol", type: Symbol }
+        { name: "symbol", type: Symbol }
     ]};
 }
 

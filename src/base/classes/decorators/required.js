@@ -12,18 +12,18 @@
 import Utilities from "../../Utilities";
 
 export default function(target, name, descriptor) {
+    if (!descriptor) throw Error("@readOnly can only be applied to class fields with descriptors");
     if (!target || Utilities.isClass(target) || !descriptor) return target;
     if (!descriptor.initializer) throw Error(`Value required for ${name}`);
 
     let _value = descriptor.initializer();
+    const getter = function() { return _value; };
+    const setter = function(value) { _value = value || throw Error(`Value required for ${name}`); }
 
     return {
         configurable: descriptor.configurable,
         enumerable: descriptor.enumerable,
-        get: () => _value,
-        set: (value) => {
-            _value = value || throw Error(`Value required for ${name}`);
-        }
-
+        get: getter,
+        set: setter
     }
 }

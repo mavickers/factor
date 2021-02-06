@@ -13,7 +13,6 @@ import Utilities from "../../Utilities";
 
 export default function(target, name, descriptor) {
     if (!descriptor) throw Error("@readOnly can only be applied to class fields with descriptors");
-    //if (!target || Utilities.isClass(target) || !descriptor) return target;
 
     return {
         ...descriptor,
