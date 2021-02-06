@@ -33,7 +33,7 @@ export default function(type) {
     };
 
     const decorator = function(target, name, descriptor) {
-        if (!descriptor) throw Error("@readOnly can only be applied to class fields with descriptors");
+        if (!descriptor) throw Error("@is() can only be applied to class fields with descriptors");
         descriptor.initializer && setter(descriptor.initializer());
 
         return {
