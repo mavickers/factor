@@ -1,8 +1,8 @@
 import "jest-extended";
 import { is } from "../src/base/classes/decorators";
 
-describe("is decorator tests", () => {
-    it("should apply 'is' decorator properly for primitives when instantiating", () => {
+describe("@is decorator tests", () => {
+    it("should apply decorator properly for primitives when instantiating", () => {
         let Class1;
 
         // check class definitions - type set to actual type or corresponding
@@ -41,7 +41,7 @@ describe("is decorator tests", () => {
         expect(() => Class1 = class { @is("Symbol") field1 = Symbol(); }).toThrow();
     });
 
-    it("should apply 'is' decorator properly for primitives after instantiation", () => {
+    it("should apply decorator properly for primitives after instantiation", () => {
         let Class1;
         let model1;
 
@@ -85,5 +85,20 @@ describe("is decorator tests", () => {
         expect(() => { model1.field1 = Symbol.for("field1"); model1.field2 = Symbol.for("field2"); }).not.toThrow();
         expect(model1.field1).toEqual(Symbol.for("field1"));
         expect(model1.field2).toEqual(Symbol.for("field2"));
+    });
+
+    it("should apply decorator properly in non-standard cases", () => {
+        let Class1;
+        let model1;
+
+        // check setting values after instantiation; repeat for each primitive type.
+        expect(() => Class1 = class { @is(Boolean) field1 = true; }).not.toThrow();
+        expect(() => model1 = new Class1).not.toThrow();
+        expect(() => model1.field1 = null).not.toThrow();
+        expect(model1.field1).toBeNull();
+        expect(() => model1.field1 = false).not.toThrow();
+        expect(model1.field1).toBeFalse();
+        expect(() => model1.field1 = undefined).not.toThrow();
+        expect(model1.field1).toBeUndefined();
     });
 })

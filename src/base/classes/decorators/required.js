@@ -18,7 +18,7 @@ export default function(target, name, descriptor) {
 
     let _value = descriptor.initializer();
     const getter = function() { return _value; };
-    const setter = function(value) { _value = value || throw Error(`Value required for ${name}`); }
+    const setter = function(value) { value !== null && value !== undefined && (_value = value) || throw Error(`Value required for ${name}`); }
 
     return {
         configurable: descriptor.configurable,

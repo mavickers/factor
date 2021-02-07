@@ -32,8 +32,9 @@ export default function(type) {
         throw Error(`Incorrect value type specified for ${name}`);
     };
 
-    const decorator = function(target, name, descriptor) {
+    return function(target, name, descriptor) {
         if (!descriptor) throw Error("@is() can only be applied to class fields with descriptors");
+
         descriptor.initializer && setter(descriptor.initializer());
 
         return {
@@ -43,6 +44,4 @@ export default function(type) {
             set: setter
         }
     }
-
-    return decorator;
 }
