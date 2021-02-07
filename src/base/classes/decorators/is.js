@@ -13,33 +13,36 @@
 import Utilities from "../../Utilities";
 import Globals from "../../Globals";
 
+let _targetType;
+let _value;
+
+const getter = function() { return _value; };
+const setter = function(value) {
+    console.log("is() setter");
+    // we aren't handling null/undefined here, that's a job for @required
+    if (value === undefined || value === null) return _value = value;
+    if (Utilities.isType(value, _targetType)) return _value = value;
+
+    throw Error(`Incorrect value type specified for ${name}`);
+};
+
 export default function(type) {
-    const targetType =
+    _targetType =
         (Globals.Primitives.find(prim => prim.name === type || prim.type === type) && type) ||
         (Utilities.isClass(type) && type) ||
         undefined;
 
-    if (!targetType) throw Error(`@is(): specified type must be a supported primitive or class`);
-
-    let _value;
-
-    const getter = function() { return _value; };
-    const setter = function(value) {
-        // we aren't handling null/undefined here, that's a job for @required
-        if (value === undefined || value === null) return _value = value;
-        if (Utilities.isType(value, targetType)) return _value = value;
-
-        throw Error(`Incorrect value type specified for ${name}`);
-    };
+    if (!_targetType) throw Error(`@is(): specified type must be a supported primitive or class`);
 
     return function(target, name, descriptor) {
+        console.log("is() init", descriptor);
+
         if (!descriptor) throw Error("@is() can only be applied to class fields with descriptors");
 
         descriptor.initializer && setter(descriptor.initializer());
 
         return {
-            configurable: descriptor.configurable,
-            enumerable: descriptor.enumerable,
+            ...descriptor,
             get: getter,
             set: setter
         }

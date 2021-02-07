@@ -11,14 +11,29 @@
 
 import Utilities from "../../Utilities";
 
+let _value, _previousSetter;
+
+const getter = () => _value;
+const setter = (value) => {
+    console.log("@required setter");
+    _previousSetter(value);
+
+    value !== null &&
+    value !== undefined &&
+    (_value = value) ||
+    throw Error(`Value required for ${ name }`);
+}
+
 export default function(target, name, descriptor) {
+    console.log("@required init", descriptor);
+
+
     if (!descriptor) throw Error("@readOnly can only be applied to class fields with descriptors");
     if (!target || Utilities.isClass(target) || !descriptor) return target;
     if (!descriptor.initializer) throw Error(`Value required for ${name}`);
 
-    let _value = descriptor.initializer();
-    const getter = function() { return _value; };
-    const setter = function(value) { value !== null && value !== undefined && (_value = value) || throw Error(`Value required for ${name}`); }
+    _previousSetter = descriptor.set?.bind(descriptor) ?? function(value) { };
+    setter(descriptor.initializer());
 
     return {
         configurable: descriptor.configurable,
