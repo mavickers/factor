@@ -91,7 +91,8 @@ describe("@is decorator tests", () => {
         let Class1;
         let model1;
 
-        // check setting values after instantiation; repeat for each primitive type.
+        // check setting null/undefined properly without @required decorator;
+        // should allow null/undefined to be set on the field without throwing.
         expect(() => Class1 = class { @is(Boolean) field1 = true; }).not.toThrow();
         expect(() => model1 = new Class1).not.toThrow();
         expect(() => model1.field1 = null).not.toThrow();
