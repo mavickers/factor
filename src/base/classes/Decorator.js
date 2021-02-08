@@ -4,11 +4,11 @@ const configId = Symbol.for("@mavickers/factor/Decorator");
 
 export default class {
     constructor(args) {
-        let initValue, value;
+        let _initialValue, _value;
         const decoratorName = args.name || `decorator ${Utilities.newUuidShort()}`;
         const baseInit = args.init?.bind(args) ?? (() => undefined);
-        const baseGetter = args.get?.bind(args) ?? (() => value);
-        const baseSetter = args.set?.bind(args) ?? ((newValue) => value = newValue);
+        const baseGetter = args.get?.bind(args) ?? (() => _value);
+        const baseSetter = args.set?.bind(args) ?? ((newValue) => _value = newValue);
         const fieldsOnly = args.fieldsOnly === true || false;
         const classOnly = args.classOnly === true || false;
 
@@ -17,9 +17,9 @@ export default class {
             if (!descriptor) return undefined;
 
             const prevSetter = descriptor.set || ((newValue) => newValue);
-            const setter = (newValue) => value = baseSetter(Utilities.valueOrDefault(prevSetter(newValue), newValue));
+            const setter = (newValue) => _value = baseSetter(Utilities.valueOrDefault(prevSetter(newValue), newValue));
 
-            setter(initValue);
+            setter(_initialValue);
 
             return {
                 configurable: Utilities.hasValue(args.configurable) ? args.configurable : descriptor.configurable,
@@ -29,12 +29,16 @@ export default class {
             };
         }
 
+        Utilities.isArrayOfType(args.context, String) &&
+        (args.context = { ...args.context.map(ctx => { undefined }) }) ||
+        (args.context = { });
+
         return function(target, name, descriptor) {
             fieldsOnly && classOnly && throw Error(`Decorator ${decoratorName} has invalid configuration - fieldsOnly and classOnly both set to true`);
             fieldsOnly && !descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to class fields`);
             classOnly && descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to classes`);
 
-            initValue = descriptor.initializer ? descriptor.initializer() : (descriptor.value || descriptor.get);
+            _initialValue = descriptor.initializer ? descriptor.initializer() : (descriptor.value || descriptor.get);
 
             baseInit(target, name, descriptor);
 

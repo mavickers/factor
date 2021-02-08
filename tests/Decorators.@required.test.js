@@ -29,4 +29,15 @@ describe("@required decorator tests", () => {
         expect(() => model1.field1 = "hello").not.toThrow();
         expect(model1.field1).toEqual("hello");
     });
+
+    it("should perform independently when there are multiple fields on a class", () => {
+        let Class1, model1;
+
+        expect(() => Class1 = class { @required field1 = false; field2; }).not.toThrow();
+        expect(() => Class1 = class { @required field1; field2 = false; }).toThrow();
+        expect(() => Class1 = class { @required field1 = true; field2; @required field3 = false; }).not.toThrow();
+        expect(() => model1 = new Class1()).not.toThrow();
+        expect(model1.field1).toBeTrue();
+        expect(model1.field2).toBeUndefined();
+    });
 })
