@@ -11,16 +11,24 @@
 
 import Decorator from "../Decorator";
 
-let fieldName, value, initializing = true;
+export default function(target, name, descriptor) {
+    let fieldName, initializing = true, value;
 
-export default new Decorator({
-    name: "@readOnly",
-    init: (target, name, descriptor) => fieldName = name,
-    get: () => value,
-    set: (newValue) => {
-        !initializing && throw Error(`Field '${ fieldName }' is read only`);
-        value = newValue;
-        initializing = false;
-    },
-    fieldsOnly: true
-});
+    return new Decorator({
+        name: "@readOnly",
+        init: (target, name, descriptor) => fieldName = name,
+        get: () => value,
+        set: (newValue) => {
+            !initializing && throw Error(`Field '${ fieldName }' is read only`);
+            value = newValue;
+            initializing = false;
+        },
+        fieldsOnly: true,
+        decorator: {
+            target: target,
+            name: name,
+            descriptor: descriptor
+        }
+    });
+}
+
