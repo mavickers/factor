@@ -98,6 +98,11 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    static hasAll = (arr, items) => {
+        if (!(Array.isArray(arr) && Array.isArray(items))) return false;
+
+        return items.reduce((acc, item) => arr.includes(item) && acc, true);
+    }
     static hasValue = (obj) => obj !== null && obj !== undefined;
     static isInheriting = (obj, targetClass) => {
         const inheritances = this.getInheritances(obj);

@@ -248,4 +248,12 @@ describe("Utilities", () => {
         expect(Utilities.isType(new Class1(), Function)).toBeFalse();
         expect(Utilities.isType(new Class1(), Object)).toBeTrue();
     });
+
+    it ("should determine if an array contains all items of another array", () => {
+        expect(Utilities.hasAll([1, 2, 3, 4, 5], [2, 3, 4])).toBeTrue();
+        expect(Utilities.hasAll([1, 2, 3, 4, 5], [4, 5, 6])).toBeFalse();
+        expect(Utilities.hasAll([], [])).toBeTrue();
+        expect(Utilities.hasAll([1], [])).toBeTrue();
+        expect(Utilities.hasAll([], [1])).toBeFalse();
+    })
 });

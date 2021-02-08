@@ -12,18 +12,23 @@
 import Decorator from "../Decorator";
 import Utilities from "../../Utilities";
 
-const init = (target, name, descriptor) => this.context["fieldName"] = name;
-const getter = () => this.context["value"];
-const setter = (newValue) =>
-    Utilities.hasValue(newValue)
-        ? this.context["value"] = newValue
-        : throw Error(`Value required for ${ this.context["fieldName"] }`);
+export default function(target, name, descriptor) {
+    let value, fieldName;
 
-export default new Decorator({
-    name: "@readOnly",
-    get: getter,
-    set: setter,
-    init: init,
-    fieldsOnly: true,
-    context: [ "value", "fieldName" ]
-});
+    const init = (target, name, descriptor) => fieldName = name;
+    const getter = () => value;
+    const setter = (newValue) => Utilities.hasValue(newValue) ? value = newValue : throw Error(`Value required for ${ fieldName }`);
+
+    return new Decorator({
+        name: "@readOnly",
+        get: getter,
+        set: setter,
+        init: init,
+        fieldsOnly: true,
+        decorator: {
+            target: target,
+            name: name,
+            descriptor: descriptor
+        }
+    });
+}
