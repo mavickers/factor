@@ -120,4 +120,10 @@ describe("@is decorator tests", () => {
         expect(model1.field1).toBeTrue();
         expect(model1.field2).toEqual("test");
     });
+
+    it("should handle special cases properly", () => {
+       let Class1;
+
+       expect(() => Class1 = @is(Boolean) class { @is(Boolean) field1 }).toThrow();
+    });
 })
