@@ -110,7 +110,13 @@ describe("@is decorator tests", () => {
     it("should work independently when assigned to multiple fields", () => {
         let Class1, model1;
 
-        expect(() => Class1 = class { @is(Boolean) field1 = true; @is(String) field2; }).not.toThrow();
+        expect(() => Class1 = class {
+            @is(Boolean) field1 = true;
+            @is(String) field2;
+            @is("boolean") field3;
+            @is("string") field4 = "testing!";
+        }).not.toThrow();
+
         expect(() => model1 = new Class1()).not.toThrow();
         expect(model1.field1).toBeTrue();
         expect(model1.field2).toBeUndefined();
@@ -119,6 +125,15 @@ describe("@is decorator tests", () => {
         expect(() => model1.field1 = "2").toThrow();
         expect(model1.field1).toBeTrue();
         expect(model1.field2).toEqual("test");
+
+        expect(model1.field3).toBeUndefined();
+        expect(model1.field4).toEqual("testing!");
+        expect(() => model1.field3 = false).not.toThrow()
+        expect(() => model1.field4 = "not testing").not.toThrow()
+        expect(model1.field1).toBeTrue();
+        expect(model1.field2).toEqual("test");
+        expect(model1.field3).toBeFalse();
+        expect(model1.field4).toEqual("not testing");
     });
 
     it("should handle special cases properly", () => {
