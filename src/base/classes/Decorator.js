@@ -29,10 +29,6 @@ export default class {
             };
         }
 
-        // Utilities.isArrayOfType(args.context, String) &&
-        // (args.context = { ...args.context.map(ctx => { undefined }) }) ||
-        // (args.context = { });
-
         const decorator = function(target, name, descriptor) {
             fieldsOnly && classOnly && throw Error(`Decorator ${decoratorName} has invalid configuration - fieldsOnly and classOnly both set to true`);
             fieldsOnly && !descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to class fields`);
@@ -46,6 +42,15 @@ export default class {
                    baseFieldInit(target, name, descriptor) ||
                    baseClassInit(target, name, descriptor);
         }
+
+        // Because js modules cache instantiated objects each decorator module should be
+        // a function that instantiates the Decorator class inside of it. For decorators
+        // that do not take arguments (such as @readOnly) the custom is to add a decorator
+        // property to the constructor arguments; if the constructor here sees those
+        // parameters it will return the results of the executed decorator function.
+        //
+        // For decorators that take arguments (such as @is) the function will not be the
+        // decorator function, so this constructor will return a decorator function.
 
         return args.decorator && decorator(args.decorator.target, args.decorator.name, args.decorator.descriptor) || decorator;
     }
