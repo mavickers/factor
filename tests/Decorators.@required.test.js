@@ -24,6 +24,8 @@ describe("@required decorator tests", () => {
         expect(model1.field1).toBeTrue();
         expect(() => model1.field1 = undefined).toThrow();
         expect(model1.field1).toBeTrue();
+
+        // @required should not care about changing types
         expect(() => model1.field1 = "hello").not.toThrow();
         expect(model1.field1).toEqual("hello");
     });

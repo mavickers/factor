@@ -98,6 +98,7 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    static hasValue = (obj) => obj !== null && obj !== undefined;
     static isInheriting = (obj, targetClass) => {
         const inheritances = this.getInheritances(obj);
 
@@ -188,4 +189,6 @@ export default class Utilities {
     static newUuidShort() {
         return Utilities.newUuid().split("-").slice(-1)[0];
     }
+
+    static valueOrDefault = (value, defaultValue) => Utilities.hasValue(value) ? value : defaultValue;
 }

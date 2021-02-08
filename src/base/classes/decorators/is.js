@@ -12,16 +12,16 @@
 
 import Utilities from "../../Utilities";
 import Globals from "../../Globals";
+import Decorator from "../Decorator";
 
 let _targetType;
 let _value;
 
 const getter = function() { return _value; };
-const setter = function(value) {
-    console.log("is() setter");
+const setter = function(newValue) {
     // we aren't handling null/undefined here, that's a job for @required
-    if (value === undefined || value === null) return _value = value;
-    if (Utilities.isType(value, _targetType)) return _value = value;
+    if (newValue === undefined || newValue === null) return _value = newValue;
+    if (Utilities.isType(newValue, _targetType)) return _value = newValue;
 
     throw Error(`Incorrect value type specified for ${name}`);
 };
@@ -30,21 +30,12 @@ export default function(type) {
     _targetType =
         (Globals.Primitives.find(prim => prim.name === type || prim.type === type) && type) ||
         (Utilities.isClass(type) && type) ||
-        undefined;
+        throw Error(`@is(): specified type must be a supported primitive or class`);
 
-    if (!_targetType) throw Error(`@is(): specified type must be a supported primitive or class`);
-
-    return function(target, name, descriptor) {
-        console.log("is() init", descriptor);
-
-        if (!descriptor) throw Error("@is() can only be applied to class fields with descriptors");
-
-        descriptor.initializer && setter(descriptor.initializer());
-
-        return {
-            ...descriptor,
-            get: getter,
-            set: setter
-        }
-    }
+    return new Decorator({
+        name: "@is",
+        get: getter,
+        set: setter,
+        fieldsOnly: true
+    });
 }

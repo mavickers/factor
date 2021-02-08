@@ -9,36 +9,15 @@
  *
  */
 
+import Decorator from "../Decorator";
 import Utilities from "../../Utilities";
 
-let _value, _previousSetter;
+let value, fieldName;
 
-const getter = () => _value;
-const setter = (value) => {
-    console.log("@required setter");
-    _previousSetter(value);
+const init = (target, name, descriptor) => fieldName = name;
+const getter = () => value;
+const setter = (newValue) => Utilities.hasValue(newValue)
+        ? value = newValue
+        : throw Error(`Value required for ${ fieldName }`);
 
-    value !== null &&
-    value !== undefined &&
-    (_value = value) ||
-    throw Error(`Value required for ${ name }`);
-}
-
-export default function(target, name, descriptor) {
-    console.log("@required init", descriptor);
-
-
-    if (!descriptor) throw Error("@readOnly can only be applied to class fields with descriptors");
-    if (!target || Utilities.isClass(target) || !descriptor) return target;
-    if (!descriptor.initializer) throw Error(`Value required for ${name}`);
-
-    _previousSetter = descriptor.set?.bind(descriptor) ?? function(value) { };
-    setter(descriptor.initializer());
-
-    return {
-        configurable: descriptor.configurable,
-        enumerable: descriptor.enumerable,
-        get: getter,
-        set: setter
-    }
-}
+export default new Decorator({ name: "@readOnly", get: getter, set: setter, init: init, fieldsOnly: true });
