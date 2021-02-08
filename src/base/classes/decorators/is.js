@@ -14,23 +14,21 @@ import Utilities from "../../Utilities";
 import Globals from "../../Globals";
 import Decorator from "../Decorator";
 
-let _targetType;
-let _value;
-
-const getter = function() { return _value; };
-const setter = function(newValue) {
-    // we aren't handling null/undefined here, that's a job for @required
-    if (newValue === undefined || newValue === null) return _value = newValue;
-    if (Utilities.isType(newValue, _targetType)) return _value = newValue;
-
-    throw Error(`Incorrect value type specified for ${name}`);
-};
-
 export default function(type) {
-    _targetType =
-        (Globals.Primitives.find(prim => prim.name === type || prim.type === type) && type) ||
-        (Utilities.isClass(type) && type) ||
-        throw Error(`@is(): specified type must be a supported primitive or class`);
+    let value,
+        targetType =
+            (Globals.Primitives.find(prim => prim.name === type || prim.type === type) && type) ||
+            (Utilities.isClass(type) && type) ||
+            throw Error(`@is(): specified type must be a supported primitive or class`);
+
+    const getter = function() { return value; };
+    const setter = function(newValue) {
+        // we aren't handling null/undefined here, that's a job for @required
+        if (!Utilities.hasValue(newValue)) return value = newValue;
+        if (Utilities.isType(newValue, targetType)) return value = newValue;
+
+        throw Error(`Incorrect value type specified for ${name}`);
+    };
 
     return new Decorator({
         name: "@is",

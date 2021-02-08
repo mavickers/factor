@@ -46,26 +46,26 @@ describe("@is decorator tests", () => {
         let model1;
 
         // check setting values after instantiation; repeat for each primitive type.
-        expect(() => Class1 = class { @is(Boolean) field1; @is("boolean") field2; }).not.toThrow();
-        expect(() => model1 = new Class1()).not.toThrow();
-        console.log(Object.getOwnPropertyDescriptor(model1, "field1"));
-        expect(() => model1.field1 = "false").toThrow();
-        expect(() => model1.field2 = "false").toThrow();
-        expect(model1.field1).toBeUndefined();
-        expect(model1.field2).toBeUndefined();
-        expect(() => { model1.field1 = false; model1.field2 = false; }).not.toThrow();
-        expect(model1.field1).toBeFalse();
-        expect(model1.field2).toBeFalse();
-
+        // expect(() => Class1 = class { @is(Boolean) field1; @is("boolean") field2; }).not.toThrow();
+        // expect(() => model1 = new Class1()).not.toThrow();
+        // console.log(Object.getOwnPropertyDescriptor(model1, "field1"));
+        // expect(() => model1.field1 = "false").toThrow();
+        // expect(() => model1.field2 = "false").toThrow();
+        // expect(model1.field1).toBeUndefined();
+        // expect(model1.field2).toBeUndefined();
+        // expect(() => { model1.field1 = false; model1.field2 = false; }).not.toThrow();
+        // expect(model1.field1).toBeFalse();
+        // expect(model1.field2).toBeFalse();
+        //
         expect(() => Class1 = class { @is(Number) field1; @is("number") field2; }).not.toThrow();
         expect(() => model1 = new Class1()).not.toThrow();
-        expect(() => model1.field1 = "1").toThrow();
-        expect(() => model1.field2 = "1").toThrow();
-        expect(model1.field1).toBeUndefined();
-        expect(model1.field2).toBeUndefined();
-        expect(() => { model1.field1 = 1; model1.field2 = 2; }).not.toThrow();
+        // expect(() => model1.field1 = "1").toThrow();
+        // expect(() => model1.field2 = "1").toThrow();
+        // expect(model1.field1).toBeUndefined();
+        // expect(model1.field2).toBeUndefined();
+        expect(() => { model1.field1 = 1; model1.field2 = 47; }).not.toThrow();
         expect(model1.field1).toEqual(1);
-        expect(model1.field2).toEqual(2);
+        expect(model1.field2).toEqual(47);
 
         expect(() => Class1 = class { @is(String) field1; @is("string") field2; }).not.toThrow();
         expect(() => model1 = new Class1()).not.toThrow();
