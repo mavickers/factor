@@ -9,13 +9,18 @@
  *
  */
 
-import Utilities from "../../Utilities";
+import Decorator from "../Decorator";
 
-export default function(target, name, descriptor) {
-    if (!descriptor) throw Error("@readOnly can only be applied to class fields with descriptors");
+let fieldName, value, initializing = true;
 
-    return {
-        ...descriptor,
-        writable: false
-    }
-}
+export default new Decorator({
+    name: "@readOnly",
+    init: (target, name, descriptor) => fieldName = name,
+    get: () => value,
+    set: (newValue) => {
+        !initializing && throw Error(`Field '${ fieldName }' is read only`);
+        value = newValue;
+        initializing = false;
+    },
+    fieldsOnly: true
+});
