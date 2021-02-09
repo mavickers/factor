@@ -11,12 +11,17 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     "plugins": [
+                        [ "@babel/plugin-proposal-decorators", { "legacy": true } ],
                         [ "@babel/plugin-proposal-class-properties", { "loose": true } ],
-                        [ "@babel/plugin-proposal-decorators", { "legacy": false } ],
                         [ "@babel/plugin-proposal-private-property-in-object", { "loose": true } ],
+                        "@babel/plugin-proposal-export-namespace-from",
+                        "@babel/plugin-proposal-function-sent",
+                        "@babel/plugin-proposal-numeric-separator",
                         "@babel/plugin-proposal-throw-expressions",
                         "@babel/plugin-syntax-dynamic-import",
+                        "@babel/plugin-transform-arrow-functions",
                         "@babel/plugin-transform-classes",
+                        "@babel/plugin-transform-computed-properties",
                         "@babel/plugin-transform-runtime",
                         "@babel/plugin-transform-template-literals"
                     ],

@@ -137,6 +137,7 @@ export default class Utilities {
             (this.isString(targetClass) && inheritances.map(inheritance => inheritance.name).includes(targetClass)) ||
             false;
     };
+    static isNil = (obj) => !Utilities.isNotNil(obj);
     static isNotNil = (obj) => obj !== null && obj !== undefined;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
@@ -193,6 +194,13 @@ export default class Utilities {
 
     static newUuidShort() {
         return Utilities.newUuid().split("-").slice(-1)[0];
+    }
+
+    static spread(args, names, obj = { }) {
+        Utilities.isArrayOfType(names, "string") &&
+        names.forEach(name => obj[name] = args[names.indexOf(name)]);
+
+        return obj;
     }
 
     static valueOrDefault = (value, defaultValue) => Utilities.isNotNil(value) ? value : defaultValue;

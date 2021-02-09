@@ -10,11 +10,21 @@
  */
 
 import Decorator from "../Decorator";
+import Utilities from "../../Utilities";
+import TypeMismatchSetOptions from "../flags/TypeMismatchSetOptions";
+
+export const mismatchConfig = Symbol.for("@mavickers/factor/@onTypeMismatch");
 
 export default function(mismatchFlag) {
+    const flag = new TypeMismatchSetOptions(mismatchFlag);
+
+    if (flag.value === 0) throw Error("@onTypeMismatch invalid argument")
+
     let decorator, value;
 
-    const init = (target, name, descriptor) => decorator = { target: target, name: name, descriptor: descriptor };
+    const init = (target, name, descriptor) => {
+        descriptor ? descriptor[mismatchConfig] = flag : target[mismatchConfig] = flag;
+    }
     const getter = () => value;
     const setter = (newValue) => value = newValue;
 

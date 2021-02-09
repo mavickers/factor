@@ -17,7 +17,7 @@ export default function(target, name, descriptor) {
 
     const init = (target, name, descriptor) => fieldName = name;
     const getter = () => value;
-    const setter = (newValue) => Utilities.hasValue(newValue) ? value = newValue : throw Error(`Value required for ${ fieldName }`);
+    const setter = (newValue) => Utilities.isNotNil(newValue) ? value = newValue : throw Error(`Value required for ${ fieldName }`);
 
     return new Decorator({
         name: "@readOnly",

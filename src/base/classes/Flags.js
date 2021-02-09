@@ -30,6 +30,8 @@ class Flags {
         // once for each child class.
         if (!(props.includes("_flags"))) Object.defineProperty(this.constructor, "_flags", { get: () => flags });
 
+        // todo: bounds check args if isSingle and throw if not valid
+
         this.set(...args.filter(arg => Utilities.isNumber(arg) || Utilities.isString(arg)));
     }
 

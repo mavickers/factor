@@ -13,22 +13,45 @@
 import Utilities from "../../Utilities";
 import Globals from "../../Globals";
 import Decorator from "../Decorator";
+import TypeMismatchSetOptions from "../flags/TypeMismatchSetOptions";
+import { mismatchConfig } from "./onTypeMismatch";
+
+const { isClass, isNil, isType, spread } = Utilities;
 
 export default function(type) {
-    let fieldName, value,
+    let decorator, value,
         targetType =
             (Globals.Primitives.find(prim => prim.name === type || prim.type === type) && type) ||
-            (Utilities.isClass(type) && type) ||
+            (isClass(type) && type) ||
             throw Error(`@is(): specified type must be a supported primitive or class`);
 
-    const init = (target, name, descriptor) => fieldName = name;
+    const init = (...args) => decorator = spread(args, [ "target", "name", "descriptor" ]);
     const getter = function() { return value; };
     const setter = function(newValue) {
         // we aren't handling null/undefined here, that's a job for @required
-        if (!Utilities.hasValue(newValue)) return value = newValue;
-        if (Utilities.isType(newValue, targetType)) return value = newValue;
+        if (isNil(newValue)) return value = newValue;
+        // the type matches, so go ahead and assign the value and return
+        if (isType(newValue, targetType)) return value = newValue;
 
-        throw Error(`Incorrect value type specified for ${ fieldName }`);
+        // the type mismatched, so let's figure out what we're supposed to do
+
+        const mismatchFlag =
+            decorator?.descriptor?.[mismatchConfig] ??
+            decorator?.target?.[mismatchConfig] ??
+            new TypeMismatchSetOptions("Throw");
+
+        // now let's do it
+
+        if (mismatchFlag.equals("Ignore")) return value = newValue;
+        if (mismatchFlag.equals("Noop")) return value = value;
+        if (mismatchFlag.equals("Null")) return value = null;
+
+        // we're here either because the flag is set to throw or there were no flags
+        // set, which means this is the default when all else fails
+
+        console.log(mismatchFlag.value);
+
+        throw Error(`Incorrect value type specified for ${ decorator.name }`);
     };
 
     return new Decorator({

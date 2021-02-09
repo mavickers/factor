@@ -22,14 +22,16 @@ export default class {
             setter(_initialValue);
 
             return {
-                configurable: Utilities.hasValue(args.configurable) ? args.configurable : descriptor.configurable,
-                enumerable: Utilities.hasValue(args.enumerable) ? args.enumerable : descriptor.enumerable,
+                configurable: Utilities.isNotNil(args.configurable) ? args.configurable : descriptor.configurable,
+                enumerable: Utilities.isNotNil(args.enumerable) ? args.enumerable : descriptor.enumerable,
                 get: baseGetter,
                 set: setter
             };
         }
 
         const decorator = function(target, name, descriptor) {
+            // todo: need to handle when a class is being passed through here (not a field).
+
             fieldsOnly && classOnly && throw Error(`Decorator ${decoratorName} has invalid configuration - fieldsOnly and classOnly both set to true`);
             fieldsOnly && !descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to class fields`);
             classOnly && descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to classes`);
