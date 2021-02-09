@@ -103,14 +103,6 @@ export default class Utilities {
 
         return items.reduce((acc, item) => arr.includes(item) && acc, true);
     }
-    static hasValue = (obj) => obj !== null && obj !== undefined;
-    static isInheriting = (obj, targetClass) => {
-        const inheritances = this.getInheritances(obj);
-
-        return (this.isClass(targetClass) && inheritances.includes(targetClass)) ||
-               (this.isString(targetClass) && inheritances.map(inheritance => inheritance.name).includes(targetClass)) ||
-               false;
-    };
     static is(obj) {
         return {
             BooleanOrDefault: (defaultValue) =>
@@ -138,6 +130,14 @@ export default class Utilities {
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = (obj) => obj && obj instanceof Error && true || false;
     static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
+    static isInheriting = (obj, targetClass) => {
+        const inheritances = this.getInheritances(obj);
+
+        return (this.isClass(targetClass) && inheritances.includes(targetClass)) ||
+            (this.isString(targetClass) && inheritances.map(inheritance => inheritance.name).includes(targetClass)) ||
+            false;
+    };
+    static isNotNil = (obj) => obj !== null && obj !== undefined;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
@@ -195,5 +195,5 @@ export default class Utilities {
         return Utilities.newUuid().split("-").slice(-1)[0];
     }
 
-    static valueOrDefault = (value, defaultValue) => Utilities.hasValue(value) ? value : defaultValue;
+    static valueOrDefault = (value, defaultValue) => Utilities.isNotNil(value) ? value : defaultValue;
 }
