@@ -34,7 +34,7 @@ export default class {
             fieldsOnly && !descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to class fields`);
             classOnly && descriptor && throw Error(`Decorator '${decoratorName}' can only be applied to classes`);
 
-            _initialValue = descriptor.initializer ? descriptor.initializer() : (descriptor.value || descriptor.get);
+            _initialValue = descriptor.initializer ? descriptor.initializer() : (descriptor.value || (descriptor.get && descriptor.get()));
 
             baseInit(target, name, descriptor);
 

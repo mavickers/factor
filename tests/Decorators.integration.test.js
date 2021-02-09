@@ -8,17 +8,12 @@ describe("Decorator integration", () => {
         let Class1, model1;
 
         expect(() => Class1 = class { @is(Boolean) @required field1 = false; }).not.toThrow();
-        // expect(() => Class1 = class { @is(Boolean) @required field1; }).toThrow();
+        expect(() => Class1 = class { @is(Boolean) @required field1; }).toThrow();
+        expect(() => Class1 = class { @is(Boolean) @required field1 = "false"; }).toThrow();
+        expect(() => model1 = new Class1()).not.toThrow();
+        expect(() => model1.field1 = "false").toThrow();
 
 
-
-        //expect(() => Class1 = class { @is(Boolean) @required field1 = "false"; }).toThrow();
-
-        // expect(() => Class1 = class { @is(Boolean) @required field1 = "false"; }).not.toThrow();
-        // expect(() => model1 = new Class1()).not.toThrow();
-        // expect(() => model1.field1 = "false").toThrow();
-        //
-        //
-        // expect(() => Class1 = class { @is(Boolean) @required field1; }).toThrow();
+        expect(() => Class1 = class { @is(Boolean) @required field1; }).toThrow();
     });
 });
