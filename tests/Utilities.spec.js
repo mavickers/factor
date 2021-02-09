@@ -3,6 +3,7 @@ import Utilities from "../src/base/Utilities";
 import Flags from "../src/base/classes/Flags";
 import Logger from "../src/base/components/Logger/Logger";
 import Mixin from "../src/base/classes/Mixin";
+import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 
 const logger = new Logger();
 
@@ -235,6 +236,7 @@ describe("Utilities", () => {
 
     it("should determine if objects are of a specific type properly", () => {
         const Class1 = class { };
+        const mismatchFlag = new TypeMismatchSetOptions("Ignore");
 
         expect(Utilities.isType(true, Boolean)).toBeTrue();
         expect(Utilities.isType(true, "boolean")).toBeTrue();
@@ -247,6 +249,8 @@ describe("Utilities", () => {
         expect(Utilities.isType(new Class1(), Class1)).toBeTrue();
         expect(Utilities.isType(new Class1(), Function)).toBeFalse();
         expect(Utilities.isType(new Class1(), Object)).toBeTrue();
+
+        expect(Utilities.isType(mismatchFlag, TypeMismatchSetOptions)).toBeTrue();
     });
 
     it ("should determine if an array contains all items of another array", () => {

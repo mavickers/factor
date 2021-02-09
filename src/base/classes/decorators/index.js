@@ -1,6 +1,7 @@
 import configurable from "./configurable";
 import describable from "./describable";
 import enumerable from "./enumerable";
+import flags from "./flags";
 import is from "./is";
 import mappable from "./mappable";
 import readOnly from "./readOnly";
@@ -10,6 +11,7 @@ export {
     configurable,
     describable,
     enumerable,
+    flags,
     is,
     mappable,
     readOnly,
