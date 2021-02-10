@@ -9,7 +9,7 @@
         "github": "https://github.com/mavickers"
     },
     "scripts": {
-        "build": "webpack"
+        "build": "jest tests && webpack"
     },
     "repository": {
         "type": "git",

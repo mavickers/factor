@@ -10,8 +10,10 @@
  */
 
 import Decorator from "../Decorator";
-import Utilities from "../../Utilities";
 import TypeMismatchSetOptions from "../flags/TypeMismatchSetOptions";
+import Utilities from "../../Utilities";
+
+const { spread } = Utilities;
 
 export const mismatchConfig = Symbol.for("@mavickers/factor/@onTypeMismatch");
 
@@ -22,11 +24,20 @@ export default function(mismatchFlag) {
 
     let decorator, value;
 
-    const init = (target, name, descriptor) => {
-        descriptor ? descriptor[mismatchConfig] = flag : target[mismatchConfig] = flag;
+    // const init = (target, name, descriptor) => descriptor ? descriptor[mismatchConfig] = flag : target[mismatchConfig] = flag;
+    const init = (...args) => {
+        decorator = spread(args, [ "target", "name", "descriptor" ]);
+        decorator.descriptor ? decorator.descriptor[mismatchConfig] = flag : decorator.target[mismatchConfig] = flag;
+        console.log("@onTypeMismatch init", decorator);
+        // console.log(descriptor ? "setting field " + descriptor[mismatchConfig].value : "setting class");
     }
     const getter = () => value;
-    const setter = (newValue) => value = newValue;
+    // const setter = (newValue) => value = newValue;
+    const setter = (newValue) => {
+        console.log("@onTypeMismatch setter", decorator);
+
+        return value = newValue;
+    }
 
     return new Decorator({
         name: "@onTypeMismatch",

@@ -14,6 +14,7 @@ export default class {
 
         const baseClassInit = function(target, name, descriptor) {
             // we may jam something in here at a later time
+            return target;
         };
         const baseFieldInit = function(target, name, descriptor) {
             if (!descriptor) return undefined;

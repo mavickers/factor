@@ -25,7 +25,11 @@ export default function(type) {
             (isClass(type) && type) ||
             throw Error(`@is(): specified type must be a supported primitive or class`);
 
-    const init = (...args) => decorator = spread(args, [ "target", "name", "descriptor" ]);
+    // const init = (...args) => decorator = spread(args, [ "target", "name", "descriptor" ]);
+    const init = (...args) => {
+        decorator = spread(args, [ "target", "name", "descriptor" ]);
+        console.log("@is init", decorator.name);
+    }
     const getter = function() { return value; };
     const setter = function(newValue) {
         // we aren't handling null/undefined here, that's a job for @required
@@ -41,6 +45,12 @@ export default function(type) {
             new TypeMismatchSetOptions("Throw");
 
         // now let's do it
+
+        console.log("@is setter", decorator);
+
+        if (decorator.name) {
+            console.log(decorator.descriptor);
+        }
 
         if (mismatchFlag.equals("Ignore")) return value = newValue;
         if (mismatchFlag.equals("Noop")) return value = value;

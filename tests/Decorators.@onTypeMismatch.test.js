@@ -2,6 +2,8 @@ import "jest-extended";
 import { is } from "../src/base/classes/decorators";
 import TypeMismatchSetOptions from "../src/base/classes/flags/TypeMismatchSetOptions";
 import onTypeMismatch, { mismatchConfig } from "../src/base/classes/decorators/onTypeMismatch";
+import Decorator from "../src/base/classes/Decorator";
+import Utilities from "../src/base/Utilities";
 
 let Class1, Class2, Class3,
     model1, model2, model3;
@@ -86,22 +88,22 @@ describe("@onTypeMismatch decorator tests", () => {
         describe("when set on fields", () => {
             beforeEach(() => {
                 Class1 = class {
-                    @is(Boolean) @onTypeMismatch("Throw") field1;
-                    @is("boolean") @onTypeMismatch("Throw") field2;
-                    @is(Boolean) field3;
-                    @is("boolean") field4;
-                    @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Throw) field5;
-                    @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Throw) field6;
-                    @is(Boolean) @onTypeMismatch("Throw") field7 = true;
-                    @is("boolean") @onTypeMismatch("Throw") field8 = false;
-                    @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Throw) field9 = true;
-                    @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Throw) field10 = false;
+                    // @is(Boolean) @onTypeMismatch("Throw") field1;
+                    // @is("boolean") @onTypeMismatch("Throw") field2;
+                    // @is(Boolean) field3;
+                    // @is("boolean") field4;
+                    // @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Throw) field5;
+                    // @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Throw) field6;
+                    // @is(Boolean) @onTypeMismatch("Throw") field7 = true;
+                    // @is("boolean") @onTypeMismatch("Throw") field8 = false;
+                    // @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Throw) field9 = true;
+                    // @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Throw) field10 = false;
                 }
 
-                Class2 = @onTypeMismatch("Throw") class {
-                    @is(Boolean) field1;
-                    field2;
-                }
+                // Class2 = @onTypeMismatch("Throw") class {
+                //     @is(Boolean) field1;
+                //     field2;
+                // }
 
                 expect(() => model1 = new Class1()).not.toThrow();
             });
@@ -165,13 +167,52 @@ describe("@onTypeMismatch decorator tests", () => {
                 expect(model1.field3).toBeTrue();
                 expect(model1.field4).toBeFalse();
             });
+
+            it("should override class option when set on field", () => {
+                expect(() => {
+                    const test = function(...args) {
+                        console.log("test()", args);
+                        const decorator = Utilities.spread(args, [ "target", "name", "descriptor" ]);
+                        let value;
+
+                        return new Decorator({
+                            name: "@test",
+                            init: (...args) => {
+                                console.log("@test init", this, args);
+                            },
+                            get: () => value,
+                            set: (newValue) => {
+                                return value = newValue
+                            },
+                            decorator: decorator
+                        })
+                    }
+
+                    Class3 = @onTypeMismatch("Ignore") @test class {
+                        @is(Boolean) fieldA;
+                        @is("boolean") fieldB;
+                        // @is(Boolean) @onTypeMismatch("Throw") field1;
+                        // @is("boolean") @onTypeMismatch("Throw") field2;
+                        // @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Throw) field3;
+                        // @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Throw) field4;
+                        // @is(Boolean) @onTypeMismatch("Throw") field5 = true;
+                    };
+
+                    model3 = new Class3();
+                }).not.toThrow();
+
+                expect(Class3[mismatchConfig].equals("Ignore"));
+                expect(() => model3.fieldA = "test1").not.toThrow();
+                // expect(() => model3.fieldB = "test2").not.toThrow();
+                // expect(() => model3.field1 = "test1").toThrow();
+                // expect(() => model3.field2 = "test2").toThrow();
+                // expect(() => model3.field3 = "test3").toThrow();
+                // expect(() => model3.field4 = "test4").toThrow();
+            });
         });
-
-
     });
 
-
     it("should handle special cases properly", () => {
-        // multiple
+        // multiple on the same field/class
     });
 })

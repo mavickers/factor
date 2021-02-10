@@ -48,7 +48,6 @@ describe("@is decorator tests", () => {
         // check setting values after instantiation; repeat for each primitive type.
         expect(() => Class1 = class { @is(Boolean) field1; @is("boolean") field2; }).not.toThrow();
         expect(() => model1 = new Class1()).not.toThrow();
-        console.log(Object.getOwnPropertyDescriptor(model1, "field1"));
         expect(() => model1.field1 = "false").toThrow();
         expect(() => model1.field2 = "false").toThrow();
         expect(model1.field1).toBeUndefined();
