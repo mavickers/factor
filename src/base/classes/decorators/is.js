@@ -49,8 +49,6 @@ export default function(type) {
         // we're here either because the flag is set to throw or there were no flags
         // set, which means this is the default when all else fails
 
-        console.log(mismatchFlag.value);
-
         throw Error(`Incorrect value type specified for ${ decorator.name }`);
     };
 
