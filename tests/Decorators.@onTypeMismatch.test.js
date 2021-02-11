@@ -169,7 +169,7 @@ describe("@onTypeMismatch decorator tests", () => {
             it("should override class option when set on field", () => {
                 expect(() => {
                     Class3 =  @onTypeMismatch("Ignore") class {
-                        @is(Boolean) fieldA = true;
+                        @is(Boolean) fieldA;
                         @is("boolean") fieldB;
                         // this use-case is broken for the time being
                         // @is(Boolean) fieldC = "testC";
@@ -185,7 +185,6 @@ describe("@onTypeMismatch decorator tests", () => {
                 }).not.toThrow();
 
                 expect(Class3[mismatchConfig].equals("Ignore"));
-                expect(model3.fieldA).toBeTrue();
                 expect(() => model3.fieldA = "testA").not.toThrow();
                 expect(() => model3.fieldB = "testB").not.toThrow();
                 expect(model3.fieldA).toEqual("testA");
