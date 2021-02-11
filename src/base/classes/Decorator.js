@@ -54,18 +54,15 @@ export default class {
             // but when we're dealing with a field the target is the instance
             // of the class; for the purposes of the decorator class we want to
             // always be dealing with the class itself.
-            const normalizedTarget = descriptor ? target.constructor : target;
-
-            baseInit(normalizedTarget, name, descriptor);
+            // const normalizedTarget = descriptor ? target.constructor : target;
+            const recipient = baseInit(target, name, descriptor);
 
             // no descriptor means we are applying the decorator to a class
-            if (!descriptor) return baseClassInit(normalizedTarget, name, descriptor);
+            if (!descriptor) return baseClassInit(recipient, name, descriptor);
 
-            // we're dealing with a field, so determine and set the initial
-            // value of the field before calling baseFieldInit and returning
             _initialValue = descriptor.initializer ? descriptor.initializer() : (descriptor.value || (descriptor.get && descriptor.get()));
 
-            return baseFieldInit(normalizedTarget, name, descriptor);
+            return baseFieldInit(target, name, recipient);
         }
 
         // Because js modules cache instantiated objects each decorator module should be

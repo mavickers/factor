@@ -42,14 +42,14 @@ export default function(type) {
         // if we have a descriptor and there is mismatchConfig on it, use
         // that; if not check for mismatchConfig on the class that the field is
         // attached to (the class itself, not the instance); if that fails then
-        // we fallback to using Throw.
+        // we fallback to using Throw; remember that since we're running the setter
+        // in a property context we want to check the mismatchConfig on the target
+        // constructor rather than the target itself as the target in a property
+        // context will be the instance of class and not the class itself.
 
-        const isField = decorator.descriptor && true;
-        // const target = decorator && (decorator.descriptor || decorator.target) || { };
-        // const mismatchFlag = target[mismatchConfig] || new TypeMismatchSetOptions("Throw");
         const mismatchFlag =
             (decorator && decorator.descriptor && decorator.descriptor[mismatchConfig]) ||
-            (decorator && decorator.target && decorator.target[mismatchConfig]) ||
+            (decorator && decorator.target && decorator.target.constructor[mismatchConfig]) ||
             new TypeMismatchSetOptions("Throw");
 
         // now let's do it

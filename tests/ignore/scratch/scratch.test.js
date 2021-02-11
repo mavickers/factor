@@ -53,12 +53,21 @@ describe("Scratch Tests", () => {
    });
 
    it("scratch", () => {
-       function limiter(n) {
-           if (n === 6) return 3;
-           else return 3 * limiter(n + 1)
+       function define(fieldName) {
+
+
+           this.onTypeMismatch = function() {
+
+           }
+           this.is = function() {
+
+           }
+
+           return this;
        }
 
-       console.log(limiter(5));
-       console.log(limiter(3));
+       class Class1 {
+           // @define("").is(Boolean).onTypeMismatch("Throw")
+       }
    })
 });

@@ -29,9 +29,7 @@ export default function(mismatchFlag) {
         decorator = { target, name, descriptor };
         recipient[mismatchConfig] = flag;
 
-        // console.log(recipient);
-
-        return recipient;
+        return descriptor || target;
     };
     const getter = () => value;
     const setter = (newValue) => {
