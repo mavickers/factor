@@ -3,6 +3,8 @@ import Utilities from "../../Utilities";
 import LogMessage from "./LogMessage";
 import Location from "../../classes/Location";
 
+export const LoggerConfig = Symbol.for("@mavickers/factor/components/Logger");
+
 export default class Logger {
     #group;
     #id;

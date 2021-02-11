@@ -11,30 +11,31 @@
 
 import Decorator from "../Decorator";
 import TypeMismatchSetOptions from "../flags/TypeMismatchSetOptions";
-import Utilities from "../../Utilities";
-
-const { spread } = Utilities;
 
 export const mismatchConfig = Symbol.for("@mavickers/factor/@onTypeMismatch");
 
 export default function(mismatchFlag) {
-    const flag = new TypeMismatchSetOptions(mismatchFlag);
+    const flag = new TypeMismatchSetOptions(mismatchFlag)
 
     if (flag.value === 0) throw Error("@onTypeMismatch invalid argument")
 
-    let decorator, value;
+    let decorator, onField, targetName, value;
 
-    // const init = (target, name, descriptor) => descriptor ? descriptor[mismatchConfig] = flag : target[mismatchConfig] = flag;
-    const init = (...args) => {
-        decorator = spread(args, [ "target", "name", "descriptor" ]);
-        decorator.descriptor ? decorator.descriptor[mismatchConfig] = flag : decorator.target[mismatchConfig] = flag;
-        console.log("@onTypeMismatch init", decorator);
-        // console.log(descriptor ? "setting field " + descriptor[mismatchConfig].value : "setting class");
-    }
+    const init = (target, name, descriptor) => {
+        const recipient = descriptor || target;
+
+        onField = descriptor && true || false;
+        targetName = onField ? name : target.name;
+        decorator = { target, name, descriptor };
+        recipient[mismatchConfig] = flag;
+
+        // console.log(recipient);
+
+        return recipient;
+    };
     const getter = () => value;
-    // const setter = (newValue) => value = newValue;
     const setter = (newValue) => {
-        console.log("@onTypeMismatch setter", decorator);
+        if (!onField) throw Error("@onTypeMismatch.setter invoked on class " + targetName + " (that should never happen)");
 
         return value = newValue;
     }

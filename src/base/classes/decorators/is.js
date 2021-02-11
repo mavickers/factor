@@ -25,10 +25,12 @@ export default function(type) {
             (isClass(type) && type) ||
             throw Error(`@is(): specified type must be a supported primitive or class`);
 
-    // const init = (...args) => decorator = spread(args, [ "target", "name", "descriptor" ]);
-    const init = (...args) => {
-        decorator = spread(args, [ "target", "name", "descriptor" ]);
-        console.log("@is init", decorator.name);
+    const init = (target, name, descriptor) => {
+        if (!descriptor) throw Error("@is.init descriptor missing, possibly due to applying @is on a class (that should not happen)");
+
+        decorator = { target, name, descriptor };
+
+        return descriptor;
     }
     const getter = function() { return value; };
     const setter = function(newValue) {
@@ -37,20 +39,20 @@ export default function(type) {
         // the type matches, so go ahead and assign the value and return
         if (isType(newValue, targetType)) return value = newValue;
 
-        // the type mismatched, so let's figure out what we're supposed to do
+        // if we have a descriptor and there is mismatchConfig on it, use
+        // that; if not check for mismatchConfig on the class that the field is
+        // attached to (the class itself, not the instance); if that fails then
+        // we fallback to using Throw.
 
+        const isField = decorator.descriptor && true;
+        // const target = decorator && (decorator.descriptor || decorator.target) || { };
+        // const mismatchFlag = target[mismatchConfig] || new TypeMismatchSetOptions("Throw");
         const mismatchFlag =
-            decorator?.descriptor?.[mismatchConfig] ??
-            decorator?.target?.[mismatchConfig] ??
+            (decorator && decorator.descriptor && decorator.descriptor[mismatchConfig]) ||
+            (decorator && decorator.target && decorator.target[mismatchConfig]) ||
             new TypeMismatchSetOptions("Throw");
 
         // now let's do it
-
-        console.log("@is setter", decorator);
-
-        if (decorator.name) {
-            console.log(decorator.descriptor);
-        }
 
         if (mismatchFlag.equals("Ignore")) return value = newValue;
         if (mismatchFlag.equals("Noop")) return value = value;
