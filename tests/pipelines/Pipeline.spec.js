@@ -1,4 +1,5 @@
-import { Pipeline, PipelineFilter, PipelineArgs } from "../../../src/base/components/Pipeline";
+import { Pipeline, PipelineFilter, PipelineArgs } from "../../src/base/components/Pipeline";
+import NormalizeDataParametersFilter from "../../src/base/pipelines/Common/NormalizeDataParametersFilter";
 
 class FilterA extends PipelineFilter {
     constructor() {
@@ -46,8 +47,9 @@ describe("Pipeline", () => {
         let pipeline, argsB;
         const argsA = new PipelineArgs({ test1: 1 });
 
-        expect(() => pipeline = new Pipeline(FilterA, FilterB, FilterC)).not.toThrow();
-        expect(pipeline.count).toEqual(3);
+        expect(() => pipeline = new Pipeline(NormalizeDataParametersFilter, FilterA, FilterB, FilterC)).not.toThrow();
+        console.log(argsA.data);
+        expect(pipeline.count).toEqual(4);
         expect(() => argsB = pipeline.execute(argsA)).not.toThrow();
         expect(argsB).toEqual(argsA);
         expect(argsB.data.test1).toEqual(4);

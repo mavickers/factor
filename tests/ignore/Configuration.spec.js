@@ -1,6 +1,6 @@
-import StandardModel from "../../../src/base/classes/StandardModel";
-import TypeMismatchSetOptions from "../../../src/base/classes/flags/TypeMismatchSetOptions";
-import Utilities from "../../../src/base/Utilities";
+import StandardModel from "../../src/base/classes/StandardModel";
+import TypeMismatchSetOptions from "../../src/base/classes/flags/TypeMismatchSetOptions";
+import Utilities from "../../src/base/Utilities";
 
 describe("Configuration", () => {
     it("should perform basic class configuration properly", () => {

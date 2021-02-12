@@ -1,4 +1,5 @@
-import PipelineArgs from "../../../src/base/components/Pipeline/PipelineArgs";
+import "jest-extended";
+import PipelineArgs from "../../src/base/components/Pipeline/PipelineArgs";
 
 describe("PipelineArgs", () => {
     it("should instantiate and operate PipelineArgs correctly", () => {
@@ -11,13 +12,12 @@ describe("PipelineArgs", () => {
 
         // tests on args.error
         expect(() => args.error = Error("test")).not.toThrow();
-        expect(args.error).toBeNull();
+        expect(args.error).not.toBeNull();
         expect(() => args.error = "Test Message").not.toThrow();
         expect(args.error.message).toEqual("Test Message");
 
-        // try to set args.error to an error object again; this should
-        // again silently fail, and the prior value should be preserved.
         expect(() => args.error = Error("test")).not.toThrow();
-        expect(args.error.message).toEqual("Test Message");
+        expect(args.error).not.toBeNull();
+        expect(args.error.message).toEqual("test");
     });
 })

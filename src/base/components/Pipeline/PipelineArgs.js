@@ -32,10 +32,10 @@ class PipelineArgs {
         return this.#error;
     }
 
-    set error(msg) {
+    set error(err) {
         this.#error =
-            Utilities.isString(msg) && msg.trim() && Error(msg.trim()) ||
-            msg instanceof Error && msg ||
+            Utilities.isString(err) && err.trim() && Error(err.trim()) ||
+            err instanceof Error && err ||
             this.#error;
     }
 

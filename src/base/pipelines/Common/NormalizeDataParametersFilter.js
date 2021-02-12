@@ -10,9 +10,9 @@ export default class NormalizeDataParametersFilter extends PipelineFilter {
             // array, an object or an array of objects; parsing the actual
             // values will be the problem of the consumer.
             const args = Array.isArray(data) ? data : [ data ];
-            const result = { };
+            let result = { };
 
-            args.filter(arg => Utilities.isPureObject(arg)).forEach(arg => Utilities.merge(result, arg))
+            args.filter(arg => Utilities.isPureObject(arg)).forEach(arg => result = Utilities.merge(result, arg))
 
             // we want to reserve the "arguments" property, so abort if it was
             // names in PipelineArgs.

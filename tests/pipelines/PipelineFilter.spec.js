@@ -1,5 +1,7 @@
-import PipelineArgs from "../../../src/base/components/Pipeline/PipelineArgs";
-import PipelineFilter from "../../../src/base/components/Pipeline/PipelineFilter";
+import PipelineArgs from "../../src/base/components/Pipeline/PipelineArgs";
+import PipelineFilter from "../../src/base/components/Pipeline/PipelineFilter";
+import NormalizeDataParametersFilter from "../../src/base/pipelines/Common/NormalizeDataParametersFilter";
+import { Pipeline } from "../../src/base/components/Pipeline";
 
 class TestFilterA extends PipelineFilter {
     constructor() {
@@ -9,10 +11,9 @@ class TestFilterA extends PipelineFilter {
 
 class TestFilterB extends PipelineFilter {
     constructor() {
-        super((data) => {
+        super((data, logger) => {
             data.test2 = "000";
             data.test1 = "456";
-            return "END";
         });
     }
 }
@@ -26,8 +27,6 @@ class TestFilterC extends PipelineFilter {
 const processorReplacement = (data) => {
     data.test1 = "abcde";
     data.test2 = "vwxyz";
-
-    return "NEW PROCESSOR";
 };
 
 describe("PipelineFilter", () => {
@@ -40,14 +39,13 @@ describe("PipelineFilter", () => {
     });
 
     it("executes and updates data properly", () => {
-        let filter = new TestFilterB();
         let args = new PipelineArgs({ test1: "123" });
         let returnVal = "321";
+        let pipeline = Pipeline.createWith(NormalizeDataParametersFilter, TestFilterB);
 
-        expect(() => returnVal = filter.execute(args)).not.toThrow();
+        expect(() => returnVal = pipeline.execute(args)).not.toThrow();
         expect(args.data.test1).toEqual("456");
         expect(args.data.test2).toEqual("000");
-        expect(returnVal).toEqual("END");
     });
 
     it("should abort properly", () => {
@@ -67,12 +65,12 @@ describe("PipelineFilter", () => {
         let returnVal = "321";
 
         expect(() => returnVal = filter.execute(args)).not.toThrow();
-        expect(returnVal).toEqual("END");
+        expect(returnVal).toBeNull();
         expect(() => filter.processor = processorReplacement).not.toThrow();
         expect(filter.processor).toEqual(processorReplacement);
         expect(() => returnVal = filter.execute(args)).not.toThrow();
         expect(args.data.test1).toEqual("abcde");
         expect(args.data.test2).toEqual("vwxyz");
-        expect(returnVal).toEqual("NEW PROCESSOR");
+        expect(returnVal).toBeNull();
     });
 });
