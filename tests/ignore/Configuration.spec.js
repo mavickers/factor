@@ -2,6 +2,9 @@ import StandardModel from "../../src/base/classes/StandardModel";
 import TypeMismatchSetOptions from "../../src/base/classes/flags/TypeMismatchSetOptions";
 import Utilities from "../../src/base/Utilities";
 
+
+// todo: go back through this and see if it's necessary to keep this file
+
 describe("Configuration", () => {
     it("should perform basic class configuration properly", () => {
         class TestModel extends StandardModel {
