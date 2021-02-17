@@ -1,7 +1,7 @@
 import "jest-extended";
-import { is } from "../../../src/base/classes/decorators";
+import { is } from "../../src/base/classes/decorators";
 
-describe("@is decorator tests (Boolean)", () => {
+describe("@is decorator tests (boolean)", () => {
     it("should apply decorator properly for primitives when instantiating", () => {
         let Class1;
 
