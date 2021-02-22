@@ -112,12 +112,20 @@ describe("@onTypeMismatch decorator null option for boolean type tests", () => {
             let Class4, model4;
             expect(() => Class4 = class { @is(Boolean) @onTypeMismatch("Null") field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeNull();
             expect(() => Class4 = class { @is("boolean") @onTypeMismatch("Null") field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeNull();
             expect(() => Class4 = class { @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Null) field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeNull();
             expect(() => Class4 = class { @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Null) field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeNull();
         });
 
         it("should set field values to null when fields are not set after instantiation according to type", () => {

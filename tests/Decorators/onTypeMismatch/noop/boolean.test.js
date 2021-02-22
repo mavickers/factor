@@ -112,12 +112,20 @@ describe("@onTypeMismatch decorator noop option for boolean type tests", () => {
             let Class4, model4;
             expect(() => Class4 = class { @is(Boolean) @onTypeMismatch("Noop") field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeUndefined();
             expect(() => Class4 = class { @is("boolean") @onTypeMismatch("Noop") field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeUndefined();
             expect(() => Class4 = class { @is(Boolean) @onTypeMismatch(TypeMismatchSetOptions.Noop) field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeUndefined();
             expect(() => Class4 = class { @is("boolean") @onTypeMismatch(TypeMismatchSetOptions.Noop) field1 = "true" }).not.toThrow();
             expect(Class4).not.toBeUndefined();
+            expect(() => model4 = new Class4()).not.toThrow();
+            expect(model4.field1).toBeUndefined();
         });
 
         it("should leave field values as-is when fields are not set after instantiation according to type", () => {
