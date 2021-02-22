@@ -6,7 +6,7 @@ import onTypeMismatch, { mismatchConfig } from "../../../../src/base/classes/dec
 let Class1, Class2, Class3,
     model1, model2, model3;
 
-describe("@onTypeMismatch decorator tests noop option for boolean type", () => {
+describe("@onTypeMismatch decorator noop option for boolean type tests", () => {
     beforeEach(() => {
         Class1 = Class2 = Class3 = undefined;
         model1 = model2 = model3 = undefined;

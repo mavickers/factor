@@ -7,7 +7,7 @@ let Class1, Class2, Class3,
     model1, model2, model3,
     symbol1, symbol2, symbol3;
 
-describe("@onTypeMismatch decorator tests throw option for symbol type", () => {
+describe("@onTypeMismatch decorator throw option for symbol type tests", () => {
     beforeEach(() => {
 
         Class1 = Class2 = Class3 = undefined;
