@@ -15,6 +15,5 @@ describe("Decorator integration", () => {
         expect(() => Class1 = class { @is(Boolean) @required field1; }).toThrow();
 
         // todo: more tests to add here.
-
     });
 });

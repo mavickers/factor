@@ -16,7 +16,7 @@ import Decorator from "../Decorator";
 import TypeMismatchSetOptions from "../flags/TypeMismatchSetOptions";
 import { mismatchConfig } from "./onTypeMismatch";
 
-const { isClass, isNil, isType, spread } = Utilities;
+const { isClass, isNil, isType } = Utilities;
 
 export default function(type) {
     let decorator, value,
