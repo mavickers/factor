@@ -141,6 +141,10 @@ describe("@onTypeMismatch decorator noop option for boolean type tests", () => {
             expect(() => model1.field8 = "false").not.toThrow();
             expect(model1.field7).toBeTrue();
             expect(model1.field8).toBeFalse();
+            expect(() => model1.field9 = "true").not.toThrow();
+            expect(() => model1.field10 = "false").not.toThrow();
+            expect(model1.field9).toBeTrue();
+            expect(model1.field10).toBeFalse();
 
             // this tests default type mismatch (which should be "Throw")
             expect(() => model1.field3 = "true").toThrow();
