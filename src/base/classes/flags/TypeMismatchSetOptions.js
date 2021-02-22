@@ -6,6 +6,8 @@ class TypeMismatchSetOptions extends Flags {
     static Throw;
     static Noop;
     static Null;
+    // todo: think about how to implement Coerce option
+    // static Coerce;
 }
 
 export default TypeMismatchSetOptions;
