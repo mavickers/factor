@@ -1,6 +1,7 @@
 import Flags from "../Flags";
 
 class TypeMismatchSetOptions extends Flags {
+    // Default does not do anything currently
     static Default;
     static Ignore;
     static Throw;
