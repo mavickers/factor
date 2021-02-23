@@ -1,7 +1,4 @@
-import Decorator from "../src/base/classes/Decorator";
-import Utilities from "../src/base/Utilities";
-
-const { is, required } = require("../src/base/classes/decorators");
+const { is, required } = require("../../src/base/classes/decorators");
 
 describe("Decorator integration", () => {
     it("should apply @is and @required together when specified", () => {

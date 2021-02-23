@@ -1,5 +1,5 @@
 import "jest-extended";
-import { readOnly } from "../src/base/classes/decorators";
+import { readOnly } from "../../src/base/classes/decorators";
 
 describe("@readOnly decorator tests", () => {
     it("should apply 'readOnly' decorator properly", () => {

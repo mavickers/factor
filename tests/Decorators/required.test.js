@@ -1,5 +1,5 @@
 import "jest-extended";
-import { required } from "../src/base/classes/decorators";
+import { required } from "../../src/base/classes/decorators";
 
 describe("@required decorator tests", () => {
     it("should operate properly on fields when instantiating class", () => {
