@@ -1,6 +1,8 @@
 import Utilities from "../Utilities";
 import TypeMismatchSetOptions from "./flags/TypeMismatchSetOptions";
 
+// todo: possibly deprecate?
+
 export default class FieldDefinition {
     name;
     type;
