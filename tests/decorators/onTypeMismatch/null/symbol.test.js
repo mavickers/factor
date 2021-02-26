@@ -22,15 +22,15 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
             Class1 = @onTypeMismatch("Null") class {
                 @is(Symbol) field1;
                 @is("symbol") field2;
-                @is(Symbol) field3 = "1";
-                @is("symbol") field4 = "100.1";
+                @is(Symbol) field3 = symbol1;
+                @is("symbol") field4 = symbol2;
             }
 
             Class2 = @onTypeMismatch(TypeMismatchSetOptions.Null) class {
                 @is(Symbol) field1;
                 @is("symbol") field2;
-                @is(Symbol) field3 = "1";
-                @is("symbol") field4 = "100.1";
+                @is(Symbol) field3 = symbol1;
+                @is("symbol") field4 = symbol2;
             }
 
             expect(() => model1 = new Class1()).not.toThrow();
@@ -49,8 +49,8 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
 
             expect(model1.field1).toBeUndefined();
             expect(model1.field2).toBeUndefined();
-            expect(model1.field3).toEqual("1");
-            expect(model1.field4).toEqual("100.1");
+            expect(model1.field3).toEqual(symbol1);
+            expect(model1.field4).toEqual(symbol2);
         });
 
         it("should set field values to null when fields are not set after instantiation according to type", () => {
@@ -65,14 +65,14 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
         });
 
         it("should allow fields to set to their proper values", () => {
-            expect(() => model1.field1 = "1").not.toThrow();
-            expect(model1.field1).toEqual("1");
-            expect(() => model1.field2 = "100.1").not.toThrow();
-            expect(model1.field2).toEqual("100.1");
-            expect(() => model2.field1 = "1").not.toThrow();
-            expect(model1.field1).toEqual("1");
-            expect(() => model2.field2 = "100.1").not.toThrow();
-            expect(model1.field2).toEqual("100.1");
+            expect(() => model1.field1 = symbol1).not.toThrow();
+            expect(model1.field1).toEqual(symbol1);
+            expect(() => model1.field2 = symbol2).not.toThrow();
+            expect(model1.field2).toEqual(symbol2);
+            expect(() => model2.field1 = symbol1).not.toThrow();
+            expect(model1.field1).toEqual(symbol1);
+            expect(() => model2.field2 = symbol2).not.toThrow();
+            expect(model1.field2).toEqual(symbol2);
         });
     });
 
@@ -85,10 +85,10 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
                 @is("symbol") field4;
                 @is(Symbol) @onTypeMismatch(TypeMismatchSetOptions.Null) field5;
                 @is("symbol") @onTypeMismatch(TypeMismatchSetOptions.Null) field6;
-                @is(Symbol) @onTypeMismatch("Null") field7 = "1";
-                @is("symbol") @onTypeMismatch("Null") field8 = "100.1";
-                @is(Symbol) @onTypeMismatch(TypeMismatchSetOptions.Null) field9 = "1";
-                @is("symbol") @onTypeMismatch(TypeMismatchSetOptions.Null) field10 = "100.1";
+                @is(Symbol) @onTypeMismatch("Null") field7 = symbol1;
+                @is("symbol") @onTypeMismatch("Null") field8 = symbol2;
+                @is(Symbol) @onTypeMismatch(TypeMismatchSetOptions.Null) field9 = symbol1;
+                @is("symbol") @onTypeMismatch(TypeMismatchSetOptions.Null) field10 = symbol2;
             }
 
             Class2 = @onTypeMismatch("Null") class {
@@ -106,10 +106,10 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
             expect(model1.field4).toBeUndefined();
             expect(model1.field5).toBeUndefined();
             expect(model1.field6).toBeUndefined();
-            expect(model1.field7).toEqual("1");
-            expect(model1.field8).toEqual("100.1");
-            expect(model1.field9).toEqual("1");
-            expect(model1.field10).toEqual("100.1");
+            expect(model1.field7).toEqual(symbol1);
+            expect(model1.field8).toEqual(symbol2);
+            expect(model1.field9).toEqual(symbol1);
+            expect(model1.field10).toEqual(symbol2);
         });
 
         it("should not throw when fields are not set at instantiation according to type", () => {
@@ -158,21 +158,21 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
         });
 
         it("should allow fields to set to their proper values", () => {
-            expect(() => model1.field1 = "1").not.toThrow();
-            expect(model1.field1).toEqual("1");
-            expect(() => model1.field2 = "100.1").not.toThrow();
-            expect(model1.field2).toEqual("100.1");
-            expect(() => model1.field5 = "1").not.toThrow();
-            expect(model1.field5).toEqual("1");
-            expect(() => model1.field6 = "100.1").not.toThrow();
-            expect(model1.field6).toEqual("100.1");
+            expect(() => model1.field1 = symbol1).not.toThrow();
+            expect(model1.field1).toEqual(symbol1);
+            expect(() => model1.field2 = symbol2).not.toThrow();
+            expect(model1.field2).toEqual(symbol2);
+            expect(() => model1.field5 = symbol1).not.toThrow();
+            expect(model1.field5).toEqual(symbol1);
+            expect(() => model1.field6 = symbol2).not.toThrow();
+            expect(model1.field6).toEqual(symbol2);
 
             // this tests that default type mismatch does not interfere
             // when values are set properly
-            expect(() => model1.field3 = "1").not.toThrow();
-            expect(() => model1.field4 = "100.1").not.toThrow();
-            expect(model1.field3).toEqual("1");
-            expect(model1.field4).toEqual("100.1");
+            expect(() => model1.field3 = symbol1).not.toThrow();
+            expect(() => model1.field4 = symbol2).not.toThrow();
+            expect(model1.field3).toEqual(symbol1);
+            expect(model1.field4).toEqual(symbol2);
         });
 
         it("should override class option when set on field", () => {
@@ -187,7 +187,7 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
                     @is("symbol") @onTypeMismatch("Null") field2;
                     @is(Symbol) @onTypeMismatch(TypeMismatchSetOptions.Null) field3;
                     @is("symbol") @onTypeMismatch(TypeMismatchSetOptions.Null) field4;
-                    @is(Symbol) @onTypeMismatch("Null") field5 = "1";
+                    @is(Symbol) @onTypeMismatch("Null") field5 = symbol1;
                     @is(Symbol) @onTypeMismatch("Null") field6 = 1;
                 };
 
@@ -209,7 +209,7 @@ describe("@onTypeMismatch decorator null option for symbol type tests", () => {
             expect(model3.field2).toBeNull();
             expect(model3.field3).toBeNull();
             expect(model3.field4).toBeNull();
-            expect(model3.field5).toEqual("1");
+            expect(model3.field5).toEqual(symbol1);
             expect(model3.field6).toBeNull();
         });
     });
