@@ -1,6 +1,6 @@
 const { is, required } = require("../../src/base/classes/decorators");
 
-describe("Decorator integration", () => {
+describe("Decorator combination tests", () => {
     it("should apply @is and @required together when specified", () => {
         let Class1, model1;
 
