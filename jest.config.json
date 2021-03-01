@@ -5,7 +5,7 @@
         "mjs"
     ],
     "modulePathIgnorePatterns": [
-        "/_ignore/"
+        "/ignore/"
     ],
     "transform": {
         "^.+\\.js$": [ "babel-jest", {
