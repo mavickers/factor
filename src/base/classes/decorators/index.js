@@ -17,3 +17,14 @@ export {
     readOnly,
     required
 };
+
+export default {
+    configurable,
+    describable,
+    enumerable,
+    flags,
+    is,
+    mappable,
+    readOnly,
+    required
+};

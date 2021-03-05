@@ -2,6 +2,7 @@ import Globals from "./base/Globals";
 
 import Classes from "./base/Classes";
 import Configurable from "./base/interfaces/Configurable";
+import Decorators from "./base/classes/decorators";
 import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
 import Mixin from "./base/classes/Mixin";
@@ -23,6 +24,7 @@ import Utilities from "./base/Utilities";
 export {
     Classes,
     Configurable,
+    Decorators,
     Describable,
     Enum,
     Flags,
@@ -43,6 +45,7 @@ export default {
     AutoModel: StandardModel,
     Classes,
     Configurable,
+    Decorators,
     Describing: Describable,
     Enum: Enum,
     Flags: Flags,
