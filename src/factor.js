@@ -2,7 +2,6 @@ import Globals from "./base/Globals";
 
 import Classes from "./base/Classes";
 import Configurable from "./base/interfaces/Configurable";
-import Decorators from "./base/classes/decorators";
 import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
 import Mixin from "./base/classes/Mixin";
@@ -21,10 +20,22 @@ import MapperOptionsFlag from "./base/classes/MapperOptionsFlag";
 
 import Utilities from "./base/Utilities";
 
+import { configurable, describable, enumerable, flags, is, mappable, readOnly, required } from "./base/classes/decorators";
+
+export {
+    configurable,
+    describable,
+    enumerable,
+    flags,
+    is,
+    mappable,
+    readOnly,
+    required
+};
+
 export {
     Classes,
     Configurable,
-    Decorators,
     Describable,
     Enum,
     Flags,
@@ -45,7 +56,6 @@ export default {
     AutoModel: StandardModel,
     Classes,
     Configurable,
-    Decorators,
     Describing: Describable,
     Enum: Enum,
     Flags: Flags,
