@@ -1,4 +1,6 @@
 import Mapper from "../classes/Mapper";
+import flatMapper from "../mappers/flatMapper";
+import MapFromOptions from "../classes/flags/MapFromOptions";
 
 class Mappable {
     mapTo(mappingFunction) {
@@ -26,6 +28,43 @@ class Mappable {
         if (!(mapper instanceof Mapper || mapper instanceof Mapper)) throw Error("Invalid mapper parameter in Mapper.mapFrom");
         if (!obj) return null;
         if (!(obj instanceof Object || arrayData == null)) return null;
+
+        const isMultiple = Array.isArray(obj);
+
+        const mapped = isMultiple
+            ? mapper.multiple(obj, ancillaryData)
+            : mapper.single(obj, null, null, ancillaryData);
+
+        // if we're mapping an array then we're done
+        if (isMultiple) return mapped;
+
+        // if we have a mapped object and static mappings then lets map those static values to the mapped object
+        if (mapped && ancillaryData && ancillaryData instanceof Object) {
+            for(let mapping in ancillaryData) {
+                // if we have a value in the same key on the mapped object but
+                // don't have the overwrite flag set, skip it.
+                if (ancillaryData[mapping] && mapped[mapping] && !overwrite) continue;
+
+                // map the value if we are bypassing property name checks or if the property name
+                // exists in the mapped object.
+                if (withUnlistedPropertyMappings || mapped.hasOwnProperty(mapping)) {
+                    mapped[mapping] = ancillaryData[mapping];
+                }
+            }
+        }
+
+        return mapped;
+    }
+    static mapFromNew = function(...args) {
+        const mapper = args.filter(arg => arg instanceof Mapper)[0] || flatMapper;
+        const options = args.filter(arg => arg instanceof MapFromOptions)[0] || new MapFromOptions();
+        const objects = args.filter(arg => arg instanceof Object && arg !== mapper && arg !== options);
+        const obj = objects[0];
+        const ancillaryData = objects[1];
+        const withUnlistedPropertyMappings = options.has("WithUnlistedPropertyMappings");
+        const overwrite = options.has("WithOverwrite");
+
+        if (!obj) return null;
 
         const isMultiple = Array.isArray(obj);
 

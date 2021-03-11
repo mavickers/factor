@@ -1,8 +1,9 @@
+import Configurable from "./Configurable";
 import Utilities from "../Utilities";
 
 const configId = Symbol("describable");
 
-class Describable {
+class Describable extends Configurable {
     get className() {
         return this.__proto__.constructor.name;
     }

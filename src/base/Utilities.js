@@ -196,6 +196,68 @@ export default class Utilities {
         return Utilities.newUuid().split("-").slice(-1)[0];
     }
 
+    /*
+     *  parseArgs(obj: Object, args: Array): Object
+     *
+     *  Parses an array using an Object key/value pair as a map returning
+     *  an object mapping the names to argument values.
+     *
+     *  obj: key/value pair defining the name and order of the arguments; the
+     *       key should be a string and the value should be a primitive or
+     *       class type.
+     *  args: an array containing the argument values.
+     *
+     *  Example: parseArgs({ "firstBool": Boolean, "firstString": String", "secondBool": Boolean, "firstNumber": Number }, [ true, false, 3, "testing" ])
+     *  Returns: { firstBool: true, firstString: "testing", secondBool: false, firstNumber: 3 }
+     *
+     */
+    static parseArgs(map, args) {
+        // validate args
+        if (!(map && map instanceof Object)) return { };
+        if (!(args && Array.isArray(args) && args.length > 0)) return { };
+
+        const primitives = [ BigInt, Boolean, Number, String, Symbol ];
+        let parsedMap = { },
+            parsedArgs = { };
+
+        // first thing we need to do is flip the map around
+        Object.getOwnPropertyNames(map)
+            .filter(key => primitives.includes(map[key]))
+            .forEach(key => parsedMap[map[key]] = (parsedMap[map[key]] ?? [ ]).concat([ key ]));
+
+        // now iterate through the parseMap and
+
+        const classNames = { };
+        const primitiveNames = Object.getOwnPropertyNames(primitives);
+        // parse out the keys from obj; we want only keys that are strings and
+        // keys whose values are either primitive types or defined classes.
+        const keys = Object.getOwnPropertyNames(map) || [ ]
+                    .filter(key => typeof key === "string") || [ ]
+                    .filter(key => primitiveNames.includes(map[key]) || (this.isClass(map[key]) && (classNames[key] = 0))) || [ ];
+
+        // validate keys & args
+        if (!(keys && keys.length > 0)) return { };
+        if (!(args && Array.isArray(args) && args.length > 0)) return { };
+
+
+        // if the obj value for the key is a primitive, set the corresponding key
+        // in parsed to the obj value and increment the primitive counter;
+        // if the obj value for the key isn't a primitive, check classNames for a
+        // corresponding key; if it exists, increment the counter value, otherwise
+        // create the key and set the counter to 1, then return the obj key value.
+        // keys.forEach(key => {
+        //     parsed[key] = primitiveNames.includes(obj[key])
+        //         ? args.filter(arg => typeof arg === primitiveNames[key].toLowerCase())[primitives[obj[key]++]]
+        //         : (classNames[obj[key]] = (classNames[obj[key]] || 0) + 1) && key;
+        keys.forEach(key => {
+            parsedArgs[key] = primitiveNames.includes(map[key])
+                ? args.filter(arg => typeof arg === primitiveNames[key].toLowerCase())[primitives[map[key]++]]
+                : args.filter(arg => classNames)
+        });
+
+        return parsedArgs;
+    }
+
     static spread(args, names, obj = { }) {
         Utilities.isArrayOfType(names, "string") &&
         names.forEach(name => obj[name] = args[names.indexOf(name)]);

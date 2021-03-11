@@ -253,11 +253,22 @@ describe("Utilities", () => {
         expect(Utilities.isType(mismatchFlag, TypeMismatchSetOptions)).toBeTrue();
     });
 
-    it ("should determine if an array contains all items of another array", () => {
+    it("should determine if an array contains all items of another array", () => {
         expect(Utilities.hasAll([1, 2, 3, 4, 5], [2, 3, 4])).toBeTrue();
         expect(Utilities.hasAll([1, 2, 3, 4, 5], [4, 5, 6])).toBeFalse();
         expect(Utilities.hasAll([], [])).toBeTrue();
         expect(Utilities.hasAll([1], [])).toBeTrue();
         expect(Utilities.hasAll([], [1])).toBeFalse();
-    })
+    });
+
+    it("should parse arguments given a mapping", () => {
+        const parseArgs = { Utilities };
+        const p1 = { firstBool: Boolean, firstString: String, secondBool: Boolean, firstNumber: Number };
+        const a1 = [ true, false, 3, "testing" ];
+        let r1;
+
+        expect(() => r1 = Utilities.parseArgs(p1, a1)).not.toThrow();
+
+        console.log(r1);
+    });
 });

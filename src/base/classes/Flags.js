@@ -69,6 +69,10 @@ class Flags {
         return [ consolidatedArgs[0], this.constructor[consolidatedArgs[0]]].includes(this.#value);
     }
 
+    has = function(arg) {
+        return this.hasAny(arg);
+    }
+
     hasAll = function(...args) {
         if (args.length == 0) return false;
 
