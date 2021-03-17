@@ -51,6 +51,10 @@ export default class {
         self.#profiles.push(cleanedProfile);
     }
 
+    static addProfile(name, profile) {
+        return new this().addProfile(name, profile);
+    }
+
     /*
      *  addProfiles(profiles: object) : undefined
      *
@@ -69,6 +73,10 @@ export default class {
         keys.forEach(key => this.addProfile(key, profiles[key]));
 
         return this;
+    }
+
+    static addProfiles(profiles) {
+        return new this().addProfiles(profiles);
     }
 
     /*
@@ -101,6 +109,12 @@ export default class {
 
     withRelaxedProfiles() {
         this.#withRelaxedProfiles = false;
+
+        return this;
+    }
+
+    static withRelaxedProfiles() {
+        return new this().withRelaxedProfiles();
     }
 
     /*
@@ -114,6 +128,12 @@ export default class {
 
     withStrictProfiles() {
        this.#withRelaxedProfiles = true;
+
+       return this;
+    }
+
+    static withStrictProfiles() {
+        return new this().withStrictProfiles();
     }
 
     /*
