@@ -258,6 +258,21 @@ export default class Utilities {
         return parsedArgs;
     }
 
+    static parseType(typeName) {
+        let evalType;
+
+        if (!(typeName && typeof typeName === "string")) return undefined;
+
+
+        console.log(typeName)
+        try { evalType = eval(typeName); }
+        catch { return undefined; };
+
+
+        return Globals.Primitives.find(p => p.type === evalType)?.type ??
+               Utilities.isClass(evalType) ? evalType : undefined;
+    }
+
     static spread(args, names, obj = { }) {
         Utilities.isArrayOfType(names, "string") &&
         names.forEach(name => obj[name] = args[names.indexOf(name)]);

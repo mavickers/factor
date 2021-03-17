@@ -5,6 +5,7 @@ const primitives = [ "BigInt", "Boolean", "Number", "String", "Symbol" ];
 const { newUuidShort } = Utilities;
 
 export default class {
+    #classes;
     #lastArgs;
     #profiles;
     #withRelaxedProfiles = false;
@@ -18,27 +19,32 @@ export default class {
      *
      */
 
-    addProfile(name, profile) {
+    addProfile(name, profile, classes) {
         /*
          *  [x] should validate profile here and throw error here
          *  [x] should throw without changing contents of #profiles
          *
          */
 
-        const _name = name && typeof name == "string" && name.length > 1 || `profile-${newUuidShort()}`;
+        const _name = typeof name == "string" && name.length > 1 && name || `profile-${newUuidShort()}`;
         const self = this;
 
-        self.#profiles = self.#profiles || [];
+        self.#profiles = self.#profiles || { };
 
-        if (self.#profiles.find(profile => profile.name === _name)) throw Error("ArgsParser.addProfile(): argument 'name' missing or duplicate");
+        //if (self.#profiles.find(profile => profile.name === _name)) throw Error("ArgsParser.addProfile(): argument 'name' missing or duplicate");
+        if (self.#profiles[_name]) throw Error(`ArgsParser.addProfile(): argument 'name' missing or duplicate for value '${_name}'`);
         if (!(profile && profile instanceof Object)) throw Error("ArgsParser.addProfile(): argument 'profile' missing or invalid");
 
         const cleanedProfile = { };
 
         Object.getOwnPropertyNames(profile).forEach(fieldKey => {
-            const typeKeys = Object.getOwnPropertyNames(profile[fieldKey]);
+            const typeKeys = profile[fieldKey] && Object.getOwnPropertyNames(profile[fieldKey]);
             // todo: add class check
-            const typeKey = typeKeys && typeKeys.length === 1 && primitives.find(p => p === typeKeys[0]) || undefined;
+            const typeKey =
+                typeKeys && typeKeys.length === 1 &&
+                Utilities.parseType(typeKeys[0]) ||
+                //(primitives.find(p => p === typeKeys[0]) || Utilities.isClass(typeKeys[0])) ||
+                undefined;
 
             // there should be a single typeKey; if there is, add it to the array of
             // cleaned profiles and continue; if there isn't and we have strict profile
@@ -48,10 +54,10 @@ export default class {
             if (self.hasStrictProfiles) throw Error(`ArgsParser.addProfile(): invalid profile defined for '${ fieldKey }'`);
         });
 
-        self.#profiles.push(cleanedProfile);
+        self.#profiles[_name] = cleanedProfile;
     }
 
-    static addProfile(name, profile) {
+    static addProfile(name, profile, classes) {
         return new this().addProfile(name, profile);
     }
 
@@ -63,7 +69,7 @@ export default class {
      *
      */
 
-    addProfiles(profiles) {
+    addProfiles(profiles, classes) {
         if (!(profiles && profiles instanceof Object)) throw Error("ArgsParser.addProfiles(): argument 'profiles' is invalid");
 
         const keys = Object.getOwnPropertyNames(profiles);
@@ -100,6 +106,46 @@ export default class {
     }
 
     /*
+     *  withClass(cls: Array) : ArgsParser
+     *
+     *  adds a class to #classes internal array; class names are passed in
+     *  as strings when using addProfile so the parser is unaware of the
+     *  actual classes; this is a kludge for the time being to allow the parser
+     *  to compare args to class types.
+     *
+     */
+
+    withClass(cls) {
+        Utilities.isClass(cls) &&
+        (this.#classes = this.#classes || [ ]) &&
+        !this.#classes.includes(cls) &&
+        this.#classes.push(cls);
+
+        return this;
+    }
+
+    static withClass(cls) {
+        return new this().withClass(cls);
+    }
+
+    /*
+     *  withClasses(classes: Array) : ArgsParsers
+     *
+     *  arrayed version of withClass*();
+     *
+     */
+
+    withClasses(classes) {
+        ((classes || [ ]) && Array.isArray(classes) && classes || [ classes ]).forEach(cls => this.withClass(cls));
+
+        return this;
+    }
+
+    static withClasses(classes) {
+        return new this().withClasses(classes);
+    }
+
+    /*
      *  withRelaxedProfiles() : undefined
      *
      *  flags the profile parser to ignore errant profile data
@@ -108,7 +154,7 @@ export default class {
      */
 
     withRelaxedProfiles() {
-        this.#withRelaxedProfiles = false;
+        this.#withRelaxedProfiles = true;
 
         return this;
     }
@@ -118,16 +164,19 @@ export default class {
     }
 
     /*
-     *  withStrictProfiles() : undefined
+     *  withStrictProfiles() : ArgsParser
      *
      *  flags the profile parser to strictly parse added profiles;
      *  addProfile() will throw if profile parameter contains
      *  errant information.
      *
+     *  note that this will only affect new calls to addProfile/addProfiles;
+     *  profiles already been added should be scrubbed of invalid profiles.
+     *
      */
 
     withStrictProfiles() {
-       this.#withRelaxedProfiles = true;
+       this.#withRelaxedProfiles = false;
 
        return this;
     }
