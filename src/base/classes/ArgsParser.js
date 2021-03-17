@@ -1,9 +1,8 @@
 import Flags from "./Flags";
 import Utilities from "../Utilities";
 
-const primitives = [ BigInt, Boolean, Number, String, Symbol ];
+const primitives = [ "BigInt", "Boolean", "Number", "String", "Symbol" ];
 const { newUuidShort } = Utilities;
-const
 
 export default class {
     #lastArgs;
@@ -15,30 +14,41 @@ export default class {
      *
      *  adds a properly defined profile object to #profiles array.
      *
+     *  ex: addProfile("profile1", { num1: { Number: true }, num2: { Number: false }, str1: { String: false } })
+     *
      */
 
     addProfile(name, profile) {
         /*
-         *  [ ] should validate profile here and throw error here
-         *  [ ] should throw without changing contents of #profiles
+         *  [x] should validate profile here and throw error here
+         *  [x] should throw without changing contents of #profiles
          *
          */
 
         const _name = name && typeof name == "string" && name.length > 1 || `profile-${newUuidShort()}`;
+        const self = this;
 
-        if (this.#profiles.find(profile => profile.name === _name)) throw Error("ArgsParser.addProfile(): argument 'name' missing or duplicate");
+        self.#profiles = self.#profiles || [];
+
+        if (self.#profiles.find(profile => profile.name === _name)) throw Error("ArgsParser.addProfile(): argument 'name' missing or duplicate");
         if (!(profile && profile instanceof Object)) throw Error("ArgsParser.addProfile(): argument 'profile' missing or invalid");
 
-        const _profile = { };
-        const keys = Object.getOwnPropertyNames(profile);
+        const cleanedProfile = { };
 
-        keys.forEach(key => {
-           const __name = key;
-           const __keys = Object.getOwnPropertyNames(profile[key]);
+        Object.getOwnPropertyNames(profile).forEach(fieldKey => {
+            const typeKeys = Object.getOwnPropertyNames(profile[fieldKey]);
+            // todo: add class check
+            const typeKey = typeKeys && typeKeys.length === 1 && primitives.find(p => p === typeKeys[0]) || undefined;
 
-           // if (!this.#withRelaxedProfiles && !(__keys && __keys.length == 1 && ))
+            // there should be a single typeKey; if there is, add it to the array of
+            // cleaned profiles and continue; if there isn't and we have strict profile
+            // checking, throw an error; otherwise, continue;
+
+            if (typeKey) return cleanedProfile[fieldKey] = profile[fieldKey];
+            if (self.hasStrictProfiles) throw Error(`ArgsParser.addProfile(): invalid profile defined for '${ fieldKey }'`);
         });
 
+        self.#profiles.push(cleanedProfile);
     }
 
     /*
@@ -57,6 +67,8 @@ export default class {
         if (keys.length === 0) throw Error("ArgsParser.addProfiles(): argument 'profiles' is invalid");
 
         keys.forEach(key => this.addProfile(key, profiles[key]));
+
+        return this;
     }
 
     /*
@@ -67,6 +79,16 @@ export default class {
 
     get hasRelaxedProfiles() {
         return this.#withRelaxedProfiles;
+    }
+
+    /*
+     *  hasStrictProfiles() : bool
+     *
+     *  returns the opposite state of #withRelaxedProfiles flag.
+     */
+
+    get hasStrictProfiles() {
+        return !this.#withRelaxedProfiles;
     }
 
     /*
