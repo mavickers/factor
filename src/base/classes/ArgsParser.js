@@ -1,5 +1,6 @@
 import Flags from "./Flags";
 import Utilities from "../Utilities";
+import Globals from "../Globals";
 
 const primitives = [ "BigInt", "Boolean", "Number", "String", "Symbol" ];
 const { newUuidShort } = Utilities;
@@ -19,7 +20,7 @@ export default class {
      *
      */
 
-    addProfile(name, profile, classes) {
+    addProfile(name, profile, ...classes) {
         /*
          *  [x] should validate profile here and throw error here
          *  [x] should throw without changing contents of #profiles
@@ -37,13 +38,14 @@ export default class {
 
         const cleanedProfile = { };
 
+        this.withClasses(...classes);
+
         Object.getOwnPropertyNames(profile).forEach(fieldKey => {
             const typeKeys = profile[fieldKey] && Object.getOwnPropertyNames(profile[fieldKey]);
             // todo: add class check
             const typeKey =
                 typeKeys && typeKeys.length === 1 &&
-                Utilities.parseType(typeKeys[0]) ||
-                //(primitives.find(p => p === typeKeys[0]) || Utilities.isClass(typeKeys[0])) ||
+                Utilities.parseType(typeKeys[0], ...this.#classes) ||
                 undefined;
 
             // there should be a single typeKey; if there is, add it to the array of
@@ -51,14 +53,14 @@ export default class {
             // checking, throw an error; otherwise, continue;
 
             if (typeKey) return cleanedProfile[fieldKey] = profile[fieldKey];
-            if (self.hasStrictProfiles) throw Error(`ArgsParser.addProfile(): invalid profile defined for '${ fieldKey }'`);
+            if (self.hasStrictProfiles) throw Error(`ArgsParser.addProfile(): invalid profile defined for '${fieldKey}' - type '${typeKeys[0]}' is undefined`);
         });
 
         self.#profiles[_name] = cleanedProfile;
     }
 
-    static addProfile(name, profile, classes) {
-        return new this().addProfile(name, profile);
+    static addProfile(name, profile, ...classes) {
+        return new this().addProfile(name, profile, ...classes);
     }
 
     /*
@@ -69,8 +71,10 @@ export default class {
      *
      */
 
-    addProfiles(profiles, classes) {
+    addProfiles(profiles, ...classes) {
         if (!(profiles && profiles instanceof Object)) throw Error("ArgsParser.addProfiles(): argument 'profiles' is invalid");
+
+        this.withClasses(...classes);
 
         const keys = Object.getOwnPropertyNames(profiles);
 
@@ -78,11 +82,14 @@ export default class {
 
         keys.forEach(key => this.addProfile(key, profiles[key]));
 
+        // todo: process ...classes - should be validated and added here and not passed to addProfile();
+        //       should probably be passed to withClasses()
+
         return this;
     }
 
-    static addProfiles(profiles) {
-        return new this().addProfiles(profiles);
+    static addProfiles(profiles, ...classes) {
+        return new this().addProfiles(profiles, ...classes);
     }
 
     /*
@@ -135,14 +142,16 @@ export default class {
      *
      */
 
-    withClasses(classes) {
-        ((classes || [ ]) && Array.isArray(classes) && classes || [ classes ]).forEach(cls => this.withClass(cls));
+    withClasses(...classes) {
+        if (!classes) return this;
+
+        classes.forEach(cls => this.withClass(cls));
 
         return this;
     }
 
-    static withClasses(classes) {
-        return new this().withClasses(classes);
+    static withClasses(...classes) {
+        return new this().withClasses(...classes);
     }
 
     /*

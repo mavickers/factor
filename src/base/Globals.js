@@ -1,6 +1,14 @@
 // import StandardModel from "./classes/StandardModel";
 
 export default class Globals {
+    static get Contexts() {
+        const contextId = Symbol.for("@mavickers/factor/contexts");
+
+        if (!(global[contextId] && global[contextId] instanceof WeakMap)) global[contextId] = new WeakMap();
+
+        return global[contextId];
+    }
+
     static get Factor() {
         const factorId = Symbol.for("@mavickers/factor");
 

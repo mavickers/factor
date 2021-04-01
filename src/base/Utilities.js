@@ -43,6 +43,14 @@ export default class Utilities {
         }
     };
 
+    static getFuncsFromContext(context) {
+        const funcs = [];
+
+        return context &&
+               Object.getOwnPropertyNames(context).forEach(name => context[name] instanceof Function && funcs.push(context[name])) &&
+               funcs || funcs;
+    }
+
     /*
      *  getFuncParams
      *  lifted from https://stackoverflow.com/a/64505640/1809473
@@ -258,19 +266,23 @@ export default class Utilities {
         return parsedArgs;
     }
 
-    static parseType(typeName) {
-        let evalType;
+    static parseType(typeName, ...classes) {
+        let evalType, parseType;
 
         if (!(typeName && typeof typeName === "string")) return undefined;
 
+        // if the typeName matches a primitive, return the primitive type
 
-        console.log(typeName)
-        try { evalType = eval(typeName); }
-        catch { return undefined; };
+        if (parseType = Globals.Primitives.find(p => p.name === typeName.toLowerCase())?.type) return parseType;
 
+        // now we need to check against classes passed in; return undefined if
+        // classes is not valid, otherwise scoop the valid classes together.
 
-        return Globals.Primitives.find(p => p.type === evalType)?.type ??
-               Utilities.isClass(evalType) ? evalType : undefined;
+        const validClasses = Array.isArray(classes) && classes.filter(cls => Utilities.isClass(cls) && !Globals.Primitives.find(p => p.type === cls)) || [];
+
+        // find a matching class/type and return it
+
+        return validClasses.find(c => c.name === typeName);
     }
 
     static spread(args, names, obj = { }) {

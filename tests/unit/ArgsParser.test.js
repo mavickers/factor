@@ -39,11 +39,12 @@ describe("ArgsParser", () => {
 
     it("should allow valid profiles to be added", () => {
         class Class1 { };
+        class Class2 { };
 
         let parser;
 
         expect(() => parser = new ArgsParser()).not.toThrow();
-        expect(() => parser.addProfile("profile1", { field1: { BigInt: true }, field2: { Class1: false }})).not.toThrow();
+        expect(() => parser.addProfile("profile1", { field1: { BigInt: true }, field2: { Class3: false }}, Class1, Class2)).not.toThrow();
     });
 
 
