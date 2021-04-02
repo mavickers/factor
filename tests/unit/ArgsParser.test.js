@@ -1,5 +1,6 @@
 import "jest-extended";
 import ArgsParser from "../../src/base/classes/ArgsParser";
+import Utilities from "../../src/base/Utilities";
 
 describe("ArgsParser", () => {
     it("should instantiate without errors", () => {
@@ -9,7 +10,9 @@ describe("ArgsParser", () => {
         expect(() => new ArgsParser().addProfiles({ "test": { field1: { String: true }}})).not.toThrow();
         expect(() => ArgsParser.addProfiles({ "test": { field1: { String: true }}})).not.toThrow();
         expect(() => new ArgsParser().withRelaxedProfiles()).not.toThrow();
+        expect(() => ArgsParser.withRelaxedProfiles()).not.toThrow();
         expect(() => new ArgsParser().withStrictProfiles()).not.toThrow();
+        expect(() => ArgsParser.withStrictProfiles()).not.toThrow();
     });
 
     it("should set relaxed profile checking correctly", () => {
@@ -44,9 +47,22 @@ describe("ArgsParser", () => {
         let parser;
 
         expect(() => parser = new ArgsParser()).not.toThrow();
-        expect(() => parser.addProfile("profile1", { field1: { BigInt: true }, field2: { Class3: false }}, Class1, Class2)).not.toThrow();
+        // primitives
+        expect(() => parser.addProfile("profile1", { field1: { BigInt: true }, field2: { Boolean: false }, field3: { Number: false }, field4: { String: true }, field5: { Symbol: true }})).not.toThrow();
+        // structurals
+        expect(() => parser.addProfile("profile2", { field1: { Array: true }, field2: { Date: false }, field3: { Function: false }, field4: { Map: true }, field5: { Object: true }, field6: { Set: true }, field7: { WeakMap: true }, field8: { WeakSet: true }})).not.toThrow();
+        // classes
+        expect(() => parser.addProfile("profile3", { field1: { Class1: true }, field2: { Class2: false }}, Class1, Class2)).not.toThrow();
     });
 
+    it("should process bigint properly", () => {
+        const profile1 = { field1: { BigInt: true }, field2: { BigInt: false }};
+        let parser;
+
+        expect(() => parser = ArgsParser.addProfile("profile1", profile1)).not.toThrow();
+
+        const test = parser.parse(1, 2);
+    });
 
     it("should throw when adding invalid profiles with strict profile checking turned on", () => {
         class Class1 { };

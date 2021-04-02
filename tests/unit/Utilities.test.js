@@ -237,20 +237,37 @@ describe("Utilities", () => {
     it("should determine if objects are of a specific type properly", () => {
         const Class1 = class { };
         const mismatchFlag = new TypeMismatchSetOptions("Ignore");
+        const { isType } = Utilities;
 
-        expect(Utilities.isType(true, Boolean)).toBeTrue();
-        expect(Utilities.isType(true, "boolean")).toBeTrue();
-        expect(Utilities.isType("test", String)).toBeTrue();
-        expect(Utilities.isType("test", "string")).toBeTrue();
-        expect(Utilities.isType(1, Number)).toBeTrue();
-        expect(Utilities.isType(1, "number")).toBeTrue();
-        expect(Utilities.isType(Mixin.configId, Symbol)).toBeTrue();
-        expect(Utilities.isType(Mixin.configId, "symbol")).toBeTrue();
-        expect(Utilities.isType(new Class1(), Class1)).toBeTrue();
-        expect(Utilities.isType(new Class1(), Function)).toBeFalse();
-        expect(Utilities.isType(new Class1(), Object)).toBeTrue();
+        // primitives
+        expect(isType(BigInt("9007199254740991"), BigInt)).toBeTrue();
+        expect(isType(BigInt("9007199254740991"), "bigint")).toBeTrue();
+        expect(isType(true, Boolean)).toBeTrue();
+        expect(isType(true, "boolean")).toBeTrue();
+        expect(isType(1, Number)).toBeTrue();
+        expect(isType(1, "number")).toBeTrue();
+        expect(isType("test", String)).toBeTrue();
+        expect(isType("test", "string")).toBeTrue();
+        expect(isType(Mixin.configId, Symbol)).toBeTrue();
+        expect(isType(Mixin.configId, "symbol")).toBeTrue();
 
-        expect(Utilities.isType(mismatchFlag, TypeMismatchSetOptions)).toBeTrue();
+        // structurals
+        expect(isType([], Array)).toBeTrue();
+        expect(isType(new Date(), Date)).toBeTrue();
+        expect(isType(function() { }, Function)).toBeTrue();
+        expect(isType(() => { }, Function)).toBeTrue();
+        expect(isType(new Map(), Map)).toBeTrue();
+        expect(isType({ }, Object)).toBeTrue();
+        expect(isType(new Set(), Set)).toBeTrue();
+        expect(isType(new WeakMap(), WeakMap)).toBeTrue();
+        expect(isType(new WeakSet(), WeakSet)).toBeTrue();
+
+        // classes
+        expect(isType(new Class1(), Class1)).toBeTrue();
+        expect(isType(new Class1(), Function)).toBeFalse();
+        expect(isType(new Class1(), Object)).toBeTrue();
+
+        expect(isType(mismatchFlag, TypeMismatchSetOptions)).toBeTrue();
     });
 
     it("should determine if an array contains all items of another array", () => {

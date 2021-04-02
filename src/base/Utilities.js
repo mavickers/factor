@@ -106,12 +106,25 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    static getType = (obj) => {
+        const allTypes = [...Globals.Primitives, ...Globals.Structurals ];
+        const objTypeString = Object.prototype.toString.call(obj);
+        const types = allTypes.filter(t => t.signature === objTypeString);
+
+        return types && types.length === 1 && types[0].type || undefined;
+    };
     static hasAll = (arr, items) => {
         if (!(Array.isArray(arr) && Array.isArray(items))) return false;
 
         return items.reduce((acc, item) => arr.includes(item) && acc, true);
     }
+
+    // todo: this is probably going to be deprecated
     static is(obj) {
+        if (obj === null || obj === undefined) return false;
+
+
+
         return {
             BooleanOrDefault: (defaultValue) =>
                 Utilities.isBoolean(obj)
@@ -267,13 +280,14 @@ export default class Utilities {
     }
 
     static parseType(typeName, ...classes) {
-        let evalType, parseType;
+        let parseType;
 
         if (!(typeName && typeof typeName === "string")) return undefined;
 
-        // if the typeName matches a primitive, return the primitive type
+        // if the typeName matches a primitive or structure, return the type
 
-        if (parseType = Globals.Primitives.find(p => p.name === typeName.toLowerCase())?.type) return parseType;
+        if (parseType = Globals.Primitives.find(p => p.name === typeName.toLowerCase())) return parseType.type;
+        if (parseType = Globals.Structurals.find(s => s.name === typeName.toLowerCase())) return parseType.type;
 
         // now we need to check against classes passed in; return undefined if
         // classes is not valid, otherwise scoop the valid classes together.

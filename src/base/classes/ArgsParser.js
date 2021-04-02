@@ -7,7 +7,7 @@ const { newUuidShort } = Utilities;
 
 export default class {
     #classes;
-    #lastArgs;
+    #args;
     #profiles;
     #withRelaxedProfiles = false;
 
@@ -30,33 +30,35 @@ export default class {
         const _name = typeof name == "string" && name.length > 1 && name || `profile-${newUuidShort()}`;
         const self = this;
 
+        self.#classes = self.#classes || [ ];
         self.#profiles = self.#profiles || { };
 
         //if (self.#profiles.find(profile => profile.name === _name)) throw Error("ArgsParser.addProfile(): argument 'name' missing or duplicate");
         if (self.#profiles[_name]) throw Error(`ArgsParser.addProfile(): argument 'name' missing or duplicate for value '${_name}'`);
         if (!(profile && profile instanceof Object)) throw Error("ArgsParser.addProfile(): argument 'profile' missing or invalid");
 
-        const cleanedProfile = { };
-
         this.withClasses(...classes);
+
+        const cleanedProfile = { };
 
         Object.getOwnPropertyNames(profile).forEach(fieldKey => {
             const typeKeys = profile[fieldKey] && Object.getOwnPropertyNames(profile[fieldKey]);
-            // todo: add class check
-            const typeKey =
-                typeKeys && typeKeys.length === 1 &&
-                Utilities.parseType(typeKeys[0], ...this.#classes) ||
-                undefined;
+            const typeKey = typeKeys && typeKeys.length === 1 && Utilities.parseType(typeKeys[0], ...self.#classes) || undefined;
 
             // there should be a single typeKey; if there is, add it to the array of
             // cleaned profiles and continue; if there isn't and we have strict profile
             // checking, throw an error; otherwise, continue;
 
-            if (typeKey) return cleanedProfile[fieldKey] = profile[fieldKey];
-            if (self.hasStrictProfiles) throw Error(`ArgsParser.addProfile(): invalid profile defined for '${fieldKey}' - type '${typeKeys[0]}' is undefined`);
+            if (!typeKey && self.hasStrictProfiles) throw Error(`ArgsParser.addProfile(): invalid profile defined for '${fieldKey}' - type '${typeKeys[0]}' is undefined`);
+
+            // add to the cleanedProfile object; required is set to true on strict true value
+
+            return cleanedProfile[fieldKey] = { type: typeKey, required: profile[fieldKey][typeKeys[0]] === true };
         });
 
-        self.#profiles[_name] = cleanedProfile;
+        return Object.keys(cleanedProfile).length > 0
+            ? self.#profiles[_name] = cleanedProfile && this
+            : self.hasStrictProfiles && throw Error(`ArgsParser.addProfile(): invalid profile ${name}`) || this;
     }
 
     static addProfile(name, profile, ...classes) {
@@ -81,9 +83,6 @@ export default class {
         if (keys.length === 0) throw Error("ArgsParser.addProfiles(): argument 'profiles' is invalid");
 
         keys.forEach(key => this.addProfile(key, profiles[key]));
-
-        // todo: process ...classes - should be validated and added here and not passed to addProfile();
-        //       should probably be passed to withClasses()
 
         return this;
     }
@@ -138,7 +137,7 @@ export default class {
     /*
      *  withClasses(classes: Array) : ArgsParsers
      *
-     *  arrayed version of withClass*();
+     *  arrayed version of withClass();
      *
      */
 
@@ -197,6 +196,7 @@ export default class {
     /*
      *  parse(): { errors: { profile1: [ field1, field2, ..., fieldN ] }, profile: this.#profiles[n] || null, values: { field1: val1, ..., fieldN: valN } }
      */
+
     parse() {
         /*
          *  [ ] evaluate profiles in order
@@ -207,6 +207,15 @@ export default class {
          *
          */
 
-        throw Error("not implemented");
+        let profileNames;
+
+        // validate profiles
+
+        if (!this.#profiles) throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
+
+        !(Array.isArray(this.#profiles) && this.#profiles.length > 0) && throw Error("ArgsParser.parse(): parser does not contain any valid profiles to parse")
+
+
+        return true;
     }
 }

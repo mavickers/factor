@@ -24,7 +24,6 @@ export default class Globals {
             Date: { type: Date, name: "number" },
             Number: { type: Number, name: "number" },
             Object: { type: Object, name: "object" },
-            // StandardModel: { type: StandardModel, name: "object" },
             String: { type: String, name: "string" }
         }
 
@@ -37,11 +36,22 @@ export default class Globals {
     }
 
     static get Primitives() { return [
-        { name: "bigint", type: BigInt },
-        { name: "boolean", type: Boolean },
-        { name: "number", type: Number },
-        { name: "string", type: String },
-        { name: "symbol", type: Symbol }
+        { name: "bigint", type: BigInt, signature: "[object BigInt]" },
+        { name: "boolean", type: Boolean, signature: "[object Boolean]" },
+        { name: "number", type: Number, signature: "[object Number]" },
+        { name: "string", type: String, signature: "[object String]" },
+        { name: "symbol", type: Symbol, signature: "[object Symbol]" }
+    ]};
+
+    static get Structurals() { return [
+        { name: "array", type: Array, signature: "[object Array]" },
+        { name: "date", type: Date, signature: "[object Date]" },
+        { name: "function", type: Function, signature: "[object Function]" },
+        { name: "map", type: Map, signature: "[object Map]" },
+        { name: "object", type: Object, signature: "[object Object]" },
+        { name: "set", type: Set, signature: "[object Set]" },
+        { name: "weakmap", type: WeakMap, signature: "[object WeakMap]" },
+        { name: "weakset", type: WeakSet, signature: "[object WeakSet]" }
     ]};
 }
 
