@@ -25,7 +25,7 @@ export default class Utilities {
      *  class.
      *
      */
-    static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || null;
+    static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || undefined;
     static getClassName = function(obj) { return this.getClass(obj).name; };
     static getCurrentLocation(back) {
         back = Utilities.isNumber(back) && back || 0;
@@ -132,6 +132,7 @@ export default class Utilities {
                     ? defaultValue : throw new Error("invalid default value")
         }
     }
+    static isArguments = (obj) => obj && Object.prototype.toString.call(obj) === "[object Arguments]" && true || false;
     static isArrayOfType = function(obj, type) {
         if (!(obj && Array.isArray(obj) && obj.length > 0 && type && type.toString().trim())) return false;
         return (typeof type == "string")
