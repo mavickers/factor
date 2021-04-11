@@ -92,7 +92,7 @@ describe("ArgsParser", () => {
         bigint2 = 5678n;
 
         expect(() => parser.parse(args(bigint1, "1234"))).not.toThrow();
-        console.log(parser.result);
+        console.log(parser.result, parser.result.profile == profiles.profile1);
     });
 
     it("should throw when adding invalid profiles with strict profile checking turned on", () => {

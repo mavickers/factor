@@ -8,6 +8,7 @@ const { getClass, getType, isArguments, newUuidShort } = Utilities;
 class Result {
     errors = { };     // errors for each profile... { profile1: [ field1, field2, ..., fieldN ] }
     name = undefined; // the matching profile name... "{{ name }}"
+    profile = undefined; // the matching profile...
     definition = { }; // the matching profile definition... { field1: { type: type, required: true/false }, ..., fieldN: { type: type, required: true/false } }
     values = { };     // field values for the matching profile... { field1: val1, ... fieldN: valN }
 }
@@ -66,7 +67,7 @@ export default class {
         });
 
         return Object.keys(cleanedProfile).length > 0
-            ? (self.#profiles[_name] = cleanedProfile) && self
+            ? (self.#profiles[_name] = { definition: cleanedProfile, profile: profile }) && self
             : self.hasStrictProfiles && throw Error(`ArgsParser.addProfile(): invalid profile ${name}`) || self;
     }
 
@@ -235,7 +236,7 @@ export default class {
             const values = { };
             let argsIndex = 0;
 
-            Object.entries(profileDefinition).forEach(field => {
+            Object.entries(profileDefinition.definition).forEach(field => {
                 const [ fieldName, fieldDefinition ] = field;
                 const { type, required } = fieldDefinition;
                 const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];
@@ -247,10 +248,12 @@ export default class {
                 // if we have a match reset argsIndex to the index of match and
                 // push the match value onto the vals object; if we don't have a
                 // match and the field is required push an error onto the errors object;
-                // in all circumstances proceed to the next field.
+                // if we don't have a match and the field is not required null the
+                // value on the field in the returned values; in all circumstances
+                // proceed to the next field.
 
                 match && (values[fieldName] = match) && (argsIndex = args.indexOf(match) + 1);
-                !match && required && errors.push(fieldName);
+                !match && (required && errors.push(fieldName)) || (!required && (values[fieldName] = null));
             });
 
             // if we have errors then the profile doesn't match - set the errors
@@ -259,7 +262,8 @@ export default class {
             // object and return false to stop processing the profile entries;
 
             return errors.length > 0 && (parser.result.errors[profileName] = errors) && true ||
-                   (parser.result.name = profileName) && (parser.result.definition = profileDefinition) && (parser.result.values = values) && false ||
+                   (parser.result.name = profileName) && (parser.result.definition = profileDefinition.definition) &&
+                   (parser.result.values = values) && (parser.result.profile = profileDefinition.profile) && false ||
                    false;
         }
 
