@@ -57,8 +57,8 @@ describe("ArgsParser", () => {
         expect(() => parser.withProfile("profile3", { field1: { Class1: true }, field2: { Class2: false }}, Class1, Class2)).not.toThrow();
     });
 
-    it("should handle lack of profiles, invalid profiles, or invalid arguments passed to parser", () => {
-        let parser, result;
+    it("should handle lack of profiles, invalid profiles, missing classes, or invalid arguments passed to parser", () => {
+        let parser;
 
         expect(() => parser = new ArgsParser()).not.toThrow();
         expect(() => parser.parse()).toThrow("valid profiles");
@@ -66,33 +66,37 @@ describe("ArgsParser", () => {
         expect(() => parser.withProfile()).toThrow("missing");
         expect(() => parser.withProfile("profile1", { field1: { Test: true }})).toThrow("undefined");
 
-        expect(() => parser.withProfile("profile1", { field1: { String: true }})).not.toThrow();
-        expect(() => parser.withProfile("profile1", { field1: { String: true }})).toThrow("duplicate");
+        expect(() => parser.withProfile("profile2", { field1: { Class1: true } })).toThrow(/type\s\'Class1\'\sis\sundefined/);
+
+        expect(() => parser.withProfile("profile3", { field1: { String: true }})).not.toThrow();
+        expect(() => parser.withProfile("profile3", { field1: { String: true }})).toThrow("duplicate");
         expect(() => parser.parse()).toThrow("argument");
     });
 
     it("should process bigint properly", () => {
         const profiles = {
-            profile1: { field1: { BigInt: true }, field2: { BigInt: false }, field3: { String: true } },
+            profile1: { field1: { BigInt: true } },
             profile2: { field1: { BigInt: true }, field2: { BigInt: true } }
-        };
-        let parser, bigint1, bigint2;
+        }
+        const bigint1 = 1234n,
+              bigint2 = 5678n;
+        let parser;
 
-        expect(() => parser = ArgsParser.withProfile("profile1", profiles.profile1)).not.toThrow();
-        expect(() => parser.parse(args("1", "2"))).not.toThrow();
+        expect(() => parser = ArgsParser.withProfiles(profiles)).not.toThrow();
+        expect(parser.parse(args("1", "2"))).toBeFalse();
         expect(parser.result?.errors?.profile1).toBeArray();
         expect(parser.result?.errors?.profile1?.length).toEqual(1);
-
-        expect(() => parser = parser.withProfile("profile2", profiles.profile2)).not.toThrow();
-        expect(() => parser.parse(args("1", "2"))).not.toThrow();
         expect(parser.result?.errors?.profile2).toBeArray();
         expect(parser.result?.errors?.profile2?.length).toEqual(2);
 
-        bigint1 = 1234n;
-        bigint2 = 5678n;
+        expect(parser.parse(args(bigint1, "1234"))).toBeTrue();
+        expect(parser.result?.values?.field1).toEqual(1234n);
+        expect(parser.result?.values?.field2).toBeUndefined();
 
-        expect(() => parser.parse(args(bigint1, "1234"))).not.toThrow();
-        console.log(parser.result, parser.result.profile == profiles.profile1);
+        expect(parser.parse(args(bigint2, bigint1))).toBeTrue();
+        console.log(parser.result);
+        // expect(parser.result?.values?.field1).toEqual(5678n);
+        expect(parser.result?.values?.field2).toEqual(1234n);
     });
 
     it("should throw when adding invalid profiles with strict profile checking turned on", () => {
