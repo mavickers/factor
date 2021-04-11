@@ -29,7 +29,7 @@ export default class {
      *
      */
 
-    addProfile(name, profile, ...classes) {
+    withProfile(name, profile, ...classes) {
         /*
          *  [x] should validate profile here and throw error here
          *  [x] should throw without changing contents of #profiles
@@ -66,12 +66,12 @@ export default class {
         });
 
         return Object.keys(cleanedProfile).length > 0
-            ? self.#profiles[_name] = cleanedProfile && this
-            : self.hasStrictProfiles && throw Error(`ArgsParser.addProfile(): invalid profile ${name}`) || this;
+            ? (self.#profiles[_name] = cleanedProfile) && self
+            : self.hasStrictProfiles && throw Error(`ArgsParser.addProfile(): invalid profile ${name}`) || self;
     }
 
-    static addProfile(name, profile, ...classes) {
-        return new this().addProfile(name, profile, ...classes);
+    static withProfile(name, profile, ...classes) {
+        return new this().withProfile(name, profile, ...classes);
     }
 
     /*
@@ -82,7 +82,7 @@ export default class {
      *
      */
 
-    addProfiles(profiles, ...classes) {
+    withProfiles(profiles, ...classes) {
         if (!(profiles && profiles instanceof Object)) throw Error("ArgsParser.addProfiles(): argument 'profiles' is invalid");
 
         this.withClasses(...classes);
@@ -91,13 +91,13 @@ export default class {
 
         if (keys.length === 0) throw Error("ArgsParser.addProfiles(): argument 'profiles' is invalid");
 
-        keys.forEach(key => this.addProfile(key, profiles[key]));
+        keys.forEach(key => this.withProfile(key, profiles[key]));
 
         return this;
     }
 
-    static addProfiles(profiles, ...classes) {
-        return new this().addProfiles(profiles, ...classes);
+    static withProfiles(profiles, ...classes) {
+        return new this().withProfiles(profiles, ...classes);
     }
 
     /*
@@ -118,6 +118,10 @@ export default class {
 
     get hasStrictProfiles() {
         return !this.#withRelaxedProfiles;
+    }
+
+    get profiles() {
+        return this.#profiles;
     }
 
     /*
@@ -209,8 +213,8 @@ export default class {
 
     parse(argsParm) {
         /*
-         *  [ ] evaluate profiles in order
-         *  [ ] first profile that matches wins
+         *  [x] evaluate profiles in order
+         *  [x] first profile that matches wins
          *  [ ] order of fulfillment: class, function, array, object;
          *      classes typeof into function, and arrays typeof into
          *      object.
@@ -219,7 +223,9 @@ export default class {
 
         this.result = new Result();
 
-        !(Array.isArray(this.#profiles) && this.#profiles.length > 0) && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
+        const profiles = Object.entries(this.#profiles || { });
+
+        profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         !(isArguments(argsParm)) && throw Error("ArgsParser.parse(): argsParm argument is not valid");
 
         const args = Array.from(argsParm);
@@ -235,6 +241,9 @@ export default class {
                 const [ fieldName, fieldDefinition ] = field;
                 const { type, required } = fieldDefinition;
                 const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];
+                // getType does not do an ordered comparison; there may need
+                // to be an adjustment so that objects are matched in order
+                // of classes, functions, arrays, and then objects.
                 const match = argsSet.find(arg => getType(arg) === type || getClass(arg) === type);
 
                 // if we have a match reset argsIndex to the index of match and
@@ -242,8 +251,7 @@ export default class {
                 // match and the field is required push an error onto the errors object;
                 // in all circumstances proceed to the next field.
 
-                (match && (values[fieldName] = match) && (argsIndex = args.indexOf(match))) ||
-                !match && required && errors.push(fieldName);
+                (match && (values[fieldName] = match) && (argsIndex = args.indexOf(match))) || required && errors.push(fieldName);
             });
 
             // if we have errors then the profile doesn't match - set the errors
