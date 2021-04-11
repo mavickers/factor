@@ -2,7 +2,7 @@ import "jest-extended";
 import ArgsParser from "../../src/base/classes/ArgsParser";
 import Utilities from "../../src/base/Utilities";
 
-const args = () => arguments;
+const args = function() { return arguments };
 
 describe("ArgsParser", () => {
     it("should instantiate without errors", () => {
@@ -73,21 +73,26 @@ describe("ArgsParser", () => {
 
     it("should process bigint properly", () => {
         const profiles = {
-            profile1: { field1: { BigInt: true }, field2: { BigInt: false } },
+            profile1: { field1: { BigInt: true }, field2: { BigInt: false }, field3: { String: true } },
             profile2: { field1: { BigInt: true }, field2: { BigInt: true } }
         };
-        let parser, test;
+        let parser, bigint1, bigint2;
 
         expect(() => parser = ArgsParser.withProfile("profile1", profiles.profile1)).not.toThrow();
         expect(() => parser.parse(args("1", "2"))).not.toThrow();
         expect(parser.result?.errors?.profile1).toBeArray();
         expect(parser.result?.errors?.profile1?.length).toEqual(1);
 
-
         expect(() => parser = parser.withProfile("profile2", profiles.profile2)).not.toThrow();
         expect(() => parser.parse(args("1", "2"))).not.toThrow();
         expect(parser.result?.errors?.profile2).toBeArray();
         expect(parser.result?.errors?.profile2?.length).toEqual(2);
+
+        bigint1 = 1234n;
+        bigint2 = 5678n;
+
+        expect(() => parser.parse(args(bigint1, "1234"))).not.toThrow();
+        console.log(parser.result);
     });
 
     it("should throw when adding invalid profiles with strict profile checking turned on", () => {

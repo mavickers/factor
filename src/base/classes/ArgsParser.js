@@ -249,8 +249,8 @@ export default class {
                 // match and the field is required push an error onto the errors object;
                 // in all circumstances proceed to the next field.
 
-                (match && (values[fieldName] = match) && (argsIndex = args.indexOf(match))) ||
-                required && errors.push(fieldName);
+                match && (values[fieldName] = match) && (argsIndex = args.indexOf(match) + 1);
+                !match && required && errors.push(fieldName);
             });
 
             // if we have errors then the profile doesn't match - set the errors
