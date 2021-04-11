@@ -2,6 +2,8 @@ import "jest-extended";
 import ArgsParser from "../../src/base/classes/ArgsParser";
 import Utilities from "../../src/base/Utilities";
 
+const args = () => arguments;
+
 describe("ArgsParser", () => {
     it("should instantiate without errors", () => {
         expect(() => new ArgsParser()).not.toThrow();
@@ -56,7 +58,6 @@ describe("ArgsParser", () => {
     });
 
     it("should handle lack of profiles, invalid profiles, or invalid arguments passed to parser", () => {
-        const BurpArgs = () => arguments;
         let parser, result;
 
         expect(() => parser = new ArgsParser()).not.toThrow();
@@ -71,12 +72,22 @@ describe("ArgsParser", () => {
     });
 
     it("should process bigint properly", () => {
-        const profile1 = { field1: { BigInt: true }, field2: { BigInt: false }};
+        const profiles = {
+            profile1: { field1: { BigInt: true }, field2: { BigInt: false } },
+            profile2: { field1: { BigInt: true }, field2: { BigInt: true } }
+        };
         let parser, test;
 
-        expect(() => parser = ArgsParser.withProfile("profile1", profile1)).not.toThrow();
+        expect(() => parser = ArgsParser.withProfile("profile1", profiles.profile1)).not.toThrow();
+        expect(() => parser.parse(args("1", "2"))).not.toThrow();
+        expect(parser.result?.errors?.profile1).toBeArray();
+        expect(parser.result?.errors?.profile1?.length).toEqual(1);
 
-        test = parser.parse(1, 2);
+
+        expect(() => parser = parser.withProfile("profile2", profiles.profile2)).not.toThrow();
+        expect(() => parser.parse(args("1", "2"))).not.toThrow();
+        expect(parser.result?.errors?.profile2).toBeArray();
+        expect(parser.result?.errors?.profile2?.length).toEqual(2);
     });
 
     it("should throw when adding invalid profiles with strict profile checking turned on", () => {

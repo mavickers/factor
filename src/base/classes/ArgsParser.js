@@ -46,7 +46,7 @@ export default class {
         if (self.#profiles[_name]) throw Error(`ArgsParser.addProfile(): argument 'name' missing or duplicate for value '${_name}'`);
         if (!(profile && profile instanceof Object)) throw Error("ArgsParser.addProfile(): argument 'profile' missing or invalid");
 
-        this.withClasses(...classes);
+        self.withClasses(...classes);
 
         const cleanedProfile = { };
 
@@ -62,7 +62,7 @@ export default class {
 
             // add to the cleanedProfile object; required is set to true on strict true value
 
-            return cleanedProfile[fieldKey] = { type: typeKey, required: profile[fieldKey][typeKeys[0]] === true };
+            return (cleanedProfile[fieldKey] = { type: typeKey, required: profile[fieldKey][typeKeys[0]] === true }) && true;
         });
 
         return Object.keys(cleanedProfile).length > 0
@@ -221,15 +221,13 @@ export default class {
          *
          */
 
-        this.result = new Result();
-
-        const profiles = Object.entries(this.#profiles || { });
+        const parser = this;
+        const profiles = Object.entries(parser.#profiles || { });
 
         profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         !(isArguments(argsParm)) && throw Error("ArgsParser.parse(): argsParm argument is not valid");
 
         const args = Array.from(argsParm);
-        const parser = this;
 
         const evaluate = function(profile) {
             const [ profileName, profileDefinition ] = profile;
@@ -251,7 +249,8 @@ export default class {
                 // match and the field is required push an error onto the errors object;
                 // in all circumstances proceed to the next field.
 
-                (match && (values[fieldName] = match) && (argsIndex = args.indexOf(match))) || required && errors.push(fieldName);
+                (match && (values[fieldName] = match) && (argsIndex = args.indexOf(match))) ||
+                required && errors.push(fieldName);
             });
 
             // if we have errors then the profile doesn't match - set the errors
@@ -264,8 +263,9 @@ export default class {
                    false;
         }
 
-        Object.entries(this.#profiles).every(evaluate);
+        parser.result = new Result();
+        profiles.every(evaluate);
 
-        return this.result.name !== undefined;
+        return parser.result.name !== undefined;
     }
 }
