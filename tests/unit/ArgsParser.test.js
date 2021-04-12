@@ -88,13 +88,13 @@ describe("ArgsParser", () => {
         expect(parser.result?.errors?.profile1?.length).toEqual(1);
         expect(parser.result?.errors?.profile2).toBeArray();
         expect(parser.result?.errors?.profile2?.length).toEqual(2);
+        console.log(parser.result);
 
         expect(parser.parse(args(bigint1, "1234"))).toBeTrue();
         expect(parser.result?.values?.field1).toEqual(1234n);
         expect(parser.result?.values?.field2).toBeUndefined();
 
         expect(parser.parse(args(bigint2, bigint1))).toBeTrue();
-        console.log(parser.result);
         // expect(parser.result?.values?.field1).toEqual(5678n);
         expect(parser.result?.values?.field2).toEqual(1234n);
     });

@@ -1,17 +1,8 @@
-import Flags from "./Flags";
-import Utilities from "../Utilities";
-import Globals from "../Globals";
+import Evaluator from "./Evaluator";
+import Result from "./Result";
+import Utilities from "../../Utilities";
 
-const primitives = [ "BigInt", "Boolean", "Number", "String", "Symbol" ];
-const { getClass, getType, isArguments, newUuidShort } = Utilities;
-
-class Result {
-    errors = { };     // errors for each profile... { profile1: [ field1, field2, ..., fieldN ] }
-    name = undefined; // the matching profile name... "{{ name }}"
-    profile = undefined; // the matching profile...
-    definition = { }; // the matching profile definition... { field1: { type: type, required: true/false }, ..., fieldN: { type: type, required: true/false } }
-    values = { };     // field values for the matching profile... { field1: val1, ... fieldN: valN }
-}
+const { isArguments, newUuidShort } = Utilities;
 
 export default class {
     #classes;
@@ -216,6 +207,8 @@ export default class {
         /*
          *  [x] evaluate profiles in order
          *  [x] first profile that matches wins
+         *  [ ] the number of fields in a profile must match
+         *      the number of args
          *  [ ] order of fulfillment: class, function, array, object;
          *      classes typeof into function, and arrays typeof into
          *      object.
@@ -229,43 +222,7 @@ export default class {
         !(isArguments(argsParm)) && throw Error("ArgsParser.parse(): argsParm argument is not valid");
 
         const args = Array.from(argsParm);
-
-        const evaluate = function(profile) {
-            const [ profileName, profileDefinition ] = profile;
-            const errors = [ ];
-            const values = { };
-            let argsIndex = 0;
-
-            Object.entries(profileDefinition.definition).forEach(field => {
-                const [ fieldName, fieldDefinition ] = field;
-                const { type, required } = fieldDefinition;
-                const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];
-                // getType does not do an ordered comparison; there may need
-                // to be an adjustment so that objects are matched in order
-                // of classes, functions, arrays, and then objects.
-                const match = argsSet.find(arg => getType(arg) === type || getClass(arg) === type);
-
-                // if we have a match reset argsIndex to the index of match and
-                // push the match value onto the vals object; if we don't have a
-                // match and the field is required push an error onto the errors object;
-                // if we don't have a match and the field is not required null the
-                // value on the field in the returned values; in all circumstances
-                // proceed to the next field.
-
-                match && (values[fieldName] = match) && (argsIndex = args.indexOf(match) + 1);
-                !match && (required && errors.push(fieldName)) || (!required && (values[fieldName] = null));
-            });
-
-            // if we have errors then the profile doesn't match - set the errors
-            // for the profile on the result object and return true to continue
-            // processing entries; otherwise we have a match, so set the result
-            // object and return false to stop processing the profile entries;
-
-            return errors.length > 0 && (parser.result.errors[profileName] = errors) && true ||
-                   (parser.result.name = profileName) && (parser.result.definition = profileDefinition.definition) &&
-                   (parser.result.values = values) && (parser.result.profile = profileDefinition.profile) && false ||
-                   false;
-        }
+        const evaluate = new Evaluator(parser, args);
 
         parser.result = new Result();
         profiles.every(evaluate);
