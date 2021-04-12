@@ -4,7 +4,7 @@ import Utilities from "../../src/base/Utilities";
 
 const args = function() { return arguments };
 
-describe("ArgsParser", () => {
+describe("ArgsParser With Standard Evaluator", () => {
     it("should instantiate without errors", () => {
         expect(() => new ArgsParser()).not.toThrow();
         expect(() => new ArgsParser().withProfile("test", { field1: { String: true }})).not.toThrow();
@@ -57,20 +57,38 @@ describe("ArgsParser", () => {
         expect(() => parser.withProfile("profile3", { field1: { Class1: true }, field2: { Class2: false }}, Class1, Class2)).not.toThrow();
     });
 
-    it("should handle lack of profiles, invalid profiles, missing classes, or invalid arguments passed to parser", () => {
-        let parser;
+    it("should handle invalid parameters (args, profiles, classes) correctly", () => {
+        let parser, Class1;
 
         expect(() => parser = new ArgsParser()).not.toThrow();
-        expect(() => parser.parse()).toThrow("valid profiles");
 
+        // profiles
         expect(() => parser.withProfile()).toThrow("missing");
-        expect(() => parser.withProfile("profile1", { field1: { Test: true }})).toThrow("undefined");
+        expect(() => parser.withProfile("profile1", { field1: { Class1: true } })).toThrow(/type\s\'Class1\'\sis\sundefined/);
+        expect(() => parser.withProfile("profile1", { field1: { String: true }})).not.toThrow();
+        expect(() => parser.withProfile("profile1", { field1: { String: true }})).toThrow("duplicate");
 
-        expect(() => parser.withProfile("profile2", { field1: { Class1: true } })).toThrow(/type\s\'Class1\'\sis\sundefined/);
+        // args
+        expect(() => parser.parse()).toThrow("args argument");
+        expect(() => parser.parse("test")).toThrow("args argument");
+        expect(() => parser.parse(args(1, 2))).not.toThrow();
+        expect(parser.result?.errors?.profile1?.[0]).toEqual("*");
+        expect(() => parser.parse(args(1))).not.toThrow();
+        expect(parser.result?.errors?.profile1?.[0]).toEqual("field1");
 
-        expect(() => parser.withProfile("profile3", { field1: { String: true }})).not.toThrow();
-        expect(() => parser.withProfile("profile3", { field1: { String: true }})).toThrow("duplicate");
-        expect(() => parser.parse()).toThrow("argument");
+        // classes
+        expect(() => parser.withClass(Class1)).toThrow("invalid class argument");
+        expect(() => parser.withClass(Class1 = class { })).not.toThrow();
+        expect(() => parser.withProfile("profile2", { field1: { Class1: true }})).not.toThrow();
+        expect(() => parser.parse("test")).toThrow("args argument");
+        expect(() => parser.parse(args(new Class1(), "test"))).not.toThrow();
+        expect(parser.result?.errors?.profile1).not.toBeUndefined();
+        expect(parser.result?.errors?.profile2).not.toBeUndefined();
+        expect(parser.result?.errors?.profile2?.[0]).toEqual("*");
+        expect(() => parser.parse(args(1))).not.toThrow();
+        expect(parser.result?.errors?.profile1).not.toBeUndefined();
+        expect(parser.result?.errors?.profile2).not.toBeUndefined();
+        expect(parser.result?.errors?.profile2?.[0]).toEqual("field1");
     });
 
     it("should process bigint properly", () => {

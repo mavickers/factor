@@ -1,6 +1,4 @@
 import Utilities from "../../Utilities";
-import Result from "./Result";
-
 const { getClass, getType } = Utilities;
 
 export default class {
@@ -12,14 +10,7 @@ export default class {
             const values = { };
             let argsIndex = 0;
 
-            // if the number of field definitions in the profile
-            // do not match the number of arguments then disqualify
-            // the profile; otherwise, process the field definitions.
-
-            fieldDefinitions.length !== args.length && errors.push("*") ||
             fieldDefinitions.forEach(field => {
-                // todo: update this so it compares the corresponding
-                //       args and fieldDefinitions value
                 const [ fieldName, fieldDefinition ] = field;
                 const { type, required } = fieldDefinition;
                 const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];

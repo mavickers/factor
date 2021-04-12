@@ -150,7 +150,8 @@ export default class {
      */
 
     withClass(cls) {
-        Utilities.isClass(cls) &&
+        if (!Utilities.isClass(cls)) throw Error("ArgsParser.withClass(): invalid class argument");
+
         (this.#classes = this.#classes || [ ]) &&
         !this.#classes.includes(cls) &&
         this.#classes.push(cls);
@@ -226,7 +227,7 @@ export default class {
      *
      */
 
-    parse(argsParm) {
+    parse(args) {
         /*
          *  [x] evaluate profiles in order
          *  [x] first profile that matches wins
@@ -240,16 +241,16 @@ export default class {
 
         const parser = this;
 
-        !(isArguments(argsParm)) && throw Error("ArgsParser.parse(): argsParm argument is not valid");
+        !(isArguments(args)) && throw Error("ArgsParser.parse(): args argument is not valid");
 
-        const args = Array.from(argsParm);
+        const argsArray = Array.from(args);
         const profiles = Object.entries(parser.#profiles || { });
 
         profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         parser.result = new Result();
 
         const Evaluator = this.hasVaryingArguments ? VaryingEvaluator : StandardEvaluator;
-        const evaluate = new Evaluator(parser, args);
+        const evaluate = new Evaluator(parser, argsArray);
 
         profiles.every(evaluate);
 

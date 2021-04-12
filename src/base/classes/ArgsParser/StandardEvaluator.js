@@ -1,5 +1,14 @@
+/*  StandardEvaluator.js
+ *
+ *  evaluator class for args parser; evaluates a given profile
+ *  against a given set of args; the number of fields defined
+ *  in the profile must match the number of args or the profile
+ *  is disqualified; a profile disqualified due to a mismatched
+ *  number of arguments is marked as error on all fields ("*")
+ *  in the error array.
+ */
+
 import Utilities from "../../Utilities";
-import Result from "./Result";
 
 const { getClass, getType } = Utilities;
 
@@ -10,7 +19,6 @@ export default class {
             const fieldDefinitions = Object.entries(profileDefinition.definition);
             const errors = [ ];
             const values = { };
-            let argsIndex = 0;
 
             // if the number of field definitions in the profile
             // do not match the number of arguments then disqualify
@@ -18,15 +26,20 @@ export default class {
 
             fieldDefinitions.length !== args.length && errors.push("*") ||
             fieldDefinitions.forEach(field => {
-                // todo: update this so it compares the corresponding
-                //       args and fieldDefinitions value
                 const [ fieldName, fieldDefinition ] = field;
                 const { type, required } = fieldDefinition;
-                const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];
-                // getType does not do an ordered comparison; there may need
-                // to be an adjustment so that objects are matched in order
-                // of classes, functions, arrays, and then objects.
-                const match = argsSet.find(arg => getType(arg) === type || getClass(arg) === type);
+                const index = fieldDefinitions.indexOf(field);
+                const arg = args[index];
+                const argIsNil = arg === null || arg === undefined;
+
+                // todo: getType does not do an ordered comparison; there may need
+                //       to be an adjustment so that objects are matched in order
+                //       of classes, functions, arrays, and then objects.
+
+                // a match is if the field is not required and the arg value is null
+                // or the arg is not null and matches the defined type or class.
+
+                const match = (argIsNil && !required) || (!argIsNil && getType(arg) === type || getClass(arg) === type);
 
                 // if we have a match reset argsIndex to the index of match and
                 // push the match value onto the vals object; if we don't have a
@@ -35,8 +48,10 @@ export default class {
                 // value on the field in the returned values; in all circumstances
                 // proceed to the next field.
 
-                match && (values[fieldName] = match) && (argsIndex = args.indexOf(match) + 1);
-                !match && (required && errors.push(fieldName)) || (!required && (values[fieldName] = null));
+                // if we have a match push the match value onto the vals object;
+
+                match && (values[fieldName] = match) || errors.push(fieldName);
+                // !match && (required && errors.push(fieldName)) || (!required && (values[fieldName] = null));
             });
 
             // if we have errors then the profile doesn't match - set the errors
