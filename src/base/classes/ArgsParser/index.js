@@ -13,7 +13,7 @@ export default class {
     result;
 
     /*
-     *  addProfile(name: string, definition: object) : undefined
+     *  withProfile(name: string, definition: object) : undefined
      *
      *  adds a properly defined profile object to #profiles array.
      *
@@ -216,15 +216,16 @@ export default class {
          */
 
         const parser = this;
-        const profiles = Object.entries(parser.#profiles || { });
 
-        profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         !(isArguments(argsParm)) && throw Error("ArgsParser.parse(): argsParm argument is not valid");
 
         const args = Array.from(argsParm);
+        const profiles = Object.entries(parser.#profiles || { }).filter(entry => { console.log(entry); return true; });
+
+        profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
+
         const evaluate = new Evaluator(parser, args);
 
-        parser.result = new Result();
         profiles.every(evaluate);
 
         return parser.result.name !== undefined;

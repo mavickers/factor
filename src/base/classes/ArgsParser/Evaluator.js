@@ -1,10 +1,13 @@
 import Utilities from "../../Utilities";
+import Result from "./Result";
 
 const { getClass, getType } = Utilities;
 
 export default class {
     constructor(parser, args) {
         return function(profile) {
+            parser.result = new Result();
+
             const [ profileName, profileDefinition ] = profile;
             const errors = [ ];
             const values = { };
