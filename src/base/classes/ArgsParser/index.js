@@ -220,9 +220,10 @@ export default class {
         !(isArguments(argsParm)) && throw Error("ArgsParser.parse(): argsParm argument is not valid");
 
         const args = Array.from(argsParm);
-        const profiles = Object.entries(parser.#profiles || { }).filter(entry => { console.log(entry); return true; });
+        const profiles = Object.entries(parser.#profiles || { });
 
         profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
+        parser.result = new Result();
 
         const evaluate = new Evaluator(parser, args);
 

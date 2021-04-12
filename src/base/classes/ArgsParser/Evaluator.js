@@ -6,14 +6,18 @@ const { getClass, getType } = Utilities;
 export default class {
     constructor(parser, args) {
         return function(profile) {
-            parser.result = new Result();
-
             const [ profileName, profileDefinition ] = profile;
+            const fieldDefinitions = Object.entries(profileDefinition.definition);
             const errors = [ ];
             const values = { };
             let argsIndex = 0;
 
-            Object.entries(profileDefinition.definition).forEach(field => {
+            // if the number of field definitions in the profile
+            // do not match the number of arguments then disqualify
+            // the profile; otherwise, process the field definitions.
+
+            fieldDefinitions.length !== args.length && errors.push("*") ||
+            fieldDefinitions.forEach(field => {
                 const [ fieldName, fieldDefinition ] = field;
                 const { type, required } = fieldDefinition;
                 const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];
