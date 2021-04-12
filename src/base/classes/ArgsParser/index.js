@@ -1,4 +1,5 @@
-import Evaluator from "./Evaluator";
+import StandardEvaluator from "./StandardEvaluator";
+import VaryingEvaluator from "./VaryingEvaluator";
 import Result from "./Result";
 import Utilities from "../../Utilities";
 
@@ -9,6 +10,7 @@ export default class {
     #args;
     #profiles;
     #withRelaxedProfiles = false;
+    #withVaryingArguments = false;
 
     result;
 
@@ -67,7 +69,7 @@ export default class {
     }
 
     /*
-     *  addProfiles(profiles: object) : undefined
+     *  withProfiles(profiles: object) : undefined
      *
      *  passes individual projects objects from object parameter
      *  to addProfile.
@@ -110,6 +112,27 @@ export default class {
 
     get hasStrictProfiles() {
         return !this.#withRelaxedProfiles;
+    }
+
+    /*
+     *  hasStandardArguments() : bool
+     *
+     *  returns the opposite state of #withVaryingArguments flag.
+     */
+
+    get hasStandardArguments() {
+        return !this.#withVaryingArguments;
+    }
+
+    /*
+     *  hasVaryingArguments() : bool
+     *
+     *  returns the state of #withVaryingArguments flag
+     *
+     */
+
+    get hasVaryingArguments() {
+        return this.#withVaryingArguments;
     }
 
     get profiles() {
@@ -225,6 +248,7 @@ export default class {
         profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         parser.result = new Result();
 
+        const Evaluator = this.hasVaryingArguments ? VaryingEvaluator : StandardEvaluator;
         const evaluate = new Evaluator(parser, args);
 
         profiles.every(evaluate);
