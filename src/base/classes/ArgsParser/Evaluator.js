@@ -18,6 +18,8 @@ export default class {
 
             fieldDefinitions.length !== args.length && errors.push("*") ||
             fieldDefinitions.forEach(field => {
+                // todo: update this so it compares the corresponding
+                //       args and fieldDefinitions value
                 const [ fieldName, fieldDefinition ] = field;
                 const { type, required } = fieldDefinition;
                 const argsSet = argsIndex < args.length && args.slice(argsIndex) || [ ];
