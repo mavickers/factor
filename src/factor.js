@@ -7,6 +7,7 @@ import Describable from "./base/interfaces/Describable";
 import Mappable from "./base/interfaces/Mappable";
 import Mixin from "./base/classes/Mixin";
 
+import ArgsParser from "./base/classes/ArgsParser";
 import Logger from "./base/components/Logger/Logger";
 
 import Pipeline from "./base/components/Pipeline/Pipeline";
@@ -34,6 +35,7 @@ export {
 };
 
 export {
+    ArgsParser,
     Classes,
     Configurable,
     Decorators,
@@ -53,6 +55,7 @@ export {
 };
 
 export default {
+    ArgsParser: ArgsParser,
     AutoModel: StandardModel,
     Classes,
     Configurable,

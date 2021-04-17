@@ -1,4 +1,4 @@
-import StandardEvaluator from "./FIxedLengthEvaluator";
+import StandardEvaluator from "./FixedLengthEvaluator";
 import VaryingEvaluator from "./VaryingLengthEvaluator";
 import Result from "./Result";
 import Utilities from "../../Utilities";

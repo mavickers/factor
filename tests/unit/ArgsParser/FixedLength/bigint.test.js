@@ -44,18 +44,18 @@ describe("ArgsParser With Fixed Length Evaluator - BigInt Tests", () => {
         }
     ];
     test.each(testCases)("parse single valid BigInt args", (testCase) => {
-       let parser;
+        let parser;
 
         // todo: adjust the comparison here when JSON.parse starts
         //       supporting BigInt; for the time being we have to
         //       compare the individual properties of the result when
         //       using toEqual rather than the entire result object.
 
-       expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();
-       expect(parser.parse(testCase.args)).toBeTrue();
-       expect(parser.result.errors).toEqual(testCase.results.errors);
-       expect(parser.result.profileName).toEqual(testCase.results.profileName);
-       expect(parser.result.profileDefinition).toEqual(testCase.profiles.profile1);
-       expect(parser.result.values.field1).toEqual(testCase.results.values.field1);
+        expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();
+        expect(parser.parse(testCase.args)).toBeTrue();
+        expect(parser.result.errors).toEqual(testCase.results.errors);
+        expect(parser.result.profileName).toEqual(testCase.results.profileName);
+        expect(parser.result.profileDefinition).toEqual(testCase.profiles.profile1);
+        expect(parser.result.values.field1).toEqual(testCase.results.values.field1);
     });
 });
