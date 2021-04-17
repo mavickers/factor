@@ -1,5 +1,5 @@
-import StandardEvaluator from "./StandardEvaluator";
-import VaryingEvaluator from "./VaryingEvaluator";
+import StandardEvaluator from "./FIxedLengthEvaluator";
+import VaryingEvaluator from "./VaryingLengthEvaluator";
 import Result from "./Result";
 import Utilities from "../../Utilities";
 
@@ -254,6 +254,6 @@ export default class {
 
         profiles.every(evaluate);
 
-        return parser.result.name !== undefined;
+        return parser.result.profileName !== undefined;
     }
 }

@@ -1,4 +1,4 @@
-/*  StandardEvaluator.js
+/*  FixedLengthEvaluator.js
  *
  *  evaluator class for args parser; evaluates a given profile
  *  against a given set of args; the number of fields defined
@@ -39,7 +39,7 @@ export default class {
                 // a match is if the field is not required and the arg value is null
                 // or the arg is not null and matches the defined type or class.
 
-                const match = (argIsNil && !required) || (!argIsNil && getType(arg) === type || getClass(arg) === type);
+                const match = argIsNil && !required ? null : (!argIsNil && getType(arg) === type || getClass(arg) === type) && arg;
 
                 // if we have a match reset argsIndex to the index of match and
                 // push the match value onto the vals object; if we don't have a
@@ -60,9 +60,8 @@ export default class {
             // object and return false to stop processing the profile entries;
 
             return errors.length > 0 && (parser.result.errors[profileName] = errors) && true ||
-                (parser.result.name = profileName) && (parser.result.definition = profileDefinition.definition) &&
-                (parser.result.values = values) && (parser.result.profile = profileDefinition.profile) && false ||
-                false;
+                (parser.result.profileName = profileName) && (parser.result.values = values) &&
+                (parser.result.profileDefinition = profileDefinition.profile) && false || false;
         }
     }
 }
