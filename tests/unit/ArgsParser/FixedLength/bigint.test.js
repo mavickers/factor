@@ -1,3 +1,8 @@
+/*  bigint.test.js
+ *
+ *  ArgsParser tests specific to bigint type.
+ */
+
 import "jest-extended";
 import ArgsParser from "../../../../src/base/classes/ArgsParser";
 

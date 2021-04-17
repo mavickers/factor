@@ -1,6 +1,12 @@
+/*  general.test.js
+ *
+ *  this is a set of tests that target general functionality of
+ *  the ArgsParser class.
+ */
+
 import "jest-extended";
-import ArgsParser from "../../src/base/classes/ArgsParser";
-import Utilities from "../../src/base/Utilities";
+import ArgsParser from "../../../src/base/classes/ArgsParser";
+import Utilities from "../../../src/base/Utilities";
 
 const args = function() { return arguments };
 
@@ -91,66 +97,12 @@ describe("ArgsParser With Standard Evaluator", () => {
         expect(parser.result?.errors?.profile2?.[0]).toEqual("field1");
     });
 
-    test("should process bigint properly", () => {
-        // const cases = [
-        //     {
-        //         profiles: {
-        //             profile1: { field1: { BigInt: true } },
-        //             profile2: { field1: { BigInt: true }, field2: { BigInt: true } }
-        //         },
-        //
-        //     }
-        // ]
-        const cases = {
-            profiles: {
-                profile1: { field1: { BigInt: true } },
-                profile2: { field1: { BigInt: true }, field2: { BigInt: true } }
-            },
-            results: {
-                failed: {
-
-                },
-                succeeded: {
-                    "profile1": {
-                        errors: { },
-                        profileName: "profile1",
-                        profileDefinition: { field1: { BigInt: true } },
-                        values: { field1: 1234n }
-                    }
-                }
-            }
-        };
-        const bigint1 = 1234n,
-              bigint2 = 5678n;
-        let parser;
-
-        expect(() => parser = ArgsParser.withProfiles(cases.profiles)).not.toThrow();
-        expect(parser.parse(args("1", "2"))).toBeFalse();
-        expect(parser.result?.errors?.profile1).toBeArray();
-        expect(parser.result?.errors?.profile1?.length).toEqual(1);
-        expect(parser.result?.errors?.profile2).toBeArray();
-        expect(parser.result?.errors?.profile2?.length).toEqual(2);
-
-        expect(parser.parse(args(bigint1))).toBeTrue();
-        expect(parser.result).toEqual(cases.results.succeeded.profile1);
-
-        expect(parser.result?.profileName).toEqual("profile1");
-        expect(parser.parse(args(bigint1, bigint2))).toBeTrue();
-        expect(parser.result?.profileName).toEqual("profile2");
-        expect(parser.result?.values?.field1).toBe(1234n);
-        expect(parser.result?.values?.field2).toBe(5678n);
-
-        expect(parser.parse(args(bigint2, bigint1))).toBeTrue();
-        expect(parser.result?.values?.field1).toBe(5678n);
-        expect(parser.result?.values?.field2).toBe(1234n);
-    });
-
     it("should throw when adding invalid profiles with strict profile checking turned on", () => {
         class Class1 { };
 
         let parser;
         let badProfile1 = { field1: undefined },
-            badProfile2 = { field1: { Object: false }};
+            badProfile2 = { field1: { Class1: false }};
 
 
         expect(() => parser = new ArgsParser()).not.toThrow();
