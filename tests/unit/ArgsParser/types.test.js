@@ -13,25 +13,28 @@ import stringTestCases from "./FixedLength/cases.string";
 // the checks for bigint values in results using toEqual() have
 // to be strung out a bit to examine the values objects precisely.
 
-const testCases = [ ...bigintTestCases, ...stringTestCases ];
+const casePackages = [ bigintTestCases, booleanTestCases, stringTestCases ];
 
 describe("ArgsParser With Fixed Length Evaluator - BigInt Tests", () => {
-    test.each(testCases)("parse single valid BigInt args", (testCase) => {
-        let parser;
+    casePackages.forEach(casePackage => {
+        test.concurrent.each(casePackage.testCases)("parse single valid BigInt args", async (testCase) => {
+            let parser;
 
-        // todo: adjust the comparison here when JSON.parse starts
-        //       supporting BigInt; JSON.parse does not know how to handle
-        //       BigInt so the checks for bigint values in results using
-        //       toEqual() have to be strung out a bit to examine the values
-        //       objects precisely; for the time being we have to compare the
-        //       individual properties of the result when using toEqual
-        //       rather than the entire result object.
+            // todo: adjust the comparison here when JSON.parse starts
+            //       supporting BigInt; JSON.parse does not know how to handle
+            //       BigInt so the checks for bigint values in results using
+            //       toEqual() have to be strung out a bit to examine the values
+            //       objects precisely; for the time being we have to compare the
+            //       individual properties of the result when using toEqual
+            //       rather than the entire result object.
 
-        expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();
-        expect(parser.parse(testCase.args)).toBeTrue();
-        expect(parser.result.errors).toEqual(testCase.results.errors);
-        expect(parser.result.profileName).toEqual(testCase.results.profileName);
-        expect(parser.result.profileDefinition).toEqual(testCase.profiles.profile1);
-        expect(parser.result.values.field1).toEqual(testCase.results.values.field1);
-    });
+            expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();
+            expect(parser.parse(testCase.args)).toBeTrue();
+            expect(parser.result.errors).toEqual(testCase.results.errors);
+            expect(parser.result.profileName).toEqual(testCase.results.profileName);
+            expect(parser.result.profileDefinition).toEqual(testCase.profiles.profile1);
+            expect(parser.result.values.field1).toEqual(testCase.results.values.field1);
+        });
+
+    })
 });

@@ -38,4 +38,4 @@ export const testCases = [
     }
 ];
 
-export default testCases;
+export default { name: "BigInt", testCases: testCases };
