@@ -27,6 +27,13 @@ export default class InitializeFilter extends PipelineFilter {
 
             newData.generateBoolean = () => Math.random() < 0.5;
 
+            // generates a random date between 1/1/1900 and the current date
+            newData.generateDate = () => {
+                const start = new Date("1/1/1900");
+
+                return new Date(start.getTime() + Math.random() * (Date.now() - start.getTime()));
+            };
+
             // this will generate a number value less than a BigInt
             // with up to 10 decimal places and randomly positive or
             // negative.

@@ -4,6 +4,7 @@ import InitializeFilter from "./InitializeFilter"
 import ArrayFilter from "./ArrayFilter";
 import BigIntFilter from "./BigIntFilter";
 import BooleanFilter from "./BooleanFilter";
+import DateFilter from "./DateFilter";
 import NumberFilter from "./NumberFilter";
 import StringFilter from "./StringFilter";
 import SymbolFilter from "./SymbolFilter";
@@ -13,5 +14,5 @@ export default
     Pipeline
         .create()
         .filterWith(InitializeFilter, ArrayFilter, BigIntFilter, BooleanFilter)
-        .filterWith(NumberFilter, StringFilter, SymbolFilter)
+        .filterWith(DateFilter, NumberFilter, StringFilter, SymbolFilter)
         .finishWith(WrapupFilter);
