@@ -38,4 +38,4 @@ export const testCases = [
     }
 ];
 
-export default { name: "String", testCases: testCases };
+export default testCases;

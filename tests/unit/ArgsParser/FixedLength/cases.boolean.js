@@ -8,13 +8,13 @@ export const profiles = {
 export const results = {
     single: {
         errors: { },
-        profileName: "boolProfile1",
+        profileName: "profile1",
         profileDefinition: profiles.single,
         values: { field1: false }
     },
     double: {
         errors: { },
-        profileName: "boolProfile2",
+        profileName: "profile2",
         profileDefinition: profiles.double,
         values: { field1: true, field2: false }
     }
@@ -38,4 +38,4 @@ export const testCases = [
     }
 ];
 
-export default { name: "Boolean", testCases: testCases };
+export default testCases;

@@ -50,8 +50,7 @@ export default class {
 
                 // if we have a match push the match value onto the vals object;
 
-                match && (values[fieldName] = match) || errors.push(fieldName);
-                // !match && (required && errors.push(fieldName)) || (!required && (values[fieldName] = null));
+                Utilities.isNotNil(match) ? (values[fieldName] = match) : errors.push(fieldName);
             });
 
             // if we have errors then the profile doesn't match - set the errors
