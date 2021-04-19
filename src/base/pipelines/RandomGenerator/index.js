@@ -1,6 +1,7 @@
 import { Pipeline } from "../../components/Pipeline";
 
 import InitializeFilter from "./InitializeFilter"
+import ArrayFilter from "./ArrayFilter";
 import BigIntFilter from "./BigIntFilter";
 import BooleanFilter from "./BooleanFilter";
 import NumberFilter from "./NumberFilter";
@@ -11,6 +12,6 @@ import WrapupFilter from "./WrapupFilter";
 export default
     Pipeline
         .create()
-        .filterWith(InitializeFilter, BigIntFilter, BooleanFilter)
+        .filterWith(InitializeFilter, ArrayFilter, BigIntFilter, BooleanFilter)
         .filterWith(NumberFilter, StringFilter, SymbolFilter)
         .finishWith(WrapupFilter);

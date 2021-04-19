@@ -19,7 +19,7 @@ const randomGenerator = (type) => RandomGenerator.execute(new PipelineArgs(type)
 
 describe("Temp Test", () => {
     test("temp", () => {
-        console.log(randomGenerator(BigInt));
+        console.log(randomGenerator(Array));
         // let parser, testCase = testCases[1];
         //
         // expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();

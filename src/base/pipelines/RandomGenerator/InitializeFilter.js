@@ -30,7 +30,7 @@ export default class InitializeFilter extends PipelineFilter {
             // this will generate a number value less than a BigInt
             // with up to 10 decimal places and randomly positive or
             // negative.
-            newData.generateNumber = () => Math.random() * (10 ** Math.floor(Math.random() * 10) + 1) * Math.random() < 0.5 ? 1 : -1;
+            newData.generateNumber = () => Math.random() * (10 ** Math.floor(Math.random() * 10) + 1) * (Math.random() < 0.5 ? 1 : -1);
 
             // this will generate a random string value up to 64
             // characters long using 0-9a-z character.
