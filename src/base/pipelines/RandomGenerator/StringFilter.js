@@ -1,12 +1,12 @@
 import { PipelineFilter } from "../../components/Pipeline";
 
-export default class BooleanFilter extends PipelineFilter {
+export default class StringFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
             if (!data) return this.abort("data parameter is invalid");
-            if (data.targetType.type !== Boolean) return;
+            if (data.targetType.type !== String) return;
 
-            data.targetValue = data.generateBoolean();
+            data.targetValue = data.generateString();
         });
     }
 }

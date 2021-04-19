@@ -8,8 +8,6 @@ export default class WrapupFilter extends PipelineFilter {
                 `aborted with: ${this.abortedWith || "n/a"}`,
                 `errored with: ${this.error || "n/a"}`
             );
-
-            return data.targetValue;
         });
     }
 }

@@ -15,11 +15,11 @@ import { PipelineArgs } from "../../src/base/components/Pipeline";
 // to be strung out a bit to examine the values objects precisely.
 
 const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(rawArgs).map(arg => arg[1]));
-const randomGenerator = (type) => RandomGenerator.execute(new PipelineArgs(type)).data;
+const randomGenerator = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
 
 describe("Temp Test", () => {
     test("temp", () => {
-        console.log(randomGenerator(Boolean));
+        console.log(randomGenerator(BigInt));
         // let parser, testCase = testCases[1];
         //
         // expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();

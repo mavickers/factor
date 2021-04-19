@@ -6,13 +6,10 @@ export default class BigIntFilter extends PipelineFilter {
             if (!data) return this.abort("data parameter is invalid");
             if (data.targetType.type !== BigInt) return;
 
-            const numbers = [..."0123456789"];
-            const digits = Math.floor(Math.random() * 64) + 1
-            let numberString = "";
+            // this will create a string using max of 64 digits
+            // and then create a positive BigInt value from the result.
 
-            while(numberString.length < digits) numberString += numbers[Math.floor(Math.random() * 10)];
-
-            data.targetValue = BigInt(numberString);
+            data.targetValue = data.generateBigInt();
         });
     }
 }
