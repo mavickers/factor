@@ -5,33 +5,33 @@
 
 import "jest-extended";
 import ArgsParser from "../../../src/base/classes/ArgsParser";
-import bigintTestCases from "./FixedLength/cases.bigint";
-import booleanTestCases from "./FixedLength/cases.boolean";
-import stringTestCases from "./FixedLength/cases.string";
+import { RandomGenerator } from "../../../src/base/pipelines";
+import { PipelineArgs } from "../../../src/base/components/Pipeline";
 
-// general note - JSON.parse does not know how to handle BigInt so
-// the checks for bigint values in results using toEqual() have
-// to be strung out a bit to examine the values objects precisely.
 
-const testCases = [ bigintTestCases, booleanTestCases, stringTestCases ];
+const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(rawArgs).map(arg => arg[1]));
+const randomGenerator = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
 
-describe("ArgsParser With Fixed Length Evaluator - BigInt Tests", () => {
-    test.concurrent.each(testCases)("parse single valid BigInt args", async (testCase) => {
-        let parser;
+describe("ArgsParser Type Tests", () => {
+    const types = [ Array, BigInt, Boolean, Number, String, Symbol ];
 
-        // todo: adjust the comparison here when JSON.parse starts
-        //       supporting BigInt; JSON.parse does not know how to handle
-        //       BigInt so the checks for bigint values in results using
-        //       toEqual() have to be strung out a bit to examine the values
-        //       objects precisely; for the time being we have to compare the
-        //       individual properties of the result when using toEqual
-        //       rather than the entire result object.
+    test.concurrent.each(types)("Primitives/Structured Loop Tests Set", async (type) => {
+       const profiles = {
+           single: { field1: { [type.name]: true }},
+           double: { field1: { [type.name]: true }, field2: { [type.name]: true }},
+       };
+       const args = {
+           single: { field1: randomGenerator(type) },
+           double: { field1: randomGenerator(type), field2: randomGenerator(type) }
+       };
 
-        expect(() => parser = ArgsParser.withProfiles(testCase.profiles)).not.toThrow();
-        expect(parser.parse(testCase.args)).toBeTrue();
-        expect(parser.result.errors).toEqual(testCase.results.errors);
-        expect(parser.result.profileName).toEqual(testCase.results.profileName);
-        expect(parser.result.profileDefinition).toEqual(testCase.profiles.profile1);
-        expect(parser.result.values.field1).toEqual(testCase.results.values.field1);
+       let parser;
+
+       expect(() => parser = ArgsParser.withProfiles(profiles)).not.toThrow();
+       expect(parser.parse(makeArgs(args.single))).toBeTrue();
+       expect(parser.result.values).toEqual(args.single);
+       expect(parser.parse(makeArgs(args.double))).toBeTrue();
+       expect(parser.result.values).toEqual(args.double);
     });
 });
+
