@@ -15,7 +15,9 @@ class PipelineFilter {
     }
 
     get abortedWith() {
-        return this.#pipelineArgs.meta.abortedWith;
+        try { return this.#pipelineArgs.meta.abortedWith; } catch { }
+
+        return "Unable to provide abortedWith";
     }
 
     get name() { return this.#name; }
@@ -31,15 +33,15 @@ class PipelineFilter {
         // so we're able to indicate that the result had a value or was
         // null when returning.
 
-        const results = this.#processFn(pipelineArgs.data, pipelineArgs.logger) || null;
+        const results = this.#processFn(pipelineArgs.data, pipelineArgs.logger);
 
-        // if a result is returned from the filter the the arguments data
+        // if a result is returned from the filter then the arguments data
         // property is replaced with these results; this allows modification
         // of the data property by a filter (do not return anything) or
         // replacement of the data property altogether (return something);
-        this.#pipelineArgs.data = results || this.#pipelineArgs.data;
+        this.#pipelineArgs.data = Utilities.isNotNil(results) ? results : this.#pipelineArgs.data;
 
-        return results;
+        return Utilities.isNotNil(results) ? results : null;
     }
 
     get executionId() {

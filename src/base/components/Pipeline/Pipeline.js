@@ -1,8 +1,8 @@
-import PipelineFilter from "./PipelineFilter";
+import { PipelineArgs, PipelineFilter } from "./";
 import Utilities from "../../Utilities";
-import PipelineArgs from "./PipelineArgs";
 
 const isFilter = (obj) => obj && (obj instanceof PipelineFilter || Object.getPrototypeOf(obj) === PipelineFilter);
+const { isFunction, isType, newUuid } = Utilities;
 
 class Pipeline {
     #executionId;
@@ -13,7 +13,7 @@ class Pipeline {
     constructor(...filters) {
         this.filterWith(...filters);
 
-        this.#executionId = Utilities.newUuid().split("-").slice(-1);
+        this.#executionId = newUuid().split("-").slice(-1);
 
         return this;
     }
@@ -31,7 +31,7 @@ class Pipeline {
     }
 
     execute(args, callback) {
-        if (!Utilities.isType(args, PipelineArgs)) throw new Error("Pipeline.execute(): invalid PipelineArgs argument");
+        if (!isType(args, PipelineArgs)) throw new Error("Pipeline.execute(): invalid PipelineArgs argument");
 
         this.#current = 0;
         let lastResult, pipelineArgs;
@@ -49,7 +49,7 @@ class Pipeline {
         }
 
         isFilter(this.#finally) && args.addFilterResult(this.#finally.name, new this.#finally().execute(args));
-        Utilities.isFunction(callback) && callback(args);
+        isFunction(callback) && callback(args);
 
         return args;
     }

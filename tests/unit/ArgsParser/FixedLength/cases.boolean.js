@@ -2,7 +2,8 @@ const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(
 
 export const profiles = {
     single: { profile1: { field1: { Boolean: true } } },
-    double: { profile2: { field1: { Boolean: true }, field2: { Boolean: true }}}
+    double: { profile2: { field1: { Boolean: true }, field2: { Boolean: true }}},
+    triple: { profile3: { field1: { Boolean: true }, filed2: { Boolean: false }, field3: { Boolean: true }}}
 }
 
 export const results = {
@@ -17,12 +18,19 @@ export const results = {
         profileName: "profile2",
         profileDefinition: profiles.double,
         values: { field1: true, field2: false }
+    },
+    triple: {
+        errors: { },
+        profileName: "profile3",
+        profileDefinition: profiles.triple,
+        values: { field1: true, field2: false, field3: false }
     }
 };
 
 export const args = {
     single: makeArgs(results.single.values),
-    double: makeArgs(results.double.values)
+    double: makeArgs(results.double.values),
+    triple: makeArgs(results.triple.values)
 };
 
 export const testCases = [
@@ -35,6 +43,11 @@ export const testCases = [
         profiles: profiles.double,
         args: args.double,
         results: results.double
+    },
+    {
+        profiles: profiles.triple,
+        args: args.triple,
+        results: results.triple
     }
 ];
 

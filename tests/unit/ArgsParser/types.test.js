@@ -16,7 +16,7 @@ import stringTestCases from "./FixedLength/cases.string";
 const testCases = [ bigintTestCases, booleanTestCases, stringTestCases ];
 
 describe("ArgsParser With Fixed Length Evaluator - BigInt Tests", () => {
-    test.concurrent.each([ booleanTestCases ])("parse single valid BigInt args", async (testCase) => {
+    test.concurrent.each(testCases)("parse single valid BigInt args", async (testCase) => {
         let parser;
 
         // todo: adjust the comparison here when JSON.parse starts
