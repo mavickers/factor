@@ -15,7 +15,6 @@ const randomGenerator = (type) => RandomGenerator.execute(new PipelineArgs(type)
 describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
     const types = [ Array, BigInt, Boolean, Date, Number, String, Symbol ];
 
-
     test.concurrent.each(types)("Primitives/Structured Loop Tests Set", async (type) => {
         // this test loops through the types and creates a single/double profile for
         // each as well as single/double set of arguments; makeArgs() above should
