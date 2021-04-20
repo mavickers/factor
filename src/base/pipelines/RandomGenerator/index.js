@@ -10,6 +10,7 @@ import MapFilter from "./MapFilter";
 import NumberFilter from "./NumberFilter";
 import StringFilter from "./StringFilter";
 import SymbolFilter from "./SymbolFilter";
+import WeakMapFilter from "./WeakMapFilter";
 import WrapupFilter from "./WrapupFilter";
 
 export default
@@ -25,6 +26,7 @@ export default
             MapFilter,
             NumberFilter,
             StringFilter,
-            SymbolFilter
+            SymbolFilter,
+            WeakMapFilter
         )
         .finishWith(WrapupFilter);

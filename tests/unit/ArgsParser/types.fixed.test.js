@@ -12,7 +12,7 @@ const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(
 const { getRandom } = Utilities;
 
 describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
-    const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, String, Symbol ];
+    const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, String, Symbol, WeakMap ];
 
     test.concurrent.each(types)("Primitives/Structured Loop Tests Set", async (type) => {
         // this test loops through the types and creates a single/double profile for
