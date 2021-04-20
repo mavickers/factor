@@ -6,7 +6,7 @@ export default class BooleanFilter extends PipelineFilter {
             if (!data) return throw Error("BooleanFilter: data parameter is invalid");
             if (data.targetType.type !== Boolean) return;
 
-            data.targetValue = data.generateBoolean();
+            data.targetValue = Math.random() < 0.5;
 
             this.abort();
         });

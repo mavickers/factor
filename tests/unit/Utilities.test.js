@@ -237,7 +237,7 @@ describe("Utilities", () => {
     it("should determine if objects are of a specific type properly", () => {
         const Class1 = class { };
         const mismatchFlag = new TypeMismatchSetOptions("Ignore");
-        const { isType } = Index;
+        const { isType } = Utilities;
 
         // primitives
         expect(isType(BigInt("9007199254740991"), BigInt)).toBeTrue();
@@ -279,13 +279,11 @@ describe("Utilities", () => {
     });
 
     it("should parse arguments given a mapping", () => {
-        const parseArgs = { Utilities: Index };
+        const parseArgs = { Utilities: Utilities };
         const p1 = { firstBool: Boolean, firstString: String, secondBool: Boolean, firstNumber: Number };
         const a1 = [ true, false, 3, "testing" ];
         let r1;
 
         expect(() => r1 = Utilities.parseArgs(p1, a1)).not.toThrow();
-
-        console.log(r1);
     });
 });

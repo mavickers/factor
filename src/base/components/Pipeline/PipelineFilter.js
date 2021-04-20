@@ -40,6 +40,7 @@ class PipelineFilter {
         // property is replaced with these results; this allows modification
         // of the data property by a filter (do not return anything) or
         // replacement of the data property altogether (return something);
+
         this.#pipelineArgs.data = isNotNil(results) ? results : this.#pipelineArgs.data;
 
         return isNotNil(results) ? results : null;

@@ -1,22 +1,25 @@
 import { PipelineFilter } from "../../components/Pipeline";
+import Utilities from "../../Utilities";
 
 export default class ArrayFilter extends PipelineFilter {
-    constructor() {
+constructor() {
         super((data, logger) => {
             if (!data) throw Error("ArrayFilter: data parameter is invalid");
             if (data.targetType.type !== Array) return;
+
 
             // generates a random-sized, two-dimensional array with
             // primitive types and a few structural types; size ranges
             // from 1x1 to 10x10.
 
+            const { getRandom } = Utilities;
             const fns = [
-                data.generateBigInt,
-                data.generateBoolean,
-                data.generateDate,
-                data.generateNumber,
-                data.generateString,
-                data.generateSymbol
+                () => getRandom(BigInt),
+                () => getRandom(Boolean),
+                () => getRandom(Date),
+                () => getRandom(Number),
+                () => getRandom(String),
+                () => getRandom(Symbol)
             ];
 
             const array = [];
