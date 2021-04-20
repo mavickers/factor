@@ -5,6 +5,7 @@ import ArrayFilter from "./ArrayFilter";
 import BigIntFilter from "./BigIntFilter";
 import BooleanFilter from "./BooleanFilter";
 import DateFilter from "./DateFilter";
+import FunctionFilter from "./FunctionFilter";
 import NumberFilter from "./NumberFilter";
 import StringFilter from "./StringFilter";
 import SymbolFilter from "./SymbolFilter";
@@ -13,6 +14,15 @@ import WrapupFilter from "./WrapupFilter";
 export default
     Pipeline
         .create()
-        .filterWith(InitializeFilter, ArrayFilter, BigIntFilter, BooleanFilter)
-        .filterWith(DateFilter, NumberFilter, StringFilter, SymbolFilter)
+        .filterWith(
+            InitializeFilter,
+            ArrayFilter,
+            BigIntFilter,
+            BooleanFilter,
+            DateFilter,
+            FunctionFilter,
+            NumberFilter,
+            StringFilter,
+            SymbolFilter
+        )
         .finishWith(WrapupFilter);
