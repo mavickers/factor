@@ -6,6 +6,7 @@ import BigIntFilter from "./BigIntFilter";
 import BooleanFilter from "./BooleanFilter";
 import DateFilter from "./DateFilter";
 import FunctionFilter from "./FunctionFilter";
+import MapFilter from "./MapFilter";
 import NumberFilter from "./NumberFilter";
 import StringFilter from "./StringFilter";
 import SymbolFilter from "./SymbolFilter";
@@ -21,6 +22,7 @@ export default
             BooleanFilter,
             DateFilter,
             FunctionFilter,
+            MapFilter,
             NumberFilter,
             StringFilter,
             SymbolFilter
