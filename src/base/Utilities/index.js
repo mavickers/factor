@@ -1,5 +1,6 @@
 import Globals from "../Globals";
 import Mixin from "../classes/Mixin";
+import RandomGenerator from "../pipelines/RandomGenerator";
 
 import { copyAndSeal } from "./objects";
 import { isFunction } from "./functions";
@@ -8,6 +9,7 @@ import { isType } from "./types";
 import { getClass, getClassName } from "./classes";
 import { isNil, isNotNil } from "./nil";
 import { newUuid, newUuidShort } from "./uuid";
+import { PipelineArgs } from "../components/Pipeline";
 
 const isStrict = (function(){ return !this; })();
 
@@ -24,15 +26,6 @@ export default class Utilities {
                 null
         }
     }
-    /*
-     *  getClass(obj)
-     *  - obj: instantiated object
-     *
-     *  Returns the class/function that the instantiated object belongs to; use-
-     *  case is for inside of a parent class where you want to know the extending
-     *  class.
-     *
-     */
     static getClass = getClass;
     static getClassName = getClassName;
     static getCurrentLocation(back) {
@@ -114,6 +107,7 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    static getRandom = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
     static getType = (obj) => {
         const allTypes = [...Globals.Primitives, ...Globals.Structurals ];
         const objTypeString = Object.prototype.toString.call(obj);

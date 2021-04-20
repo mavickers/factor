@@ -5,12 +5,11 @@
 
 import "jest-extended";
 import ArgsParser from "../../../src/base/classes/ArgsParser";
-import { RandomGenerator } from "../../../src/base/pipelines";
-import { PipelineArgs } from "../../../src/base/components/Pipeline";
+import Utilities from "../../../src/base/Utilities";
 
 
 const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(rawArgs).map(arg => arg[1]));
-const randomGenerator = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
+const { getRandom } = Utilities;
 
 describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
     const types = [ Array, BigInt, Boolean, Date, Number, String, Symbol ];
@@ -27,8 +26,8 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
             double: { field1: { [type.name]: true }, field2: { [type.name]: true }},
         };
         const args = {
-            single: { field1: randomGenerator(type) },
-            double: { field1: randomGenerator(type), field2: randomGenerator(type) }
+            single: { field1: getRandom(type) },
+            double: { field1: getRandom(type), field2: getRandom(type) }
         };
 
         let parser;
