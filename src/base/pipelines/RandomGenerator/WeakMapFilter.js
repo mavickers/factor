@@ -4,7 +4,7 @@ import Utilities from "../../Utilities";
 export default class WeakMapFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
-            if (!data) throw Error("MapFilter: data parameter is invalid");
+            if (!data) throw Error("WeakMapFilter: data parameter is invalid");
             if (data.targetType.type !== WeakMap) return;
 
             // generates a weakmap with a random number of object keys
