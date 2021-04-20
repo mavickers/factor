@@ -46,7 +46,6 @@ class Pipeline {
             catch (err) {
                 args.error = err;
             }
-
         }
 
         isFilter(this.#finally) && args.addFilterResult(this.#finally.name, new this.#finally().execute(args));

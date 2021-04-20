@@ -43,7 +43,6 @@ export default class Utilities {
             return { fileName: fileName, lineNumber: lineNumber, colNumber: colNumber, location: location, stack: stack };
         }
     };
-
     static getFuncsFromContext(context) {
         const funcs = [];
 
@@ -107,6 +106,7 @@ export default class Utilities {
     static getParentClass = (obj) => obj && Object.getPrototypeOf(obj.constructor) || null;
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
+    // a quick and dirty way of getting a random value for a specified type
     static getRandom = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
     static getType = (obj) => {
         const allTypes = [...Globals.Primitives, ...Globals.Structurals ];

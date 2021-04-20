@@ -3,7 +3,7 @@ import { PipelineFilter } from "../../components/Pipeline";
 export default class ArrayFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
-            if (!data) return this.abort("data parameter is invalid");
+            if (!data) throw Error("ArrayFilter: data parameter is invalid");
             if (data.targetType.type !== Array) return;
 
             // generates a random-sized, two-dimensional array with
@@ -27,6 +27,8 @@ export default class ArrayFilter extends PipelineFilter {
             for(let r = 0; r < rows; r++) array.push(types.map(type => fns[type]()));
 
             data.targetValue = array;
+
+            this.abort();
         });
     }
 }
