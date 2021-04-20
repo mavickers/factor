@@ -1,6 +1,8 @@
-import Utilities from "../../Utilities";
 import Logger from "../Logger/Logger";
-import Location from "../../classes/Location";
+import { copyAndSeal } from "../../Utilities/objects";
+import { isString } from "../../Utilities/strings";
+import { isType } from "../../Utilities/types";
+import { newUuid } from "../../Utilities/uuid";
 
 class PipelineArgs {
     data;
@@ -9,10 +11,10 @@ class PipelineArgs {
     #meta;
 
     constructor(...args) {
-        this.data = args.filter(arg => !Utilities.isType(arg, Logger));
+        this.data = args.filter(arg => !isType(arg, Logger));
         this.#error = null;
-        this.#meta = { abort: false, abortedWith: null, filters: [ ], executionId: Utilities.newUuid().split("-").slice(-1)[0], messages: [ ] };
-        this.#logger = args.filter(arg => Utilities.isType(arg, Logger)).slice(-1)[0] || new Logger();
+        this.#meta = { abort: false, abortedWith: null, filters: [ ], executionId: newUuid().split("-").slice(-1)[0], messages: [ ] };
+        this.#logger = args.filter(arg => isType(arg, Logger)).slice(-1)[0] || new Logger();
     }
 
     abort(obj) {
@@ -34,7 +36,7 @@ class PipelineArgs {
 
     set error(err) {
         this.#error =
-            Utilities.isString(err) && err.trim() && Error(err.trim()) ||
+            isString(err) && err.trim() && Error(err.trim()) ||
             err instanceof Error && err ||
             this.#error;
     }
@@ -42,6 +44,7 @@ class PipelineArgs {
     get logger() {
         return this.#logger;
     }
+
     // get logger() {
     //     const self = this;
     //     const location = Location.locate(2);
@@ -56,7 +59,7 @@ class PipelineArgs {
     // }
 
     get meta() {
-        return Utilities.copyAndSeal(this.#meta);
+        return copyAndSeal(this.#meta);
     }
 }
 

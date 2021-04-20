@@ -1,12 +1,18 @@
 import Globals from "../Globals";
 import Mixin from "../classes/Mixin";
 
-import isFunction from "./isFunction";
+import { copyAndSeal } from "./objects";
+import { isFunction } from "./functions";
+import { isString } from "./strings";
+import { isType } from "./types";
+import { getClass, getClassName } from "./classes";
+import { isNil, isNotNil } from "./nil";
+import { newUuid, newUuidShort } from "./uuid";
 
 const isStrict = (function(){ return !this; })();
 
 export default class Utilities {
-    static copyAndSeal = (obj) => Object.seal(JSON.parse(JSON.stringify(obj)));
+    static copyAndSeal = copyAndSeal;
     static findFrom(...args) {
         return {
             firstInheritanceOf: (objClass) =>
@@ -27,8 +33,8 @@ export default class Utilities {
      *  class.
      *
      */
-    static getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || undefined;
-    static getClassName = function(obj) { return this.getClass(obj).name; };
+    static getClass = getClass;
+    static getClassName = getClassName;
     static getCurrentLocation(back) {
         back = Utilities.isNumber(back) && back || 0;
 
@@ -49,8 +55,8 @@ export default class Utilities {
         const funcs = [];
 
         return context &&
-               Object.getOwnPropertyNames(context).forEach(name => context[name] instanceof Function && funcs.push(context[name])) &&
-               funcs || funcs;
+            Object.getOwnPropertyNames(context).forEach(name => context[name] instanceof Function && funcs.push(context[name])) &&
+            funcs || funcs;
     }
 
     /*
@@ -158,24 +164,17 @@ export default class Utilities {
         const inheritances = this.getInheritances(obj);
 
         return (this.isClass(targetClass) && inheritances.includes(targetClass)) ||
-            (this.isString(targetClass) && inheritances.map(inheritance => inheritance.name).includes(targetClass)) ||
+            (isString(targetClass) && inheritances.map(inheritance => inheritance.name).includes(targetClass)) ||
             false;
     };
-    static isNil = (obj) => !Utilities.isNotNil(obj);
-    static isNotNil = (obj) => obj !== null && obj !== undefined;
+    static isNil = isNil;
+    static isNotNil = isNotNil;
     static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
     static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
     static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
     static get isStrict() { return isStrict; };
-    static isString = (obj) => (typeof obj === "string" || obj instanceof String) && true || false;
-    static isType = (obj, type) => {
-        if (obj === null || obj === undefined || type === null || type === undefined) return false;
-        if (typeof type == "string") return typeof obj === type;
-        if (obj instanceof type) return true;
-        if (Globals.Primitives.find(p => p.type === type) && typeof obj === type.name.toLowerCase()) return true;
-
-        return false;
-    }
+    static isString = isString;
+    static isType = isType;
     static merge = (...args) => {
         const newObj = { };
 
@@ -208,17 +207,8 @@ export default class Utilities {
         return newObj;
     };
 
-    static newUuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-
-            return v.toString(16);
-        });
-    }
-
-    static newUuidShort() {
-        return Utilities.newUuid().split("-").slice(-1)[0];
-    }
+    static newUuid = newUuid;
+    static newUuidShort = newUuidShort;
 
     /*
      *  parseArgs(obj: Object, args: Array): Object
@@ -256,8 +246,8 @@ export default class Utilities {
         // parse out the keys from obj; we want only keys that are strings and
         // keys whose values are either primitive types or defined classes.
         const keys = Object.getOwnPropertyNames(map) || [ ]
-                    .filter(key => typeof key === "string") || [ ]
-                    .filter(key => primitiveNames.includes(map[key]) || (this.isClass(map[key]) && (classNames[key] = 0))) || [ ];
+            .filter(key => typeof key === "string") || [ ]
+            .filter(key => primitiveNames.includes(map[key]) || (this.isClass(map[key]) && (classNames[key] = 0))) || [ ];
 
         // validate keys & args
         if (!(keys && keys.length > 0)) return { };

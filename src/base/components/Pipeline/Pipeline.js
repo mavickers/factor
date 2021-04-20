@@ -1,8 +1,9 @@
 import { PipelineArgs, PipelineFilter } from "./";
-import Utilities from "../../Utilities";
+import { isFunction } from "../../Utilities/functions";
+import { isType } from "../../Utilities/types";
+import { newUuid } from "../../Utilities/uuid";
 
 const isFilter = (obj) => obj && (obj instanceof PipelineFilter || Object.getPrototypeOf(obj) === PipelineFilter);
-const { isFunction, isType, newUuid } = Utilities;
 
 class Pipeline {
     #executionId;

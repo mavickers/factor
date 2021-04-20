@@ -1,4 +1,5 @@
-import Utilities from "../../Utilities";
+import { getClass } from "../../Utilities/classes";
+import { isNotNil } from "../../Utilities/nil";
 
 class PipelineFilter {
     #name;
@@ -6,7 +7,7 @@ class PipelineFilter {
     #processFn = function(data) { return null };
 
     constructor(processFn) {
-        this.#name = Utilities.getClass(this).name;
+        this.#name = getClass(this).name;
         this.#processFn = processFn;
     }
 
@@ -39,9 +40,9 @@ class PipelineFilter {
         // property is replaced with these results; this allows modification
         // of the data property by a filter (do not return anything) or
         // replacement of the data property altogether (return something);
-        this.#pipelineArgs.data = Utilities.isNotNil(results) ? results : this.#pipelineArgs.data;
+        this.#pipelineArgs.data = isNotNil(results) ? results : this.#pipelineArgs.data;
 
-        return Utilities.isNotNil(results) ? results : null;
+        return isNotNil(results) ? results : null;
     }
 
     get executionId() {
