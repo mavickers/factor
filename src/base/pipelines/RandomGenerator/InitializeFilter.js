@@ -1,4 +1,4 @@
-import { PipelineFilter } from "../../components/Pipeline";
+import PipelineFilter from "../../components/Pipeline/PipelineFilter";
 import Globals from "../../Globals";
 
 export default class InitializeFilter extends PipelineFilter {

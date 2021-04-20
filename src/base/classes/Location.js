@@ -1,4 +1,4 @@
-import Utilities from "../Utilities";
+import { isNumber } from "../Utilities/numbers";
 
 export default class Location {
     #error;
@@ -11,7 +11,7 @@ export default class Location {
 
     constructor(back = 0) {
         // todo: this should check for int
-        back = Utilities.isNumber(back) && back || 0;
+        back = isNumber(back) && back || 0;
 
         try { throw new Error() }
         catch (err) {

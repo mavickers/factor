@@ -1,4 +1,5 @@
-import { PipelineArgs, PipelineFilter } from "./";
+import PipelineArgs from "./PipelineArgs";
+import PipelineFilter from "./PipelineFilter";
 import { isFunction } from "../../Utilities/functions";
 import { isType } from "../../Utilities/types";
 import { newUuid } from "../../Utilities/uuid";
@@ -38,10 +39,12 @@ class Pipeline {
         let lastResult, pipelineArgs;
 
         while (this.#current < this.count && !args.isAborted && !args.error) {
-            const filter = new this.#filters[this.#current++]();
+            const filter = new this.#filters[this.#current]();
 
             try {
                 args.addFilterResult(filter.name, filter.execute(args));
+
+                !filter.hasRepeat && this.#current++;
             }
             catch (err) {
                 args.error = err;

@@ -1,4 +1,4 @@
-import StandardEvaluator from "./FixedLengthEvaluator";
+import FixedEvaluator from "./FixedLengthEvaluator";
 import VaryingEvaluator from "./VaryingLengthEvaluator";
 import Result from "./Result";
 import Utilities from "../../Utilities";
@@ -249,8 +249,14 @@ export default class {
         profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         parser.result = new Result();
 
-        const Evaluator = this.hasVaryingArguments ? VaryingEvaluator : StandardEvaluator;
+        const Evaluator = this.hasVaryingArguments ? VaryingEvaluator : FixedEvaluator;
         const evaluate = new Evaluator(parser, argsArray);
+
+        // const args = new PipelineArgs(parser, argsArray);
+        // todo: need to add a withData or something similar to Pipeline so that
+        //       the pipeline can go through multiple executions with the same
+        //       set of data... args should actually be static with execute() taking
+        //       a different set of args each time.
 
         profiles.every(evaluate);
 

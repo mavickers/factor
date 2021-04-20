@@ -5,6 +5,7 @@ class PipelineFilter {
     #name;
     #pipelineArgs;
     #processFn = function(data) { return null };
+    #repeat = false;
 
     constructor(processFn) {
         this.#name = getClass(this).name;
@@ -51,12 +52,22 @@ class PipelineFilter {
         // return this.#name;
     }
 
+    get hasRepeat() { return this.#repeat; }
+
+    noRepeat() {
+        this.#repeat = false;
+    }
+
     get processor() {
         return this.#processFn;
     }
 
     set processor(processFn) {
         this.#processFn = (typeof processFn === "function" || processFn instanceof Function) && processFn || this.#processFn;
+    }
+
+    repeat() {
+        this.#repeat = true;
     }
 }
 

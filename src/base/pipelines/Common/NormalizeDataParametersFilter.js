@@ -1,5 +1,5 @@
 import PipelineFilter from "../../components/Pipeline/PipelineFilter";
-import Utilities from "../../Utilities";
+import { isPureObject, merge } from "../../Utilities/objects";
 
 export default class NormalizeDataParametersFilter extends PipelineFilter {
     constructor() {
@@ -12,7 +12,7 @@ export default class NormalizeDataParametersFilter extends PipelineFilter {
             const args = Array.isArray(data) ? data : [ data ];
             let result = { };
 
-            args.filter(arg => Utilities.isPureObject(arg)).forEach(arg => result = Utilities.merge(result, arg))
+            args.filter(arg => isPureObject(arg)).forEach(arg => result = merge(result, arg))
 
             // we want to reserve the "arguments" property, so abort if it was
             // names in PipelineArgs.
@@ -20,7 +20,7 @@ export default class NormalizeDataParametersFilter extends PipelineFilter {
 
             result.arguments = [ ]
 
-            args.filter(arg => !Utilities.isPureObject(arg)).forEach(arg => result.arguments.push(arg));
+            args.filter(arg => !isPureObject(arg)).forEach(arg => result.arguments.push(arg));
 
             return result;
         })

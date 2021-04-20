@@ -1,5 +1,13 @@
 import Globals from "../Globals";
 
+const getType = (obj) => {
+    const allTypes = [...Globals.Primitives, ...Globals.Structurals ];
+    const objTypeString = Object.prototype.toString.call(obj);
+    const types = allTypes.filter(t => t.signature === objTypeString);
+
+    return types && types.length === 1 && types[0].type || undefined;
+};
+
 const isType = (obj, type) => {
     if (obj === null || obj === undefined || type === null || type === undefined) return false;
     if (typeof type == "string") return typeof obj === type;
@@ -9,5 +17,5 @@ const isType = (obj, type) => {
     return false;
 }
 
-export { isType };
-export default { isType };
+export { getType, isType };
+export default { getType, isType };

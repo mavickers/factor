@@ -1,4 +1,4 @@
-import { Pipeline } from "../../components/Pipeline";
+import Pipeline from "../../components/Pipeline/Pipeline";
 
 import InitializeFilter from "./InitializeFilter"
 import ArrayFilter from "./ArrayFilter";

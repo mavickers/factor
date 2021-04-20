@@ -8,9 +8,9 @@
  *  in the error array.
  */
 
-import Utilities from "../../Utilities";
-
-const { getClass, getType } = Utilities;
+import { getClass } from "../../Utilities/classes";
+import { getType } from "../../Utilities/types";
+import { isNotNil } from "../../Utilities/nil";
 
 export default class {
     constructor(parser, args) {
@@ -39,7 +39,12 @@ export default class {
                 // a match is if the field is not required and the arg value is null
                 // or the arg is not null and matches the defined type or class.
 
-                const match = argIsNil && !required ? null : (!argIsNil && getType(arg) === type || getClass(arg) === type) && arg;
+                //const match = argIsNil && !required ? null : (!argIsNil && getType(arg) === type || getClass(arg) === type) && arg || undefined;
+                console.log("eval");
+
+                const match = argIsNil && !required ? null : (!argIsNil && getType(arg) === type || getClass(arg) === type) && arg || undefined;
+
+                console.log((!argIsNil && getType(arg) === type || getClass(arg) === type) && arg, match, arg);
 
                 // if we have a match reset argsIndex to the index of match and
                 // push the match value onto the vals object; if we don't have a
@@ -50,7 +55,7 @@ export default class {
 
                 // if we have a match push the match value onto the vals object;
 
-                Utilities.isNotNil(match) ? (values[fieldName] = match) : errors.push(fieldName);
+                isNotNil(match) ? (values[fieldName] = match) : errors.push(fieldName);
             });
 
             // if we have errors then the profile doesn't match - set the errors

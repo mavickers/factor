@@ -20,4 +20,4 @@ describe("PipelineArgs", () => {
         expect(args.error).not.toBeNull();
         expect(args.error.message).toEqual("test");
     });
-})
+});

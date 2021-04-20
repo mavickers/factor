@@ -1,7 +1,12 @@
 import Globals from "../../Globals";
-import Utilities from "../../Utilities";
 import LogMessage from "./LogMessage";
 import Location from "../../classes/Location";
+
+import { newUuidShort } from "../../Utilities/uuid";
+import { isBoolean } from "../../Utilities/booleans";
+import { isError } from "../../Utilities/errors";
+import { isString } from "../../Utilities/strings";
+import { isType } from "../../Utilities/types";
 
 export const LoggerConfig = Symbol.for("@mavickers/factor/components/Logger");
 
@@ -12,7 +17,7 @@ export default class Logger {
 
     constructor() {
         this.#group = "";
-        this.#id = Utilities.newUuidShort();
+        this.#id = newUuidShort();
         this.#logs = [ ];
     }
 
@@ -39,7 +44,7 @@ export default class Logger {
     }
 
     get formattedLogs() {
-        const objects = this.#logs.map(log => log.messages.filter(message => !Utilities.isString(message))).flat();
+        const objects = this.#logs.map(log => log.messages.filter(message => !isString(message))).flat();
 
         let output = "";
 
@@ -57,9 +62,9 @@ export default class Logger {
 
                 output += '\n' + (log.messages.indexOf(message) === 0 && coordinates || "");
 
-                output += Utilities.isString(message)
+                output += isString(message)
                     ? `${" ".repeat(indent)} ${message}`
-                    : (message || Utilities.isBoolean(message)) && `${isFirst && " " || "            "}{{obj}}`.padStart(indent, " ") || "";
+                    : (message || isBoolean(message)) && `${isFirst && " " || "            "}{{obj}}`.padStart(indent, " ") || "";
             });
         });
 
@@ -73,11 +78,11 @@ export default class Logger {
     }
 
     log(...args) {
-        const locations = args.filter(arg => Utilities.isType(arg, Location) && arg);
+        const locations = args.filter(arg => isType(arg, Location) && arg);
         const location = locations && locations.length > 0 && locations.slice(-1) || Location.locate(2);
-        let messages = args.filter(arg => !Utilities.isType(arg, Location));
+        let messages = args.filter(arg => !isType(arg, Location));
 
-        messages = messages.map(message => Utilities.isError(message) && !Globals.Factor.logErrorStack ? `error thrown: ${message.message}` : message);
+        messages = messages.map(message => isError(message) && !Globals.Factor.logErrorStack ? `error thrown: ${message.message}` : message);
         messages.length > 0 && this.#logs.push(new LogMessage(location, ...messages));
 
         return this;

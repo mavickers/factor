@@ -1,5 +1,3 @@
-// import StandardModel from "./classes/StandardModel";
-
 export default class Globals {
     static get Contexts() {
         const contextId = Symbol.for("@mavickers/factor/contexts");

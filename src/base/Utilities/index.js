@@ -2,10 +2,13 @@ import Globals from "../Globals";
 import Mixin from "../classes/Mixin";
 import RandomGenerator from "../pipelines/RandomGenerator";
 
-import { copyAndSeal } from "./objects";
+import { copyAndSeal, isObject, isPureObject } from "./objects";
+import { isBoolean } from "./booleans";
+import { isError } from "./errors";
 import { isFunction } from "./functions";
+import { isNumber } from "./numbers";
 import { isString } from "./strings";
-import { isType } from "./types";
+import { getType, isType } from "./types";
 import { getClass, getClassName } from "./classes";
 import { isNil, isNotNil } from "./nil";
 import { newUuid, newUuidShort } from "./uuid";
@@ -108,13 +111,7 @@ export default class Utilities {
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
     // a quick and dirty way of getting a random value for a specified type
     static getRandom = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
-    static getType = (obj) => {
-        const allTypes = [...Globals.Primitives, ...Globals.Structurals ];
-        const objTypeString = Object.prototype.toString.call(obj);
-        const types = allTypes.filter(t => t.signature === objTypeString);
-
-        return types && types.length === 1 && types[0].type || undefined;
-    };
+    static getType = getType;
     static hasAll = (arr, items) => {
         if (!(Array.isArray(arr) && Array.isArray(items))) return false;
 
@@ -141,7 +138,7 @@ export default class Utilities {
             ? (obj.reduce((acc, col) => acc && typeof col === type, true) || false)
             : (obj.reduce((acc, col) => acc && col instanceof type, true) || false);
     }
-    static isBoolean = (obj) => (typeof obj === "boolean" || obj instanceof Boolean) && true || false;
+    static isBoolean = isBoolean;
     static isClass = (obj) => {
         // if the string content of the given object satisfies any of these conditions,
         // consider the object as a class:
@@ -152,7 +149,7 @@ export default class Utilities {
         return obj instanceof Function && typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
     };
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
-    static isError = (obj) => obj && obj instanceof Error && true || false;
+    static isError = isError;
     static isFunction = isFunction;
     static isInheriting = (obj, targetClass) => {
         const inheritances = this.getInheritances(obj);
@@ -163,9 +160,9 @@ export default class Utilities {
     };
     static isNil = isNil;
     static isNotNil = isNotNil;
-    static isNumber = (obj) => obj && (typeof obj === "number" || obj instanceof Number) && true || false;
-    static isObject = (obj) => obj && (typeof obj === "object" || obj instanceof Object) && true || false;
-    static isPureObject = (obj) => obj && Utilities.isObject(obj) && Utilities.getClassName(obj) === "Object" || false;
+    static isNumber = isNumber;
+    static isObject = isObject;
+    static isPureObject = isPureObject;
     static get isStrict() { return isStrict; };
     static isString = isString;
     static isType = isType;

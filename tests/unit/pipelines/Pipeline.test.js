@@ -1,4 +1,6 @@
-import { Pipeline, PipelineFilter, PipelineArgs } from "../../../src/base/components/Pipeline";
+import Pipeline from "../../../src/base/components/Pipeline/Pipeline";
+import PipelineArgs from "../../../src/base/components/Pipeline/PipelineArgs";
+import PipelineFilter from "../../../src/base/components/Pipeline/PipelineFilter";
 import NormalizeDataParametersFilter from "../../../src/base/pipelines/Common/NormalizeDataParametersFilter";
 
 class FilterA extends PipelineFilter {
