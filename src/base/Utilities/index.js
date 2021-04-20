@@ -1,5 +1,7 @@
-import Globals from "./Globals";
-import Mixin from "./classes/Mixin";
+import Globals from "../Globals";
+import Mixin from "../classes/Mixin";
+
+import isFunction from "./isFunction";
 
 const isStrict = (function(){ return !this; })();
 
@@ -151,7 +153,7 @@ export default class Utilities {
     };
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = (obj) => obj && obj instanceof Error && true || false;
-    static isFunction = (obj) => obj && (typeof obj === "function" || obj instanceof Function) && true || false;
+    static isFunction = isFunction;
     static isInheriting = (obj, targetClass) => {
         const inheritances = this.getInheritances(obj);
 

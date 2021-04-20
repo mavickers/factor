@@ -11,7 +11,7 @@ export default class InitializeFilter extends PipelineFilter {
 
             if (!data) return this.abort("data parameter is invalid");
 
-            const { findFrom } = Utilities;
+            const { findFrom } = Index;
 
             data.newInstance = data.newInstance || findFrom(data.arguments).firstInstanceOf(StandardModel);
             data.parent = data.newInstance && Utilities.getParentClass(data.newInstance);

@@ -10,7 +10,7 @@ export default class SetBooleanFieldFilter extends PipelineFilter {
             if (!data) return this.abort("data parameter is invalid");
 
             const { propNames, fieldDefs } = data.config;
-            const { is } = Utilities;
+            const { is } = Index;
             const fields = fieldDefs.filter(field => field.type === Boolean);
 
             if (fields.length === 0) return;
