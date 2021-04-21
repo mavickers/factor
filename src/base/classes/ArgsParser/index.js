@@ -1,5 +1,3 @@
-import FixedEvaluator from "./FixedLengthEvaluator";
-import VaryingEvaluator from "./VaryingLengthEvaluator";
 import EvaluatorPipeline from "./EvaluatorPipeline";
 import PipelineArgs from "../../components/Pipeline/PipelineArgs";
 import Result from "./Result";
