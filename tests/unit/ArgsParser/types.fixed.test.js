@@ -11,9 +11,10 @@ const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(
 const { getRandom } = Utilities;
 
 describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
-    const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, Set, String, Symbol, WeakMap, WeakSet ];
+    const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, Set, String, Symbol, WeakMap, WeakSet ]
+                  .map(type => Object.assign(type, { toString: function() { return this.name; }}));
 
-    test.concurrent.each(types)("primitive/structure type loop", async (type) => {
+    test.concurrent.each(types)(`primitive/structure type loop: %s`, async (type) => {
         // this test loops through the types and creates a single/double profile for
         // each as well as single/double set of arguments; makeArgs() above should
         // create an arguments object that can be used to both generate arguments
