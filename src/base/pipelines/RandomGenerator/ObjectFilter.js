@@ -11,7 +11,7 @@ export default class ArrayFilter extends PipelineFilter {
             // key:value properties; keys are strings, values are
             // primitives; size ranges from one key to 100.
 
-            const { getRandom } = Utilities;
+            const { getRandom, getRandomInt } = Utilities;
             const fns = [
                 () => getRandom({ type: BigInt }),
                 () => getRandom({ type: Boolean }),
@@ -22,9 +22,9 @@ export default class ArrayFilter extends PipelineFilter {
             ];
 
             const obj = { };
-            const keys = getRandom({ type: Number, min: 1, max: 100 });
+            const keys = getRandomInt(1, 100);
 
-            for(let r = 0; r < keys; r++) obj[getRandom(String)] = fns[getRandom({ type: Number, min: 0, max: fns.length - 1 })]();
+            for(let r = 0; r < keys; r++) obj[getRandom({ type: String })] = fns[getRandomInt(0, fns.length - 1)]();
 
             data.targetValue = obj;
 

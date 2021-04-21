@@ -111,6 +111,7 @@ export default class Utilities {
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
     // a quick and dirty way of getting a random value for a specified type
     static getRandom = (args) => RandomGenerator.execute(new PipelineArgs(args)).data.targetValue;
+    static getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
     static getType = getType;
     static hasAll = (arr, items) => {
         if (!(Array.isArray(arr) && Array.isArray(items))) return false;

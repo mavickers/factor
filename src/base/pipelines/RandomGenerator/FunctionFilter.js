@@ -10,10 +10,10 @@ export default class FunctionFilter extends PipelineFilter {
             // randomly returns an anonymous function, named function,
             // arrow function or Function instance.
 
-            const { getRandom } = Utilities;
+            const { getRandomInt } = Utilities;
             const fns = [ () => { }, function() { }, function f() { }, new Function() ];
 
-            data.targetValue = fns[getRandom({ type: Number, min: 0, max: 3 })];
+            data.targetValue = fns[getRandomInt(0, 3)];
 
             this.abort();
         });

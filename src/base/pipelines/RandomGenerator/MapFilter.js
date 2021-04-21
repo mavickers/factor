@@ -11,8 +11,8 @@ export default class MapFilter extends PipelineFilter {
             // max of 100 items in the map.
 
             const map = new Map();
-            const { getRandom } = Utilities;
-            let items = getRandom({ type: Number, min: 1, max: 100 });
+            const { getRandom, getRandomInt } = Utilities;
+            let items = getRandomInt(1, 100);
 
             while (items-- > 0) map.set(getRandom({ type: String }), getRandom({ type: String }));
 

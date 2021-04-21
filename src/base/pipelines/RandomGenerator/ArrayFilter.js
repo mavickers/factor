@@ -12,7 +12,7 @@ constructor() {
             // primitive types and a few structural types; size ranges
             // from 1x1 to 10x10.
 
-            const { getRandom } = Utilities;
+            const { getRandom, getRandomInt } = Utilities;
             const fns = [
                 () => getRandom({ type: BigInt }),
                 () => getRandom({ type: Boolean }),
@@ -23,9 +23,9 @@ constructor() {
             ];
 
             const array = [];
-            const cols = getRandom({ type: Number, min: 1, max: 10 });
-            const rows = getRandom({ type: Number, min: 1, max: 10 });
-            const types = [ ...Array(cols) ].map(() => getRandom({ type: Number, min: 0, max: fns.length -1 }));
+            const cols = getRandomInt(1, 10);
+            const rows = getRandomInt(1, 10);
+            const types = [ ...Array(cols) ].map(() => getRandomInt(0, fns.length - 1));
 
             for(let r = 0; r < rows; r++) array.push(types.map(type => fns[type]()));
 

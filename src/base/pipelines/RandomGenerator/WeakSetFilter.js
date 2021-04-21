@@ -11,10 +11,10 @@ export default class WeakSetFilter extends PipelineFilter {
             // max of 100 items in the set.
 
             const set = new WeakSet();
-            const { getRandom } = Utilities;
+            const { getRandom, getRandomInt } = Utilities;
             const types = [ Array, BigInt, Boolean, Date, Number, String, Symbol ];
-            const type = () => types[getRandom({ type: Number, min: 0, max: types.length - 1})];
-            let items = getRandom({ type: Number, min: 1, max: 100 });
+            const type = () => types[getRandomInt(0, types.length - 1)];
+            let items = getRandomInt(1, 100);
 
             while (items-- > 0) set.add({ [items]: getRandom({ type: type() }) });
 
