@@ -1,5 +1,7 @@
 import FixedEvaluator from "./FixedLengthEvaluator";
 import VaryingEvaluator from "./VaryingLengthEvaluator";
+import EvaluatorPipeline from "./EvaluatorPipeline";
+import PipelineArgs from "../../components/Pipeline/PipelineArgs";
 import Result from "./Result";
 import Utilities from "../../Utilities";
 
@@ -252,12 +254,13 @@ export default class {
         const Evaluator = this.hasVaryingArguments ? VaryingEvaluator : FixedEvaluator;
         const evaluate = new Evaluator(parser, argsArray);
 
-        // const args = new PipelineArgs(parser, argsArray);
+        const evaluator = (profile) => EvaluatorPipeline.execute(new PipelineArgs({ parser, argsArray, profile }));
         // todo: need to add a withData or something similar to Pipeline so that
         //       the pipeline can go through multiple executions with the same
         //       set of data... args should actually be static with execute() taking
         //       a different set of args each time.
 
+        evaluator(profiles[0]);
         profiles.every(evaluate);
 
         return parser.result.profileName !== undefined;

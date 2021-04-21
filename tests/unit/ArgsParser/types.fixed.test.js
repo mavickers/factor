@@ -7,7 +7,6 @@ import "jest-extended";
 import ArgsParser from "../../../src/base/classes/ArgsParser";
 import Utilities from "../../../src/base/Utilities";
 
-
 const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(rawArgs).map(arg => arg[1]));
 const { getRandom } = Utilities;
 

@@ -3,11 +3,13 @@ import PipelineFilter from "../../../components/Pipeline/PipelineFilter"
 export default class InitializeFilter extends PipelineFilter {
     constructor() {
         super((data, logger) => {
-            if (!(data && data.profile)) throw Error("InitializeFilter: data parameter is invalid");
+            if (!(data && Array.isArray(data) && data.length === 1)) throw Error("InitializeFilter: data parameter is invalid");
+            if (!(data[0].parser && data[0].argsArray && data[0].profile)) throw Error("InitializeFilter: data parameter is invalid");
 
             const newData = {
-                profile: data.profile,
-                withFixedLength: data.withFixedLength && data.withFixedLength !== false || true
+                parser: data[0].parser,
+                profile: data[0].profile,
+                args: data[0].argsArray
             };
 
             newData.profileName = newData.profile[0];
