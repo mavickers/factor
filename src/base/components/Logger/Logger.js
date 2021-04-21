@@ -33,8 +33,8 @@ export default class Logger {
         return this;
     }
 
-    flush() {
-        if (this.#logs.length > 0 && !Globals.Factor.logMute) {
+    flush(flag) {
+        if (flag !== false && this.#logs.length > 0 && !Globals.Factor.logMute) {
             console.log(this.formattedLogs);
         }
 

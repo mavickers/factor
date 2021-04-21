@@ -13,7 +13,7 @@ const { getRandom } = Utilities;
 describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
     const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, Set, String, Symbol, WeakMap, WeakSet ];
 
-    test.concurrent.each([ Boolean ])("Primitives/Structured Loop Tests Set", async (type) => {
+    test.concurrent.each(types)("primitive/structure type loop", async (type) => {
         // this test loops through the types and creates a single/double profile for
         // each as well as single/double set of arguments; makeArgs() above should
         // create an arguments object that can be used to both generate arguments
@@ -25,7 +25,7 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
             double: { field1: { [type.name]: true }, field2: { [type.name]: true }},
         };
         const args = {
-            single: { field1: false },
+            single: { field1: getRandom(type) },
             double: { field1: getRandom(type), field2: getRandom(type) }
         };
 
@@ -34,10 +34,9 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
         expect(() => parser = ArgsParser.withProfiles(profiles)).not.toThrow();
         expect(parser.parse(makeArgs(args.single))).toBeTrue();
         expect(parser.result.values).toEqual(args.single);
-        // parser.parse(makeArgs(args.double));
-        // console.log(args.double, parser.result);
-        // expect(parser.parse(makeArgs(args.double))).toBeTrue();
-        // expect(parser.result.values).toEqual(args.double);
+        expect(parser.parse(makeArgs(args.double))).toBeTrue();
+        expect(parser.result.values).toEqual(args.double);
     });
 });
+
 

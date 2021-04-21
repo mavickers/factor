@@ -4,6 +4,7 @@ import EvaluatorPipeline from "./EvaluatorPipeline";
 import PipelineArgs from "../../components/Pipeline/PipelineArgs";
 import Result from "./Result";
 import Utilities from "../../Utilities";
+import { isNotNil } from "../../Utilities/nil";
 
 const { isArguments, newUuidShort } = Utilities;
 
@@ -95,6 +96,16 @@ export default class {
     static withProfiles(profiles, ...classes) {
         return new this().withProfiles(profiles, ...classes);
     }
+
+    /*
+     *  hasFixedArguments() : bool
+     *
+     *  returns the opposite state of #withVaryingArguments flag.
+     */
+
+    get hasFixedArguments() {
+        return !this.#withVaryingArguments;
+    };
 
     /*
      *  hasRelaxedProfiles() : bool
@@ -247,22 +258,20 @@ export default class {
 
         const argsArray = Array.from(args);
         const profiles = Object.entries(parser.#profiles || { });
+        const withLogging = false;
 
         profiles.length === 0 && throw Error("ArgsParser.parse(): parser does not contain any valid profiles");
         parser.result = new Result();
 
-        const Evaluator = this.hasVaryingArguments ? VaryingEvaluator : FixedEvaluator;
-        const evaluate = new Evaluator(parser, argsArray);
+        const evaluator = (profile) => EvaluatorPipeline.execute(new PipelineArgs({ parser, argsArray, profile, withLogging }));
 
-        const evaluator = (profile) => EvaluatorPipeline.execute(new PipelineArgs({ parser, argsArray, profile }));
         // todo: need to add a withData or something similar to Pipeline so that
         //       the pipeline can go through multiple executions with the same
         //       set of data... args should actually be static with execute() taking
         //       a different set of args each time.
 
-        evaluator(profiles[0]);
-        profiles.every(evaluate);
+        profiles.every(evaluator);
 
-        return parser.result.profileName !== undefined;
+        return isNotNil(parser.result.profileName);
     }
 }
