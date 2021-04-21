@@ -11,7 +11,7 @@ const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(
 const { getRandom } = Utilities;
 
 describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
-    const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, Set, String, Symbol, WeakMap, WeakSet ]
+    const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, Object, Set, String, Symbol, WeakMap, WeakSet ]
                   .map(type => Object.assign(type, { toString: function() { return this.name; }}));
 
     test.concurrent.each(types)(`primitive/structure type loop: %s`, async (type) => {
@@ -31,6 +31,8 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
         };
 
         let parser;
+
+        if (type === Object) console.log(profiles, args);
 
         expect(() => parser = ArgsParser.withProfiles(profiles)).not.toThrow();
         expect(parser.parse(makeArgs(args.single))).toBeTrue();

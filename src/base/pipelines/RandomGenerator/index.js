@@ -8,6 +8,7 @@ import DateFilter from "./DateFilter";
 import FunctionFilter from "./FunctionFilter";
 import MapFilter from "./MapFilter";
 import NumberFilter from "./NumberFilter";
+import ObjectFilter from "./ObjectFilter";
 import SetFilter from "./SetFilter";
 import StringFilter from "./StringFilter";
 import SymbolFilter from "./SymbolFilter";
@@ -27,6 +28,7 @@ export default
             FunctionFilter,
             MapFilter,
             NumberFilter,
+            ObjectFilter,
             SetFilter,
             StringFilter,
             SymbolFilter,

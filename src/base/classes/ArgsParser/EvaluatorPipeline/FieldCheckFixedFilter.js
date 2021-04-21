@@ -2,7 +2,6 @@ import PipelineFilter from "../../../components/Pipeline/PipelineFilter"
 import { getType } from "../../../Utilities/types";
 import { getClass } from "../../../Utilities/classes";
 import { isNil, isNotNil } from "../../../Utilities/nil";
-import { isBoolean } from "../../../Utilities/booleans";
 
 export default class FieldCheckFixedFilter extends PipelineFilter {
     constructor() {
@@ -24,11 +23,10 @@ export default class FieldCheckFixedFilter extends PipelineFilter {
 
             // if we have a nil arg value push the fieldName onto the errors array if the field
             // was required; otherwise assign the field value to null.
-
             if (isNil(arg)) required ? data.errors.push(fieldName) : data.values[fieldName] = null;
+
             // if we have a value and it matches the type in the field definition assign the field value
             // to the argument value; otherwise push the fieldName onto the errors array.
-
             if (isNotNil(arg)) getType(arg) === type || getClass(arg) === type ? data.values[fieldName] = arg : data.errors.push(fieldName);
 
             // increment the index and repeat this filter
