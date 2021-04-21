@@ -1,3 +1,12 @@
+/*  RandomGenerator.js
+ *
+ *  Pipeline that generates a random value for the various primitive
+ *  or structured js types; each type has its own set of limits.
+ *
+ *  todo: add functionality that allows a custom set of limits when
+ *        setting the pipeline up.
+ */
+
 import Pipeline from "../../components/Pipeline/Pipeline";
 
 import InitializeFilter from "./InitializeFilter"
