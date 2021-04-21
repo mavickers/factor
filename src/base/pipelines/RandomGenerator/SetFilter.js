@@ -16,7 +16,7 @@ export default class SetFilter extends PipelineFilter {
             const type = () => types[Math.floor(Math.random() * types.length)];
             let items = Math.floor(Math.random() * 100) + 1;
 
-            while (items-- > 0) set.add(getRandom(type()));
+            while (items-- > 0) set.add({ type: getRandom(type()) });
 
             data.targetValue = set;
 

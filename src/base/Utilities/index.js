@@ -110,7 +110,7 @@ export default class Utilities {
     static getParentClassName = function(obj) { return this.getParentClass(obj).name; };
     static getPrototypeString = (obj) => Object.prototype.toString.call(obj);
     // a quick and dirty way of getting a random value for a specified type
-    static getRandom = (type) => RandomGenerator.execute(new PipelineArgs(type)).data.targetValue;
+    static getRandom = (args) => RandomGenerator.execute(new PipelineArgs(args)).data.targetValue;
     static getType = getType;
     static hasAll = (arr, items) => {
         if (!(Array.isArray(arr) && Array.isArray(items))) return false;

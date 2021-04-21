@@ -16,7 +16,7 @@ export default class WeakSetFilter extends PipelineFilter {
             const type = () => types[Math.floor(Math.random() * types.length)];
             let items = Math.floor(Math.random() * 100) + 1;
 
-            while (items-- > 0) set.add({ [items]: getRandom(type()) });
+            while (items-- > 0) set.add({ [items]: getRandom({ type: type() }) });
 
             data.targetValue = set;
 

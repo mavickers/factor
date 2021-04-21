@@ -10,7 +10,20 @@ export default class NumberFilter extends PipelineFilter {
             // with up to 10 decimal places and randomly positive or
             // negative.
 
-            data.targetValue = Math.random() * (10 ** Math.floor(Math.random() * 10) + 1) * (Math.random() < 0.5 ? 1 : -1);
+            // function randomInteger(min, max) {
+            //     return Math.floor(Math.random() * (max - min + 1)) + min;
+            // }
+
+            // function randomNumber(min, max) {
+            //     return Math.random() * (max - min) + min;
+            // }
+
+
+            // data.targetValue = Math.random() * (10 ** Math.floor(Math.random() * 10) + 1) * (Math.random() < 0.5 ? 1 : -1);
+
+            data.targetValue = data.withWholeValue
+                ? Math.floor(Math.random() * (data.maxValue - data.minValue + 1)) + data.minValue
+                : Math.random() * (data.maxValue - data.minValue) + data.minValue;
 
             this.abort();
         });

@@ -14,18 +14,20 @@ constructor() {
 
             const { getRandom } = Utilities;
             const fns = [
-                () => getRandom(BigInt),
-                () => getRandom(Boolean),
-                () => getRandom(Date),
-                () => getRandom(Number),
-                () => getRandom(String),
-                () => getRandom(Symbol)
+                () => getRandom({ type: BigInt }),
+                () => getRandom({ type: Boolean }),
+                () => getRandom({ type: Date }),
+                () => getRandom({ type: Number }),
+                () => getRandom({ type: String }),
+                () => getRandom({ type: Symbol })
             ];
 
             const array = [];
-            const cols = Math.floor(Math.random() * 10) + 1
-            const rows = Math.floor(Math.random() * 10) + 1
-            const types = [ ...Array(cols) ].map(() => Math.floor(Math.random() * fns.length));
+            // const cols = Math.floor(Math.random() * 10) + 1
+            // const rows = Math.floor(Math.random() * 10) + 1
+            const cols = getRandom({ type: Number, min: 1, max: 10 });
+            const rows = getRandom({ type: Number, min: 1, max: 10 });
+            const types = [ ...Array(cols) ].map(() => getRandom({ type: Number, min: 0, max: fns.length -1 }));
 
             for(let r = 0; r < rows; r++) array.push(types.map(type => fns[type]()));
 

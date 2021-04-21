@@ -14,7 +14,7 @@ export default class MapFilter extends PipelineFilter {
             const { getRandom } = Utilities;
             let items = Math.floor(Math.random() * 100) + 1;
 
-            while (items-- > 0) map.set(getRandom(String), getRandom(String));
+            while (items-- > 0) map.set(getRandom({ type: String }), getRandom({ type: String }));
 
             data.targetValue = map;
 

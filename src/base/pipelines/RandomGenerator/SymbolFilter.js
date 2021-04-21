@@ -12,7 +12,7 @@ export default class SymbolFilter extends PipelineFilter {
             // while the rest of the time it uses the random string
             // generator to use as a base.
 
-            data.targetValue = Math.random () < .25 ? Symbol() : Symbol(Utilities.getRandom(String));
+            data.targetValue = Math.random () < .25 ? Symbol() : Symbol(Utilities.getRandom({ type: String }));
 
             this.abort();
         });

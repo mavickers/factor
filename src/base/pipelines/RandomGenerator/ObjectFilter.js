@@ -13,12 +13,12 @@ export default class ArrayFilter extends PipelineFilter {
 
             const { getRandom } = Utilities;
             const fns = [
-                () => getRandom(BigInt),
-                () => getRandom(Boolean),
-                () => getRandom(Date),
-                () => getRandom(Number),
-                () => getRandom(String),
-                () => getRandom(Symbol)
+                () => getRandom({ type: BigInt }),
+                () => getRandom({ type: Boolean }),
+                () => getRandom({ type: Date }),
+                () => getRandom({ type: Number }),
+                () => getRandom({ type: String }),
+                () => getRandom({ type: Symbol })
             ];
 
             const obj = { };
