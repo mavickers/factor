@@ -8,7 +8,8 @@
  *
  */
 const getClass = (obj) => obj && Object.getPrototypeOf(obj).constructor || undefined;
-const getClassName = function(obj) { return this.getClass(obj).name; };
+const getClassName = function(obj) { return getClass(obj).name; };
+const getClassName = function(obj) { return getClass(obj).name; };
 
 export { getClass, getClassName };
 export default { getClass, getClassName };
