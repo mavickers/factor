@@ -22,9 +22,9 @@ export default class ArrayFilter extends PipelineFilter {
             ];
 
             const obj = { };
-            const keys = Math.floor(Math.random() * 100) + 1;
+            const keys = getRandom({ type: Number, min: 1, max: 100 });
 
-            for(let r = 0; r < keys; r++) obj[getRandom(String)] = fns[Math.floor(Math.random() * fns.length)]();
+            for(let r = 0; r < keys; r++) obj[getRandom(String)] = fns[getRandom({ type: Number, min: 0, max: fns.length - 1 })]();
 
             data.targetValue = obj;
 

@@ -1,4 +1,5 @@
 import { PipelineFilter } from "../../components/Pipeline";
+import Utilities from "../../Utilities";
 
 export default class FunctionFilter extends PipelineFilter {
     constructor() {
@@ -9,9 +10,10 @@ export default class FunctionFilter extends PipelineFilter {
             // randomly returns an anonymous function, named function,
             // arrow function or Function instance.
 
+            const { getRandom } = Utilities;
             const fns = [ () => { }, function() { }, function f() { }, new Function() ];
 
-            data.targetValue = fns[Math.floor(Math.random() * 4)];
+            data.targetValue = fns[getRandom({ type: Number, min: 0, max: 3 })];
 
             this.abort();
         });

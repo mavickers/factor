@@ -1,4 +1,5 @@
 import { PipelineFilter } from "../../components/Pipeline";
+import Utilities from "../../Utilities";
 
 export default class BigIntFilter extends PipelineFilter {
     constructor() {
@@ -9,11 +10,12 @@ export default class BigIntFilter extends PipelineFilter {
             // this will create a string using max of 64 digits
             // and then create a positive BigInt value from the result.
 
+            const { getRandom } = Utilities;
             const numbers = [..."0123456789"];
-            const digits = Math.floor(Math.random() * 64) + 1
+            const digits = getRandom({ type: Number, min: 1, max: 64});
             let numberString = "";
 
-            while(numberString.length < digits) numberString += numbers[Math.floor(Math.random() * 10)];
+            while(numberString.length < digits) numberString += numbers[getRandom({ type: Number, min: 0, max: 9 })];
 
             data.targetValue = BigInt(numberString);
 

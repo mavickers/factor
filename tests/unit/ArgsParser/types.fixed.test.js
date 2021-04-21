@@ -14,7 +14,7 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
     const types = [ Array, BigInt, Boolean, Date, Function, Map, Number, Object, Set, String, Symbol, WeakMap, WeakSet ]
                   .map(type => Object.assign(type, { toString: function() { return this.name; }}));
 
-    test.concurrent.each([ Array ])(`primitive/structure type loop: %s`, async (type) => {
+    test.concurrent.each(types)(`primitive/structure type loop: %s`, async (type) => {
         // this test loops through the types and creates a single/double profile for
         // each as well as single/double set of arguments; makeArgs() above should
         // create an arguments object that can be used to both generate arguments
@@ -35,10 +35,8 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
         expect(() => parser = ArgsParser.withProfiles(profiles)).not.toThrow();
         expect(parser.parse(makeArgs(args.single))).toBeTrue();
         expect(parser.result.values).toEqual(args.single);
-        console.log(parser.result.values);
         expect(parser.parse(makeArgs(args.double))).toBeTrue();
         expect(parser.result.values).toEqual(args.double);
-        console.log(parser.result.values);
     });
 });
 

@@ -25,7 +25,7 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
             args1: { field5: getRandom(BigInt), field6: getRandom(Array), field7: getRandom(String), field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String), field4: getRandom(Number) }
         };
 
-        console.log(getRandom({ type: Number, min: 0, max: 5 }));
+        console.log(Math.random(), getRandom({ type: Number, whole: false }).toString(36)[2]);
 
 
         // expect(() => parser = ArgsParser.withVaryingArguments().withProfiles(profiles)).not.toThrow();

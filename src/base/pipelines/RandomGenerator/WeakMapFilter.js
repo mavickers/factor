@@ -12,7 +12,7 @@ export default class WeakMapFilter extends PipelineFilter {
 
             const map = new WeakMap();
             const { getRandom } = Utilities;
-            let items = Math.floor(Math.random() * 100) + 1;
+            let items = getRandom({ Number, min: 1, max: 100 });
 
             while (items-- > 0) map.set({ [items]: getRandom({ type: String }) }, getRandom({ type: String }));
 

@@ -1,4 +1,5 @@
 import { PipelineFilter } from "../../components/Pipeline";
+import Utilities from "../../Utilities";
 
 export default class StringFilter extends PipelineFilter {
     constructor() {
@@ -6,10 +7,14 @@ export default class StringFilter extends PipelineFilter {
             if (!data) throw Error("StringFilter: data parameter is invalid");
             if (data.targetType.type !== String) return;
 
+            const { getRandom } = Utilities;
+
             // this will generate a random string value up to 64
             // characters long using 0-9a-z character.
 
-            data.targetValue = [...Array(Math.floor(Math.random() * 64) + 1)].map(() => Math.random().toString(36)[2]).join("");
+            const arr = Array(getRandom({ type: Number, min: 1, max: 64 }));
+
+            data.targetValue = [...arr].map(() => getRandom({ type: Number, whole: false }).toString(36)[2]).join("");
 
             this.abort();
         });

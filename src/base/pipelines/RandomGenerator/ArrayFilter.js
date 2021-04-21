@@ -23,8 +23,6 @@ constructor() {
             ];
 
             const array = [];
-            // const cols = Math.floor(Math.random() * 10) + 1
-            // const rows = Math.floor(Math.random() * 10) + 1
             const cols = getRandom({ type: Number, min: 1, max: 10 });
             const rows = getRandom({ type: Number, min: 1, max: 10 });
             const types = [ ...Array(cols) ].map(() => getRandom({ type: Number, min: 0, max: fns.length -1 }));
