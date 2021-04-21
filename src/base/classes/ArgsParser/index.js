@@ -193,6 +193,18 @@ export default class {
         return new this().withClasses(...classes);
     }
 
+    /*  withFixedArguments() : ArgsParser
+     *
+     *  flags the parser to allow any number of arguments
+     *  despite the number of fields defined in the profiles.
+     */
+
+    withFixedArguments() {
+        this.#withVaryingArguments = false;
+
+        return this;
+    }
+
     /*
      *  withRelaxedProfiles() : undefined
      *
@@ -203,6 +215,18 @@ export default class {
 
     withRelaxedProfiles() {
         this.#withRelaxedProfiles = true;
+
+        return this;
+    }
+
+    /*  withVaryingArguments() : ArgsParser
+     *
+     *  flags the parser to only allow the same number of arguments
+     *  as there are fields defined in profile under evaluation.
+     */
+
+    withVaryingArguments() {
+        this.#withVaryingArguments = true;
 
         return this;
     }

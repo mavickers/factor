@@ -32,13 +32,22 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
 
         let parser;
 
-        if (type === Object) console.log(profiles, args);
-
         expect(() => parser = ArgsParser.withProfiles(profiles)).not.toThrow();
         expect(parser.parse(makeArgs(args.single))).toBeTrue();
         expect(parser.result.values).toEqual(args.single);
         expect(parser.parse(makeArgs(args.double))).toBeTrue();
         expect(parser.result.values).toEqual(args.double);
+    });
+
+    test("temp 1", () => {
+       const profiles = {
+           prof1: { field1: { Boolean: true }, field2: { String: true }, field3: { Number: true } }
+       };
+       const args = {
+           args1: { field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String) }
+       };
+
+       expect(() => parser = ArgsParser.withProfiles())
     });
 });
 

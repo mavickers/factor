@@ -12,7 +12,7 @@ export default class InitializeFilter extends PipelineFilter {
             const newData = {
                 parser: data[0].parser,
                 profile: data[0].profile,
-                args: data[0].argsArray,
+                args: data[0].argsArray.map(a => ({ value: a, isUsed: false })),
                 withLogging: data[0].withLogging || false
             };
 
