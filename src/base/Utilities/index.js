@@ -9,7 +9,7 @@ import { isFunction } from "./functions";
 import { isNumber } from "./numbers";
 import { isString } from "./strings";
 import { getType, isType } from "./types";
-import { getClass, getClassName } from "./classes";
+import { getClass, getClassName, isClass } from "./classes";
 import { isNil, isNotNil } from "./nil";
 import { newUuid, newUuidShort } from "./uuid";
 import { PipelineArgs } from "../components/Pipeline";
@@ -139,15 +139,7 @@ export default class Utilities {
             : (obj.reduce((acc, col) => acc && col instanceof type, true) || false);
     }
     static isBoolean = isBoolean;
-    static isClass = (obj) => {
-        // if the string content of the given object satisfies any of these conditions,
-        // consider the object as a class:
-        // - string starts with "class" (native class declaration)
-        // - string contains "_classCallCheck" (babelized class)
-        // - string contains "native code" (native object)
-
-        return obj instanceof Function && typeof obj === 'function' && /^\s*class\s+|_classCallCheck|native\scode/.test(obj.toString());
-    };
+    static isClass = isClass;
     static isDate = (obj) => obj && Object.prototype.toString.call(obj) === "[object Date]" && true || false;
     static isError = isError;
     static isFunction = isFunction;

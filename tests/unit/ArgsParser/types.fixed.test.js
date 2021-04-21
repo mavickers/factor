@@ -7,6 +7,7 @@ import "jest-extended";
 import ArgsParser from "../../../src/base/classes/ArgsParser";
 import Utilities from "../../../src/base/Utilities";
 import { getType, isType } from "../../../src/base/Utilities/types";
+import { getClassName, isClass, isClassed } from "../../../src/base/Utilities/classes";
 
 const makeArgs = (rawArgs) => function() { return arguments }(...Object.entries(rawArgs).map(arg => arg[1]));
 const { getRandom } = Utilities;
@@ -49,15 +50,8 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
             args1: { field5: getRandom(BigInt), field6: getRandom(Array), field7: getRandom(String), field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String), field4: getRandom(Number) }
         };
 
-        class t1 { };
-        const t2 = new t1();
-        console.log(isType([], Object));
-        console.log(isType(t2, Object));
-        // expect(() => parser = ArgsParser.withVaryingArguments().withProfiles(profiles)).not.toThrow();
-        // parser.parse(makeArgs(args.args1));
-        // console.log(parser.result);
-        // expect(parser.parse(makeArgs(args.args1))).toBeTrue();
-        // console.log(args.args1, parser.result);
+        expect(() => parser = ArgsParser.withVaryingArguments().withProfiles(profiles)).not.toThrow();
+        expect(parser.parse(makeArgs(args.args1))).toBeTrue();
     });
 });
 

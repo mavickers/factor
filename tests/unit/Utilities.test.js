@@ -124,12 +124,12 @@ describe("Utilities", () => {
         class ClassTwo extends ClassOne { };
         function ClassThree() { };
 
-        expect(Utilities.isClass(ClassOne)).toEqual(true);
-        expect(Utilities.isClass(ClassTwo)).toEqual(true);
-        expect(Utilities.isClass(ClassThree)).toEqual(false);
-        expect(Utilities.isClass(new ClassOne())).toEqual(false);
-        expect(Utilities.isClass(Object)).toEqual(true);
-        expect(Utilities.isClass(String)).toEqual(true);
+        expect(Utilities.isClass(ClassOne)).toBeTrue();
+        expect(Utilities.isClass(ClassTwo)).toBeTrue();
+        expect(Utilities.isClass(ClassThree)).toBeFalse();
+        expect(Utilities.isClass(new ClassOne())).toBeFalse();
+        expect(Utilities.isClass(Object)).toBeFalse();
+        expect(Utilities.isClass(String)).toBeFalse();
     });
 
     it("should determine if an object is a date", () => {
@@ -265,7 +265,7 @@ describe("Utilities", () => {
         // classes
         expect(isType(new Class1(), Class1)).toBeTrue();
         expect(isType(new Class1(), Function)).toBeFalse();
-        expect(isType(new Class1(), Object)).toBeTrue();
+        expect(isType(new Class1(), Object)).toBeFalse();
 
         expect(isType(mismatchFlag, TypeMismatchSetOptions)).toBeTrue();
     });

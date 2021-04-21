@@ -20,7 +20,6 @@ export default class FieldCheckVaryingFilter extends PipelineFilter {
 
             // if we have a nil arg value push the fieldName onto the errors array if the field
             // was required; otherwise assign the field value to null.
-            if (type === Object) console.log(arg.value);
             if (isNil(arg.value)) required ? data.errors.push(fieldName) : data.values[fieldName] = null;
 
             // if we have a value and it matches the type in the field definition assign the field value
