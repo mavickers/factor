@@ -11,6 +11,7 @@ export default class FieldCheckVaryingFilter extends PipelineFilter {
             if (!data && data.parser) throw Error("FieldCheckFilter: invalid data parameter");
             if (!data.parser.hasVaryingArguments) return;
             if (data.fieldDefinitionsIndex >= data.fieldDefinitions.length) return;
+            if (data.args.filter(a => a.isUsed).length >= data.fieldDefinitions.length) return;
 
             const field = data.fieldDefinitions[data.fieldDefinitionsIndex];
             const [ fieldName, fieldDefinition ] = field;
@@ -19,12 +20,13 @@ export default class FieldCheckVaryingFilter extends PipelineFilter {
 
             // if we have a nil arg value push the fieldName onto the errors array if the field
             // was required; otherwise assign the field value to null.
+            if (type === Object) console.log(arg.value);
             if (isNil(arg.value)) required ? data.errors.push(fieldName) : data.values[fieldName] = null;
 
             // if we have a value and it matches the type in the field definition assign the field value
             // to the argument value; otherwise push the fieldName onto the errors array.
-            if (isNotNil(arg.value)) getType(arg) === type || getClass(arg) === type
-                ? data.values[fieldName] = arg.value && (arg.isUsed = true)
+            if (isNotNil(arg.value)) getType(arg.value) === type || getClass(arg.value) === type
+                ? (data.values[fieldName] = arg.value) && (arg.isUsed = true)
                 : data.errors.push(fieldName);
 
             // increment the index and repeat this filter

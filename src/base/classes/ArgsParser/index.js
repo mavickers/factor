@@ -205,6 +205,10 @@ export default class {
         return this;
     }
 
+    static withFixedArguments() {
+        return new this().withFixedArguments();
+    }
+
     /*
      *  withRelaxedProfiles() : undefined
      *
@@ -229,6 +233,10 @@ export default class {
         this.#withVaryingArguments = true;
 
         return this;
+    }
+
+    static withVaryingArguments() {
+        return new this().withVaryingArguments();
     }
 
     static withRelaxedProfiles() {

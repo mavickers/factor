@@ -40,14 +40,19 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
     });
 
     test("temp 1", () => {
-       const profiles = {
-           prof1: { field1: { Boolean: true }, field2: { String: true }, field3: { Number: true } }
-       };
-       const args = {
-           args1: { field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String) }
-       };
+        let parser;
+        const profiles = {
+            prof1: { field1: { Boolean: true }, field2: { String: true }, field3: { Number: true }, field4: { Object: false }, field5: { String: true } }
+        };
+        const args = {
+            args1: { field5: getRandom(BigInt), field6: getRandom(Array), field7: getRandom(String), field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String), field4: getRandom(Number) }
+        };
 
-       expect(() => parser = ArgsParser.withProfiles())
+        expect(() => parser = ArgsParser.withVaryingArguments().withProfiles(profiles)).not.toThrow();
+        parser.parse(makeArgs(args.args1));
+        console.log(parser.result);
+        expect(parser.parse(makeArgs(args.args1))).toBeTrue();
+        console.log(args.args1, parser.result);
     });
 });
 
