@@ -1,6 +1,6 @@
 /*  types.fixed.test.js
  *
- *  ArgsParser looping tests for js types.
+ *  ArgsParser looping tests for js types and a varying number of arguments.
  */
 
 import "jest-extended";
@@ -24,6 +24,13 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
         const args = {
             args1: { field5: getRandom(BigInt), field6: getRandom(Array), field7: getRandom(String), field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String), field4: getRandom(Number) }
         };
+
+        // create test profiles
+
+        // randomly create args lists - create array of args that will satisfy profile,
+        // mix in other args.
+
+        // create args that will not satisfy profiles
 
         console.log(Math.random(), getRandom({ type: Number, whole: false }).toString(36)[2]);
 

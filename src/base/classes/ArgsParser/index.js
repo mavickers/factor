@@ -295,11 +295,6 @@ export default class {
 
         const evaluator = (profile) => EvaluatorPipeline.execute(new PipelineArgs({ parser, argsArray, profile, withLogging }));
 
-        // todo: need to add a withData or something similar to Pipeline so that
-        //       the pipeline can go through multiple executions with the same
-        //       set of data... args should actually be static with execute() taking
-        //       a different set of args each time.
-
         profiles.every(evaluator);
 
         return isNotNil(parser.result.profileName);

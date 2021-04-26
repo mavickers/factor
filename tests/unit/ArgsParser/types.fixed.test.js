@@ -1,6 +1,6 @@
 /*  types.fixed.test.js
  *
- *  ArgsParser looping tests for js types.
+ *  ArgsParser looping tests for js types and fixed number of arguments.
  */
 
 import "jest-extended";
