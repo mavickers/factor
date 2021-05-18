@@ -25,6 +25,10 @@ describe("ArgsParser Type Tests - Fixed Length Arguments", () => {
             args1: { field5: getRandom(BigInt), field6: getRandom(Array), field7: getRandom(String), field1: getRandom(Number), field2: getRandom(Boolean), field3: getRandom(String), field4: getRandom(Number) }
         };
 
+        // todo: I think this test needs to be reinstated; it appears that getRandom may not be completely
+        //       working correctly yet and/or the toString in the types array above breaks the output; see
+        //       the console.log statement below.
+
         // create test profiles
 
         // randomly create args lists - create array of args that will satisfy profile,
